@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Results {
+    private int id;
     private Competition competition;
     private Map<Integer, Integer> resultMap = new HashMap<Integer, Integer>();
 
