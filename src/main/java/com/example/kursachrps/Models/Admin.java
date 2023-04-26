@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
-@Table(name="coaches")
-public class Coach extends User {
+@Table(name = "admin")
+public class Admin extends User{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,25 +24,4 @@ public class Coach extends User {
             @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date"))
     })
     private User user;
-
-
-    @NotEmpty(message = "У тренера обязательно должна быть квалификация")
-    @ManyToOne
-    @JoinColumn(name = "qualification_id", referencedColumnName = "id")
-    private Qualification qualification;
-
-    @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
-    private Team team;
-
-    @ManyToMany
-    @JoinTable(
-            name = "Coach_BowType",
-            joinColumns = @JoinColumn(name = "bow_type_id"),
-            inverseJoinColumns = @JoinColumn(name = "coach_id"))
-    private List<BowType> bowTypeList;
-
-
-    @OneToMany(mappedBy = "coach")
-    private List<Sportsman> sportsmans;
 }

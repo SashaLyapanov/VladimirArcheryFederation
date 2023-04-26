@@ -1,100 +1,65 @@
 package com.example.kursachrps.Models;
 
-import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
+@Entity
+@Table(name = "sportsmans")
 public class Sportsman extends User {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+//    @NotEmpty
+//    @OneToOne()
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "userName", column = @Column(name = "user_name")),
+            @AttributeOverride(name = "password", column = @Column(name = "user_password")),
+            @AttributeOverride(name = "role", column = @Column(name = "user_role")),
+            @AttributeOverride(name = "firstName", column = @Column(name = "first_name")),
+            @AttributeOverride(name = "surname", column = @Column(name = "user_surname")),
+            @AttributeOverride(name = "patronymic", column = @Column(name = "patronymic")),
+            @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date"))
+    })
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
     private Team team;
+
+    @ManyToOne
+    @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach coach;
-    private BowType bowType;
-    private SportsTytle spotsTytle;
-    private List<Achievment> achievments;
-    private Diary diary;
-    private List<Competition> competitions;
-    private List<Application> applications;
 
+    @ManyToOne
+    @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
+    private SportsTitle sportsTytle;
 
+    @OneToMany(mappedBy = "sportsman")
+    private List<Achievement> achievementList;
 
-    public Sportsman() {
+    @OneToMany(mappedBy = "sportsman")
+    private List<Session> sessionList;
 
-    }
+    @OneToMany(mappedBy = "sportsman")
+    private List<Application> applicationList;
 
-    public Sportsman(@Nullable Team team, @Nullable Coach coach, BowType bowType, @Nullable SportsTytle spotsTytle) {
-        this.team = team;
-        this.coach = coach;
-        this.bowType = bowType;
-        this.spotsTytle = spotsTytle;
-    }
+    @OneToMany(mappedBy = "sportsman")
+    private List<PersonalExercise> personalExerciseList;
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public Coach getCoach() {
-        return coach;
-    }
-
-    public void setCoach(Coach coach) {
-        this.coach = coach;
-    }
-
-    public BowType getBowType() {
-        return bowType;
-    }
-
-    public void setBowType(BowType bowType) {
-        this.bowType = bowType;
-    }
-
-    public SportsTytle getSpotsTytle() {
-        return spotsTytle;
-    }
-
-    public void setSpotsTytle(SportsTytle spotsTytle) {
-        this.spotsTytle = spotsTytle;
-    }
-
-    public List<Achievment> getAchievments() {
-        return achievments;
-    }
-
-    public void setAchievments(List<Achievment> achievments) {
-        this.achievments = achievments;
-    }
-
-    public Diary getDiary() {
-        return diary;
-    }
-
-    public void setDiary(Diary diary) {
-        this.diary = diary;
-    }
-
-    public List<Competition> getCompetitions() {
-        return competitions;
-    }
-
-    public void setCompetitions(List<Competition> competitions) {
-        this.competitions = competitions;
-    }
-
-    public List<Application> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(List<Application> applications) {
-        this.applications = applications;
-    }
-
-
-
-
-
+    @ManyToMany
+    @JoinTable(
+            name = "Sportsman_Competition",
+            joinColumns = @JoinColumn(name = "sportsman_id"),
+            inverseJoinColumns = @JoinColumn(name = "competition_id"))
+    private List<Competition> competitionList;
 
 
 }

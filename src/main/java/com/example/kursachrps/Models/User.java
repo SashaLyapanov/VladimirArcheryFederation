@@ -1,74 +1,62 @@
 package com.example.kursachrps.Models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
+@Embeddable
 public class User {
-    private String name;
-    private String surname;
-    private String patronymic;
-    private String email;
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+
+    //Email (UserName)
+//    @NotEmpty(message = "Email should not be empty")
+//    @Email
+//    @Column(name = "user_name")
+    private String userName;
+
+//    @NotEmpty(message = "Password should not be empty")
+//    @Column(name = "user_password")
     private String password;
+
+    private String role;
+
+//    @NotEmpty(message = "Name should not be empty")
+//    @Column(name = "first_name")
+    private String firstName;
+
+//    @NotEmpty(message = "Surname should not be empty")
+//    @Column(name = "user_surname")
+    private String surname;
+
+//    @NotEmpty(message = "Patronymic should not be empty")
+//    @Column(name = "patronymic")
+    private String patronymic;
+
+//    @NotEmpty(message = "Birthday date should not be empty")
+//    @Column(name = "birth_date")
     private Date birthDate;
 
-    public User() {
-
-    }
-
-    public User(String name, String surname, String patronymic, String email, Date birthDate) {
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
-        this.email = email;
-        this.birthDate = birthDate;
-    }
 
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+//    @OneToOne(mappedBy = "user")
+//    private Sportsman sportsman;
+//    @OneToOne(mappedBy = "user")
+//    private Coach coach;
+//    @OneToOne(mappedBy = "user")
+//    private Admin admin;
+//    @OneToOne(mappedBy = "user")
+//    private Judge judge;
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
+//    public User() {
+//
+//    }
 
 }

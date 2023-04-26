@@ -8,22 +8,17 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "bow_types")
-public class BowType {
+@Table(name = "qualification")
+public class Qualification {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "bow_type_name")
+    @Column(name = "qualification_name")
     @NotEmpty
-    private String bowTypeName;
+    private String qualificationName;
 
-    @OneToMany(mappedBy = "bowType")
-    private List<Application> applicationList;
-
-    @ManyToMany(mappedBy = "bowTypeList")
-    private List<Competition> competitionList;
-
-    @ManyToMany(mappedBy = "bowTypeList")
+    @OneToMany(mappedBy = "qualification")
     private List<Coach> coachList;
+
 }

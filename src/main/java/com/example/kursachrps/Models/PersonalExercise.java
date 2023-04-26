@@ -8,27 +8,30 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "exercises")
-public class Exercise {
+@Table(name = "personalExercises")
+public class PersonalExercise {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty
     @Column(name = "exercise_name")
+    @NotEmpty(message = "Упражнение обязательно должно иметь название")
     private String name;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "photo")
     private String photo;
 
+    @ManyToOne
+    @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
+    private Sportsman sportsman;
+
     @ManyToMany
     @JoinTable(
-            name = "exercises_sessionExercises",
-            joinColumns = @JoinColumn(name = "exercise_id"),
+            name = "personalExercises_sessionExercises",
+            joinColumns = @JoinColumn(name = "personal_exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
     private List<SessionExercises> sessionExercisesList;
 }

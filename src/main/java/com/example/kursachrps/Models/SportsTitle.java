@@ -7,18 +7,13 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "teams")
-public class Team {
+@Table(name = "sports_titles")
+public class SportsTitle {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "team_name")
-    private String name;
 
-    @OneToMany(mappedBy = "team")
-    private List<Coach> coachs;
-
-    @OneToMany(mappedBy = "team")
-    private List<Sportsman> sportsmans;
+    @OneToMany(mappedBy = "sportsTytle")
+    private List<Sportsman> sportsmanList;
 }
