@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "personalExercises")
+@Table(name = "personal_exercises")
 public class PersonalExercise {
 
     @Id
@@ -24,11 +24,11 @@ public class PersonalExercise {
     @Column(name = "photo")
     private String photo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "personalExercises_sessionExercises",
             joinColumns = @JoinColumn(name = "personal_exercise_id"),

@@ -16,18 +16,18 @@ public class SessionExercises {
     private int id;
 
     @NotEmpty(message = "Упражнение должно иметь название")
-    @Column(name = "exercise_name")
+    @Column(name = "session_exercise_id")
     private String exeName;
 
-    @Column(name = "description")
-    private String description;
+//    @Column(name = "description")
+//    private String description;
 
-    @ManyToMany(mappedBy = "sessionExercisesList")
+    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
     private List<Session> sessionList;
 
-    @ManyToMany(mappedBy = "sessionExercisesList")
+    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
     private List<Exercise> exerciseList;
 
-    @ManyToMany(mappedBy = "sessionExercisesList")
+    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
     private List<PersonalExercise> personalExerciseList;
 }

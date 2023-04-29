@@ -25,7 +25,7 @@ public class Exercise {
     @Column(name = "photo")
     private String photo;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "exercises_sessionExercises",
             joinColumns = @JoinColumn(name = "exercise_id"),

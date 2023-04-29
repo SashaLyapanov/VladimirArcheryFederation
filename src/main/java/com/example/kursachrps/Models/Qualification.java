@@ -8,13 +8,13 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "qualification")
+@Table(name = "qualifications")
 public class Qualification {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "qualification_name")
+    @Column(name = "qualifications_name")
     @NotEmpty
     private String qualificationName;
 

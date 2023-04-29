@@ -5,18 +5,18 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "application")
+@Table(name = "applications")
 public class Application {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "id")
     private Competition competition;
 
@@ -24,7 +24,7 @@ public class Application {
     @Column(name = "payment")
     private boolean payment;
 
-    @ManyToOne
-    @JoinColumn(name = "bow_tipe_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bow_type_id", referencedColumnName = "id")
     private BowType bowType;
 }

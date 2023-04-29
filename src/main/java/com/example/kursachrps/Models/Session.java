@@ -16,22 +16,22 @@ public class Session {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     //dateTime - нужно подобрать тип данных для работы с датой и временем.
-    @Column(name = "date_and_time")
+    @Column(name = "date_time")
     private Date dateTime;
     //duration - нужно подобрать тип данных для работы с датой и временем.
     @Column(name = "duration")
     private Time duration;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "session_type_id", referencedColumnName = "id")
     private SessionType sessionType;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "session_sessionExercises",
             joinColumns = @JoinColumn(name = "session_id"),

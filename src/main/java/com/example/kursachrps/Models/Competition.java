@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 @Data
 @Entity
-@Table(name = "competition")
+@Table(name = "competitions")
 public class Competition {
     @Id
     @Column(name = "id")
@@ -19,7 +19,7 @@ public class Competition {
     @NotEmpty(message = "Название соревнованй не может быть пустым")
     private String name;
 
-    @Column(name = "date")
+    @Column(name = "competition_date")
     @NotEmpty(message = "Соревнование должно иметь дату проведения")
     private Date date;
 
@@ -39,8 +39,8 @@ public class Competition {
 
     @ManyToMany
     @JoinTable(
-            name = "Competition_BowType",
-            joinColumns = @JoinColumn(name = "competiiton_id"),
+            name = "competition_bowType",
+            joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private List<BowType> bowTypeList;
 }
