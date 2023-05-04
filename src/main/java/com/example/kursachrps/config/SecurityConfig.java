@@ -35,9 +35,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/index.html").permitAll();
+                    auth.requestMatchers(HttpMethod.POST,"/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
+                    auth.requestMatchers(HttpMethod.DELETE,"/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_DELETE.getPermission());
+                    auth.requestMatchers(HttpMethod.PATCH,"/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_UPDATE.getPermission());
                     auth.requestMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.SPORTSMEN_READ.getPermission());
-                    auth.requestMatchers(HttpMethod.POST,"/api/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
-                    auth.requestMatchers(HttpMethod.DELETE,"/api/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
                 })
 //                .formLogin()
 //                .loginPage("/auth/login").permitAll()

@@ -14,6 +14,9 @@ public class SportsTitle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "sports_title_name")
+    private String name;
+
     @OneToMany(mappedBy = "sportsTytle")
     private List<Sportsman> sportsmanList;
 }
