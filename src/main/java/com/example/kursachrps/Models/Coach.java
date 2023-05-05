@@ -10,17 +10,6 @@ import java.util.List;
 @Entity
 @Table(name="coaches")
 public class Coach extends User {
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-
-//    @NotEmpty
-//    @OneToOne()
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
-
-
     @NotEmpty(message = "У тренера обязательно должна быть квалификация")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qualification_id", referencedColumnName = "id")
@@ -36,7 +25,6 @@ public class Coach extends User {
             joinColumns = @JoinColumn(name = "bow_type_id"),
             inverseJoinColumns = @JoinColumn(name = "coach_id"))
     private List<BowType> bowTypeList;
-
 
     @OneToMany(mappedBy = "personal_coach")
     private List<Sportsman> sportsmen;

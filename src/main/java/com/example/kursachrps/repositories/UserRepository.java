@@ -6,6 +6,10 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
 
+/**
+ * Репозиторий для наследования репозиториями спортсменов, судий, админов, тренеров.
+ */
+
 @NoRepositoryBean
 public interface UserRepository extends JpaRepository<User, Integer> {
 

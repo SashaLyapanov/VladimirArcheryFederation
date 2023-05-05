@@ -22,17 +22,21 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
 
+    private final UserMainRepository userMainRepository;
+
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
                         CoachRepository coachRepository,
                         JudgeRepository judgeRepository,
                         AdminRepository adminRepository,
-                        UserRepository userRepository) {
+                        UserRepository userRepository,
+                        UserMainRepository userMainRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.coachRepository = coachRepository;
         this.judgeRepository = judgeRepository;
         this.adminRepository = adminRepository;
         this.userRepository = userRepository;
+        this.userMainRepository = userMainRepository;
     }
 
 
@@ -42,17 +46,10 @@ public class AdminService {
 
 
     @Transactional
-    public Sportsman saveSportsman(User user) {
-        Sportsman sportsman = new Sportsman();
+    public Sportsman saveSportsman(Sportsman sportsman) {
         sportsman.setRole(Role.SPORTSMAN);
         sportsman.setStatus(Status.ACTIVE);
-        sportsman.setFirstName(user.getFirstName());
-        sportsman.setSurname(user.getSurname());
-        sportsman.setPatronymic(user.getPatronymic());
-        sportsman.setBirthDate(user.getBirthDate());
-        sportsman.setEmail(user.getEmail());
-        sportsman.setPassword(user.getPassword());
-        sportsman.setId(user.getId());
+
         return sportsmanRepository.save(sportsman);
     }
 
@@ -61,6 +58,19 @@ public class AdminService {
     public User getSportsman(String email) {
         return sportsmanRepository.findByEmail(email).orElseThrow();
     }
+
+
+    public List<User> showAllSportsmen() {
+        return sportsmanRepository.findAll();
+    }
+
+
+    public List<User> showAllUsers() {
+        return userMainRepository.findAll();
+    }
+
+
+
 
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Тестовые методы//////////////////////////////
@@ -77,6 +87,6 @@ public class AdminService {
 
     @Transactional
     public Optional<User> show(String email) {
-        return userRepository.findByEmail(email);
+        return userMainRepository.findByEmail(email);
     }
 }

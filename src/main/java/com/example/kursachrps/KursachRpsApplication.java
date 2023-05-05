@@ -10,14 +10,5 @@ public class KursachRpsApplication {
 
     public static void main(String[] args) { SpringApplication.run(KursachRpsApplication.class, args);
 
-
-
-
-
-
-
-
-
-
     }
 }
