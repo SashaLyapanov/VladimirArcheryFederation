@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface JudgeRepository extends JpaRepository<Judge, Integer> {
-    Optional<Judge> findByEmail(String email);
+public interface JudgeRepository extends UserRepository {
 }

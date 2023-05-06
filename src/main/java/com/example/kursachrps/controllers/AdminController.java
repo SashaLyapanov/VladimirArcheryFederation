@@ -2,15 +2,15 @@ package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
-import com.example.kursachrps.dto.SportsmanDTO;
+import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.UserDTO;
-import com.example.kursachrps.mapper.SportsmanMapper;
+import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
+import com.example.kursachrps.repositories.CompetitionRepository;
 import com.example.kursachrps.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,11 +23,15 @@ public class AdminController {
 
     private final AdminService adminService;
     private final UserMapper userMapper;
+    private final CompetitionRepository competitionRepository;
+    private final CompetitionMapper competitionMapper;
 
     @Autowired
-    public AdminController(AdminService adminService, UserMapper userMapper) {
+    public AdminController(AdminService adminService, UserMapper userMapper, CompetitionRepository competitionRepository, CompetitionMapper competitionMapper) {
         this.adminService = adminService;
         this.userMapper = userMapper;
+        this.competitionRepository = competitionRepository;
+        this.competitionMapper = competitionMapper;
     }
 
 
@@ -37,7 +41,7 @@ public class AdminController {
 
 
     /**
-     * Метод для вывода всех спортсменов споском
+     * Метод для вывода всех User'ов споском
      */
     @GetMapping("sportsmen")
     public List<UserDTO> getAllSportsmen() {
@@ -45,7 +49,6 @@ public class AdminController {
         List<User> sportsmen = new ArrayList<>();
         sportsmen = adminService.showAllUsers();
         List<UserDTO> dto = userMapper.fromUser(sportsmen);
-//        SportsmanDTO sportsmenDTO = spo
 
         return dto;
     }
@@ -68,6 +71,15 @@ public class AdminController {
         return user;
     }
 
+
+
+    /**
+     *Метод для вывода всех соревнований
+     */
+    @GetMapping("competitions")
+    public List<CompetitionDTO> getCompetitions() {
+        return competitionMapper.fromCompetition(competitionRepository.findAll());
+    }
 
     /////////////////////////////////////////////////////////////////////////////////
     //////////Тестовые методы для проверки работоспособности/////////////////////////

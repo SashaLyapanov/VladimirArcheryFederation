@@ -19,6 +19,14 @@ public class Competition {
     @NotEmpty(message = "Название соревнованй не может быть пустым")
     private String name;
 
+
+    @Column(name = "place")
+    @NotEmpty(message = "Место должно быть!")
+    private String place;
+
+//    private List<Category> categories;
+
+
     @Column(name = "competition_date")
     @NotEmpty(message = "Соревнование должно иметь дату проведения")
     private Date date;
