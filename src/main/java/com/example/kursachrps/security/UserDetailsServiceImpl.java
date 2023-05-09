@@ -2,7 +2,6 @@ package com.example.kursachrps.security;
 
 import com.example.kursachrps.Models.User;
 import com.example.kursachrps.repositories.UserMainRepository;
-import com.example.kursachrps.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;

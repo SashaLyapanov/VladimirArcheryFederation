@@ -1,4 +1,4 @@
-package com.example.kursachrps.repositories;
+package com.example.kursachrps.repositories.RegistrAndAuth;
 
 import com.example.kursachrps.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;

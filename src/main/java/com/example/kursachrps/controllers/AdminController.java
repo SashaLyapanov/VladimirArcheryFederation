@@ -2,7 +2,9 @@ package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
+import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
+import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.dto.UserDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -41,37 +43,56 @@ public class AdminController {
 
 
     /**
-     * Метод для вывода всех User'ов споском
+     * Метод для вывода всех Sportsman'ов споском
      */
     @GetMapping("sportsmen")
-    public List<UserDTO> getAllSportsmen() {
+    public List<SportsmanAdmDTO> getAllSportsmen() {
 
-        List<User> sportsmen = new ArrayList<>();
-        sportsmen = adminService.showAllUsers();
-        List<UserDTO> dto = userMapper.fromUser(sportsmen);
+        List<Sportsman> sportsmen = new ArrayList<>();
+        sportsmen = adminService.showAllSportsmen();
+        List<SportsmanAdmDTO> dto = userMapper.fromSportsmanList(sportsmen);
 
         return dto;
+    }
+
+    /**
+     * Метод для вывода спортсмена (Sportsman)
+     */
+//    @GetMapping("sportsman/{email}")
+    @GetMapping("sportsman")
+    public SportsmanAdmDTO getSportsman(@RequestParam String email) {
+        SportsmanAdmDTO sportsmanAdmDTO = userMapper.fromSportsman(adminService.getSportsman(email));
+
+        return sportsmanAdmDTO;
     }
 
 
     /**
      * Метод для создания спортсмена в системе (регистрация от Админа)
+     * JSON (email, password, firstName, surname, patronymic, birthDate)
      */
     @PostMapping("createSportsman")
-    public Sportsman createSportsman(@RequestBody @Valid UserDTO userDTO) {
+    public Sportsman createSportsman(@RequestBody @Valid SportsmanDTO sportsmanDTO) {
 
-        Sportsman sportsman = userMapper.fromUserDTO(userDTO);
+        adminService.hashPassword(sportsmanDTO);
+        Sportsman sportsman = userMapper.fromSportsmanDTO(sportsmanDTO);
         return adminService.saveSportsman(sportsman);
     }
 
-    @GetMapping("sportsman/{email}")
-    public User getSportsman(@PathVariable String email) {
-        User user = adminService.getSportsman(email);
 
+    @PutMapping("blockUser/{email}")
+    public User blockingSportsman(@PathVariable @Valid String email) {
+
+        User user = adminService.blockingUser(email);
         return user;
     }
 
 
+
+
+    /////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////Реализация CRUD соревнований//////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
 
     /**
      *Метод для вывода всех соревнований

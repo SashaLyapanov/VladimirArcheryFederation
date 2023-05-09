@@ -4,8 +4,11 @@ import com.example.kursachrps.Models.Role;
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.Status;
 import com.example.kursachrps.Models.User;
+import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
+import com.example.kursachrps.repositories.RegistrAndAuth.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,25 +20,28 @@ import java.util.Optional;
 public class AdminService {
 
     private final SportsmanRepository sportsmanRepository;
+    private final SportsmanMainRepository sportsmanMainRepository;
     private final CoachRepository coachRepository;
     private final JudgeRepository judgeRepository;
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
-                        CoachRepository coachRepository,
+                        SportsmanMainRepository sportsmanMainRepository, CoachRepository coachRepository,
                         JudgeRepository judgeRepository,
                         AdminRepository adminRepository,
                         UserRepository userRepository,
-                        UserMainRepository userMainRepository) {
+                        PasswordEncoder passwordEncoder, UserMainRepository userMainRepository) {
         this.sportsmanRepository = sportsmanRepository;
+        this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
         this.judgeRepository = judgeRepository;
         this.adminRepository = adminRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
     }
 
@@ -50,27 +56,34 @@ public class AdminService {
         sportsman.setRole(Role.SPORTSMAN);
         sportsman.setStatus(Status.ACTIVE);
 
-        return sportsmanRepository.save(sportsman);
+        return sportsmanMainRepository.save(sportsman);
+    }
+
+    //Метод, позволяющий захешировать пароль при создании спортсмена Администратором
+    public SportsmanDTO hashPassword(SportsmanDTO sportsmanDTO) {
+        sportsmanDTO.setPassword(passwordEncoder.encode(sportsmanDTO.getPassword()));
+
+        return sportsmanDTO;
     }
 
 
+    //Метод для получения спортсмена (Sportsman) по email
     @Transactional
-    public User getSportsman(String email) {
-        return sportsmanRepository.findByEmail(email).orElseThrow();
+    public Sportsman getSportsman(String email) {
+        return sportsmanMainRepository.findByEmail(email).orElse(null);
     }
 
+    //Метод для вывода всех спортсменов (Sportsman) из БД
+    @Transactional
+    public List<Sportsman> showAllSportsmen() { return sportsmanMainRepository.findAll(); }
 
-    public List<User> showAllSportsmen() {
-        return sportsmanRepository.findAll();
+    //Метод для блокировки user'a по email.
+    @Transactional
+    public User blockingUser(String email) {
+        User user = userMainRepository.findByEmail(email).orElse(null);
+        user.setStatus(Status.BANNED);
+        return user;
     }
-
-
-    public List<User> showAllUsers() {
-        return userMainRepository.findAll();
-    }
-
-
-
 
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Тестовые методы//////////////////////////////
@@ -89,4 +102,6 @@ public class AdminService {
     public Optional<User> show(String email) {
         return userMainRepository.findByEmail(email);
     }
+
+
 }

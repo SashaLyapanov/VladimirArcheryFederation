@@ -17,6 +17,6 @@ public class SportsTitle {
     @Column(name = "sports_title_name")
     private String name;
 
-    @OneToMany(mappedBy = "sportsTytle")
+    @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.ALL)
     private List<Sportsman> sportsmanList;
 }

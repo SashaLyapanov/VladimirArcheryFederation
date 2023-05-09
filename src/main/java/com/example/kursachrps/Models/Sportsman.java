@@ -22,9 +22,9 @@ public class Sportsman extends User {
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach personal_coach;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
-    private SportsTitle sportsTytle;
+    private SportsTitle sportsTitle;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sportsman")
@@ -55,11 +55,11 @@ public class Sportsman extends User {
     }
 
     public Sportsman(String email, String password, Role role, Status status, String firstName, String surname, String patronymic, Date birthDate,
-                     Team team, Coach personal_coach, SportsTitle sportsTytle) {
+                     Team team, Coach personal_coach, SportsTitle sportsTitle) {
         super(email, password, role, status, firstName, surname,patronymic,birthDate);
         this.team = team;
         this.personal_coach = personal_coach;
-        this.sportsTytle = sportsTytle;
+        this.sportsTitle = sportsTitle;
     }
 
 }

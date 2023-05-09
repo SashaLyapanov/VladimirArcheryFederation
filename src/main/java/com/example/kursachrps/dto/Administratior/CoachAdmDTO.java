@@ -1,21 +1,15 @@
-package com.example.kursachrps.dto;
+package com.example.kursachrps.dto.Administratior;
 
 import com.example.kursachrps.dto.AdditionalDTO.QualificationDTO;
-import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
+import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
-
 @Data
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SportsmanDTO {
-
-    private String email;
-
-    private String password;
+public class CoachAdmDTO {
 
     private String firstName;
 
@@ -23,7 +17,8 @@ public class SportsmanDTO {
 
     private String patronymic;
 
-    private SportsTitleDTO sportsTitle;
+    private TeamDTO team;
 
-    private Date birthDate;
+    private QualificationDTO qualification;
+
 }
