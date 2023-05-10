@@ -1,9 +1,6 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.Role;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.Status;
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.repositories.RegistrAndAuth.*;
@@ -22,6 +19,7 @@ public class AdminService {
     private final SportsmanRepository sportsmanRepository;
     private final SportsmanMainRepository sportsmanMainRepository;
     private final CoachRepository coachRepository;
+    private final CoachMainRepository coachMainRepository;
     private final JudgeRepository judgeRepository;
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
@@ -30,14 +28,18 @@ public class AdminService {
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
-                        SportsmanMainRepository sportsmanMainRepository, CoachRepository coachRepository,
+                        SportsmanMainRepository sportsmanMainRepository,
+                        CoachRepository coachRepository,
+                        CoachMainRepository coachMainRepository,
                         JudgeRepository judgeRepository,
                         AdminRepository adminRepository,
                         UserRepository userRepository,
-                        PasswordEncoder passwordEncoder, UserMainRepository userMainRepository) {
+                        PasswordEncoder passwordEncoder,
+                        UserMainRepository userMainRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
+        this.coachMainRepository = coachMainRepository;
         this.judgeRepository = judgeRepository;
         this.adminRepository = adminRepository;
         this.userRepository = userRepository;
@@ -84,6 +86,17 @@ public class AdminService {
         user.setStatus(Status.BANNED);
         return user;
     }
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////Реализация CRUD тренеров/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+
+    @Transactional
+    public List<Coach> showAllCoaches() { return coachMainRepository.findAll(); }
+
+
 
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Тестовые методы//////////////////////////////

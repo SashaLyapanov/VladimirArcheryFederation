@@ -1,7 +1,9 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.Models.Coach;
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
+import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
@@ -89,9 +91,30 @@ public class AdminController {
 
 
 
+    /////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////Реализация CRUD тренеров/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Метод для получения всех тренеров в системе
+     */
+    @GetMapping("coaches")
+    public List<CoachAdmDTO> getCoaches() {
+
+        List<Coach> coaches = adminService.showAllCoaches();
+
+        List<CoachAdmDTO> coachesDTO = userMapper.fromCoachList(coaches);
+
+        return coachesDTO;
+    }
+
+
+
+
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD соревнований//////////////////////////////
+    ////////////////////////Реализация CRUD соревнований/////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
 
     /**

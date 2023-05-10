@@ -1,7 +1,11 @@
 package com.example.kursachrps.mapper;
 
+import com.example.kursachrps.Models.BowType;
+import com.example.kursachrps.Models.Coach;
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
+import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
+import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.dto.UserDTO;
@@ -13,21 +17,19 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-//    @Mapping(target="birthDate", source="birthDate",
-//            dateFormat="dd-MM-yyyy HH:mm:ss")
-    UserDTO transform(User user);
 
-//    @Mapping(target="birthDate", source="birthDate",
-//            dateFormat="dd-MM-yyyy HH:mm:ss")
-    User convert(UserDTO user);
+    UserDTO transform(User user);
 
     List<UserDTO> fromUser(List<User> users);
 
+    User convert(UserDTO user);
 
-//    UserDTO fromSportsman(Sportsman sportsman);
+    BowType fromBowTypeDTO(BowTypeDTO value);
+
+    BowTypeDTO fromBowType(BowType value);
+    List<BowTypeDTO> fromBowType(List<BowType> value);
 
     Sportsman fromUserDTO(UserDTO userDTO);
-
 
     @Mappings({
             @Mapping(target = "team", source = "team"),
@@ -47,5 +49,15 @@ public interface UserMapper {
 
 
     Sportsman fromSportsmanDTO(SportsmanDTO sportsmanDTO);
+
+
+    CoachAdmDTO fromCoach(Coach coach);
+
+    List<CoachAdmDTO> fromCoachList(List<Coach> coaches);
+
+    Coach fromcoachAdmDTO(CoachAdmDTO coachAdmDTO);
+
+    List<Coach> fromcoachAdmDTO(List<CoachAdmDTO> coachAdmDTO);
+
 
 }

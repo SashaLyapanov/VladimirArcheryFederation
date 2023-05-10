@@ -53,6 +53,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/api/auth/signin").permitAll();
                     auth.requestMatchers("/index.html").permitAll();
                     auth.requestMatchers("/api/v1/admin/sportsmen").permitAll();
+                    auth.requestMatchers("/api/v1/admin/coaches").permitAll();
                     auth.requestMatchers("/api/v1/admin/sportsman**").permitAll();
                     auth.requestMatchers("/api/v1/admin/competitions").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
