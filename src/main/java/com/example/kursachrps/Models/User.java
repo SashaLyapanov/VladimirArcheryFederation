@@ -16,7 +16,7 @@ public class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+//    @JsonIgnore
     private int id;
 
     @NotEmpty(message = "Email should not be empty")

@@ -17,6 +17,6 @@ public class SportsTitle {
     @Column(name = "sports_title_name")
     private String name;
 
-    @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Sportsman> sportsmanList;
 }

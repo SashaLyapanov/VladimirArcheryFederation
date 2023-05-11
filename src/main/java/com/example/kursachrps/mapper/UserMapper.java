@@ -1,12 +1,13 @@
 package com.example.kursachrps.mapper;
 
-import com.example.kursachrps.Models.BowType;
-import com.example.kursachrps.Models.Coach;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
+import com.example.kursachrps.dto.AdditionalDTO.QualificationDTO;
+import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
+import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
+import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.dto.UserDTO;
 import org.mapstruct.Mapper;
@@ -29,6 +30,18 @@ public interface UserMapper {
     BowTypeDTO fromBowType(BowType value);
     List<BowTypeDTO> fromBowType(List<BowType> value);
 
+    SportsTitleDTO fromSportsTitle(SportsTitle sportsTitle);
+
+    SportsTitle fromSportsTitleDTO(SportsTitleDTO sportsTitleDTO);
+
+    TeamDTO fromTeam(Team team);
+
+    Team fromTeamDTO(TeamDTO teamDTO);
+
+    QualificationDTO fromQualification(Qualification qualification);
+
+    Qualification fromQualificationDTO(QualificationDTO qualificationDTO);
+
     Sportsman fromUserDTO(UserDTO userDTO);
 
     @Mappings({
@@ -50,14 +63,26 @@ public interface UserMapper {
 
     Sportsman fromSportsmanDTO(SportsmanDTO sportsmanDTO);
 
-
+    @Mappings(
+            @Mapping(source = "id", target = "id")
+    )
     CoachAdmDTO fromCoach(Coach coach);
 
+    @Mappings(
+            @Mapping(source = "id", target = "id")
+    )
     List<CoachAdmDTO> fromCoachList(List<Coach> coaches);
 
+    @Mappings(
+            @Mapping(source = "id", target = "id")
+    )
     Coach fromcoachAdmDTO(CoachAdmDTO coachAdmDTO);
 
+    @Mappings(
+            @Mapping(source = "id", target = "id")
+    )
     List<Coach> fromcoachAdmDTO(List<CoachAdmDTO> coachAdmDTO);
 
+    Coach fromCoachDTO(CoachDTO coachDTO);
 
 }

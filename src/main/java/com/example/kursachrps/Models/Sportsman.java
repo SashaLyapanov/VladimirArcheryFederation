@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
@@ -15,14 +16,17 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Sportsman extends User {
     @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach personal_coach;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
     private SportsTitle sportsTitle;
 

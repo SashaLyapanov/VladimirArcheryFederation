@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QualificationDTO {
 
+    private int id;
+
     private String qualificationName;
 
 }

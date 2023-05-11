@@ -1,7 +1,6 @@
 package com.example.kursachrps.Models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.util.List;
@@ -14,8 +13,8 @@ public class Qualification {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "qualifications_name")
-    @NotEmpty
     private String qualificationName;
 
     @OneToMany(mappedBy = "qualification")

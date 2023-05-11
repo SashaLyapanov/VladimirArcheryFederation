@@ -2,6 +2,7 @@ package com.example.kursachrps.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class BowType {
     private String bowTypeName;
 
     @ManyToMany(mappedBy = "bowTypeList")
+    @Cascade({org.hibernate.annotations.CascadeType.PERSIST})
     private List<Coach> coachList;
 
     @OneToMany(mappedBy = "bowType")

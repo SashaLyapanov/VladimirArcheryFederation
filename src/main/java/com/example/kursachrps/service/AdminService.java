@@ -1,7 +1,10 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.Models.*;
+import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
+import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
+import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.repositories.RegistrAndAuth.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
+    private final SportsTitleRepository sportsTitleRepository;
+    private final UserMapper userMapper;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
@@ -35,7 +40,8 @@ public class AdminService {
                         AdminRepository adminRepository,
                         UserRepository userRepository,
                         PasswordEncoder passwordEncoder,
-                        UserMainRepository userMainRepository) {
+                        UserMainRepository userMainRepository,
+                        SportsTitleRepository sportsTitleRepository, UserMapper userMapper) {
         this.sportsmanRepository = sportsmanRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
@@ -45,6 +51,8 @@ public class AdminService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
+        this.sportsTitleRepository = sportsTitleRepository;
+        this.userMapper = userMapper;
     }
 
 
@@ -64,14 +72,19 @@ public class AdminService {
     //Метод, позволяющий захешировать пароль при создании спортсмена Администратором
     public SportsmanDTO hashPassword(SportsmanDTO sportsmanDTO) {
         sportsmanDTO.setPassword(passwordEncoder.encode(sportsmanDTO.getPassword()));
-
         return sportsmanDTO;
     }
+    //Метод, позволяющий захешировать пароль при создании Тренера Администратором
+    public CoachDTO hashPassword(CoachDTO coachDTO) {
+        coachDTO.setPassword(passwordEncoder.encode(coachDTO.getPassword()));
+        return coachDTO;
+    }
+
 
 
     //Метод для получения спортсмена (Sportsman) по email
     @Transactional
-    public Sportsman getSportsman(String email) {
+    public Sportsman getSportsmanByEmail(String email) {
         return sportsmanMainRepository.findByEmail(email).orElse(null);
     }
 
@@ -86,7 +99,30 @@ public class AdminService {
         user.setStatus(Status.BANNED);
         return user;
     }
+    //Метод для разблокировки user'a по email.
+    @Transactional
+    public User unblockingUser(String email) {
+        User user = userMainRepository.findByEmail(email).orElse(null);
+        user.setStatus(Status.ACTIVE);
+        return user;
+    }
 
+
+    @Transactional
+    public Sportsman editSportsman(String email, Sportsman updatedSportsman) {
+
+        Sportsman sportsman = sportsmanMainRepository.findByEmail(email).orElse(null);
+
+        sportsman.setFirstName(updatedSportsman.getFirstName());
+        sportsman.setSurname(updatedSportsman.getSurname());
+        sportsman.setPatronymic(updatedSportsman.getPatronymic());
+        sportsman.setBirthDate(updatedSportsman.getBirthDate());
+        sportsman.setTeam(updatedSportsman.getTeam());
+        sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
+        sportsman.setPersonal_coach(updatedSportsman.getPersonal_coach());
+
+        return sportsman;
+    }
 
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -94,9 +130,37 @@ public class AdminService {
     /////////////////////////////////////////////////////////////////////////////////
 
     @Transactional
+    public Coach saveCoach(Coach coach) {
+        coach.setRole(Role.COACH);
+        coach.setStatus(Status.ACTIVE);
+
+        return coachMainRepository.save(coach);
+    }
+
+
+    @Transactional
     public List<Coach> showAllCoaches() { return coachMainRepository.findAll(); }
 
+    @Transactional
+    public Coach getCoachByEmail(String email) { return coachMainRepository.findByEmail(email).orElse(null); }
 
+
+    @Transactional
+    public Coach editCoach(String email, Coach updatedCoach) {
+
+        Coach coach = coachMainRepository.findByEmail(email).orElse(null);
+
+        coach.setFirstName(updatedCoach.getFirstName());
+        coach.setSurname(updatedCoach.getSurname());
+        coach.setPatronymic(updatedCoach.getPatronymic());
+        coach.setBirthDate(updatedCoach.getBirthDate());
+        coach.setTeam(updatedCoach.getTeam());
+        coach.setQualification(updatedCoach.getQualification());
+        coach.setTeam(updatedCoach.getTeam());
+        coach.setBowTypeList(updatedCoach.getBowTypeList());
+
+        return coach;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Тестовые методы//////////////////////////////

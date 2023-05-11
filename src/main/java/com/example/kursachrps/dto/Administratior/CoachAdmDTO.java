@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,11 +16,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CoachAdmDTO {
 
+    private int id;
+
     private String firstName;
 
     private String surname;
 
     private String patronymic;
+
+    private Date birthDate;
 
     private TeamDTO team;
 

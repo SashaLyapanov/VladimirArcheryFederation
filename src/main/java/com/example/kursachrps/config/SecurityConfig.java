@@ -54,8 +54,11 @@ public class SecurityConfig {
                     auth.requestMatchers("/index.html").permitAll();
                     auth.requestMatchers("/api/v1/admin/sportsmen").permitAll();
                     auth.requestMatchers("/api/v1/admin/coaches").permitAll();
+                    auth.requestMatchers("/api/v1/admin/coach**").permitAll();
                     auth.requestMatchers("/api/v1/admin/sportsman**").permitAll();
+                    auth.requestMatchers("/api/v1/admin/editSportsman**").permitAll();
                     auth.requestMatchers("/api/v1/admin/competitions").permitAll();
+                    auth.requestMatchers("/api/v1/admin/blockUser**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
                     auth.requestMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
                     auth.requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_DELETE.getPermission());
@@ -67,7 +70,7 @@ public class SecurityConfig {
                 .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
 
 //                .build();
-
+//
                 .httpBasic().and().build();
     }
 
