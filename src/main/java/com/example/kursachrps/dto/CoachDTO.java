@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode
@@ -28,7 +29,7 @@ public class CoachDTO {
 
     private Date birthDate;
 
-    private List<BowTypeDTO> bowTypeList;
+    private Set<BowTypeDTO> bowTypeList;
 
     private QualificationDTO qualification;
 

@@ -15,6 +15,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -28,7 +29,7 @@ public interface UserMapper {
     BowType fromBowTypeDTO(BowTypeDTO value);
 
     BowTypeDTO fromBowType(BowType value);
-    List<BowTypeDTO> fromBowType(List<BowType> value);
+    Set<BowTypeDTO> fromBowType(Set<BowType> value);
 
     SportsTitleDTO fromSportsTitle(SportsTitle sportsTitle);
 

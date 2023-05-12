@@ -19,7 +19,7 @@ public class BowType {
     private String bowTypeName;
 
     @ManyToMany(mappedBy = "bowTypeList")
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST})
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Coach> coachList;
 
     @OneToMany(mappedBy = "bowType")

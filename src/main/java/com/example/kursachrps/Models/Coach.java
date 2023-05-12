@@ -20,7 +20,7 @@ public class Coach extends User {
     private Team team;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST})
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @JoinTable(
             name = "coach_bow_types",
             joinColumns = @JoinColumn(name = "coach_id"),
