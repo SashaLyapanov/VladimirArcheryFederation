@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -31,10 +30,14 @@ public class Session {
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "session_sessionExercises",
-            joinColumns = @JoinColumn(name = "session_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
-    private List<SessionExercises> sessionExercisesList;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "session_sessionExercises",
+//            joinColumns = @JoinColumn(name = "session_id"),
+//            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
+//    private List<SessionExercises> sessionExercisesList;
+
+    @OneToOne
+    @JoinColumn(name = "session_exercise_id")
+    private SessionExercises sessionExercises;
 }
