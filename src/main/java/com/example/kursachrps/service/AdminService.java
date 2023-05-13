@@ -30,6 +30,7 @@ public class AdminService {
     private final UserMainRepository userMainRepository;
     private final SportsTitleRepository sportsTitleRepository;
     private final UserMapper userMapper;
+    private final TeamRepository teamRepository;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
@@ -41,7 +42,9 @@ public class AdminService {
                         UserRepository userRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
-                        SportsTitleRepository sportsTitleRepository, UserMapper userMapper) {
+                        SportsTitleRepository sportsTitleRepository,
+                        UserMapper userMapper,
+                        TeamRepository teamRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
@@ -53,6 +56,7 @@ public class AdminService {
         this.userMainRepository = userMainRepository;
         this.sportsTitleRepository = sportsTitleRepository;
         this.userMapper = userMapper;
+        this.teamRepository = teamRepository;
     }
 
 
@@ -133,6 +137,11 @@ public class AdminService {
     public Coach saveCoach(Coach coach) {
         coach.setRole(Role.COACH);
         coach.setStatus(Status.ACTIVE);
+
+        Team team = coach.getTeam();
+        if (coach.getTeam().getId() == 0) {
+            teamRepository.save(team);
+        }
 
         return coachMainRepository.save(coach);
     }
