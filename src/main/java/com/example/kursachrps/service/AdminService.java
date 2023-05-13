@@ -1,7 +1,6 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.Models.*;
-import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.UserMapper;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,6 +29,7 @@ public class AdminService {
     private final SportsTitleRepository sportsTitleRepository;
     private final UserMapper userMapper;
     private final TeamRepository teamRepository;
+    private final CompetitionRepository competitionRepository;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
@@ -44,7 +43,7 @@ public class AdminService {
                         UserMainRepository userMainRepository,
                         SportsTitleRepository sportsTitleRepository,
                         UserMapper userMapper,
-                        TeamRepository teamRepository) {
+                        TeamRepository teamRepository, CompetitionRepository competitionRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
@@ -57,6 +56,7 @@ public class AdminService {
         this.sportsTitleRepository = sportsTitleRepository;
         this.userMapper = userMapper;
         this.teamRepository = teamRepository;
+        this.competitionRepository = competitionRepository;
     }
 
 
@@ -177,23 +177,14 @@ public class AdminService {
         return coach;
     }
 
+
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Тестовые методы//////////////////////////////
+    ////////////////////////Реализация CRUD соревнований/////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
 
-    //Метод для создания спортсмена в БД. (Подразумевается, что создаем User, у которого role = SPORTSMAN,
-    // и при этом каскадно должен создаться sportsman, где sportsman.id = user.id
     @Transactional
-    public User save(User user) {
-        user.setRole(Role.SPORTSMAN);
-        user.setStatus(Status.ACTIVE);
-        return userRepository.save(user);
-    }
+    public List<Competition> showAllCompetitions() { return competitionRepository.findAll(); }
 
-    @Transactional
-    public Optional<User> show(String email) {
-        return userMainRepository.findByEmail(email);
-    }
 
 
 }

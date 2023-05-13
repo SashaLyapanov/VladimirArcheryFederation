@@ -8,14 +8,12 @@ import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
-import com.example.kursachrps.dto.UserDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.repositories.CompetitionRepository;
 import com.example.kursachrps.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +27,12 @@ public class AdminController {
 
     private final AdminService adminService;
     private final UserMapper userMapper;
-    private final CompetitionRepository competitionRepository;
     private final CompetitionMapper competitionMapper;
 
     @Autowired
-    public AdminController(AdminService adminService, UserMapper userMapper, CompetitionRepository competitionRepository, CompetitionMapper competitionMapper) {
+    public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper) {
         this.adminService = adminService;
         this.userMapper = userMapper;
-        this.competitionRepository = competitionRepository;
         this.competitionMapper = competitionMapper;
     }
 
@@ -158,16 +154,14 @@ public class AdminController {
 
 
     @PutMapping("blockUser")
-    public User blockingSportsman(@RequestParam @Valid String email) {
+    public void blockingSportsman(@RequestParam @Valid String email) {
 
         User user = adminService.blockingUser(email);
-        return user;
     }
     @PutMapping("unlockUser")
-    public User unblockingSportsman(@RequestParam @Valid String email) {
+    public void unblockingSportsman(@RequestParam @Valid String email) {
 
         User user = adminService.unblockingUser(email);
-        return user;
     }
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +173,8 @@ public class AdminController {
      */
     @GetMapping("competitions")
     public List<CompetitionDTO> getCompetitions() {
-        return competitionMapper.fromCompetition(competitionRepository.findAll());
+
+        return competitionMapper.fromCompetition(adminService.showAllCompetitions());
     }
 
 
@@ -191,23 +186,4 @@ public class AdminController {
 
 
 
-    /////////////////////////////////////////////////////////////////////////////////
-    //////////Тестовые методы для проверки работоспособности/////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////
-
-    @PostMapping("create")
-    public User createUserLikeSportsman(@RequestBody @Valid UserDTO userDTO) {
-        User user = userMapper.convert(userDTO);
-        user = adminService.save(user);
-
-        return user;
-    }
-
-    @GetMapping("info/{email}")
-    public UserDTO showInfo(@PathVariable String email) throws ChangeSetPersister.NotFoundException {
-        User user = adminService.show(email).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        UserDTO userDTO = userMapper.transform(user);
-
-        return userDTO;
-    }
 }

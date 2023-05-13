@@ -3,6 +3,7 @@ package com.example.kursachrps.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,16 @@ public class Competition {
     @NotEmpty(message = "Место должно быть!")
     private String place;
 
-//    private List<Category> categories;
+    @Enumerated(EnumType.STRING)
+    private CompetitionType type;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Cascade({org.hibernate.annotations.CascadeType.MERGE})
+    @JoinTable(
+            name = "competitions_categories",
+            joinColumns = @JoinColumn(name = "competition_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
 
     @Column(name = "competition_date")
@@ -47,7 +57,7 @@ public class Competition {
 
     @ManyToMany
     @JoinTable(
-            name = "competition_bowType",
+            name = "competition_bow_type",
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private List<BowType> bowTypeList;
