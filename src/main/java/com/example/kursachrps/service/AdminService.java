@@ -163,6 +163,12 @@ public class AdminService {
         coach.setSurname(updatedCoach.getSurname());
         coach.setPatronymic(updatedCoach.getPatronymic());
         coach.setBirthDate(updatedCoach.getBirthDate());
+
+        Team team = updatedCoach.getTeam();
+        if (updatedCoach.getTeam().getId() == 0) {
+            teamRepository.save(team);
+        }
+
         coach.setTeam(updatedCoach.getTeam());
         coach.setQualification(updatedCoach.getQualification());
         coach.setTeam(updatedCoach.getTeam());
