@@ -1,6 +1,5 @@
 package com.example.kursachrps.dto;
 
-import com.example.kursachrps.dto.AdditionalDTO.QualificationDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -12,6 +11,8 @@ import java.util.Date;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SportsmanDTO {
+
+    private int id;
 
     private String email;
 

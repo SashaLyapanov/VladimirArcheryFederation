@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/**").permitAll();
                     auth.requestMatchers("/api/auth/signin").permitAll();
                     auth.requestMatchers("/index.html").permitAll();
                     auth.requestMatchers("/api/v1/admin/sportsmen").permitAll();

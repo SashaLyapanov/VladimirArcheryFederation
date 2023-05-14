@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -188,19 +187,6 @@ public class AdminService {
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Реализация CRUD соревнований/////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
-
-    @Transactional
-    public List<Competition> showAllCompetitions() { return competitionRepository.findAll(); }
-
-    @Transactional
-    public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }
-
-
-    //Метод выборки соревнований по названию, дате, категории (пока не работает)
-    @Transactional
-    public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
-        return competitionRepository.findCompetitionByNameAndDateAndCategories(name, date, categories);
-    }
 
     @Transactional
     public void createCompetition(Competition competition) {

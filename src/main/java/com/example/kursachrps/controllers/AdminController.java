@@ -11,7 +11,6 @@ import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
-import com.example.kursachrps.repositories.CompetitionRepository;
 import com.example.kursachrps.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -170,30 +168,7 @@ public class AdminController {
     ////////////////////////Реализация CRUD соревнований/////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     *Метод для вывода всех соревнований
-     */
-    @GetMapping("competitions")
-    public List<CompetitionDTO> getCompetitions() {
-        return competitionMapper.fromCompetition(adminService.showAllCompetitions());
-    }
 
-    /**
-     * Метод для вывода соревнования по названию
-     */
-    @GetMapping("competition")
-    public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
-        return competitionMapper.fromCompetition(adminService.showCompetitionByDate(date));
-    }
-
-
-    /**
-     * Метод для поиска соревнований по названию, дате и категории спортсмена
-     */
-    @GetMapping("competitionNDC")
-    public List<CompetitionDTO> getCompetitions(@RequestParam (required = false) String name, @RequestParam (required = false) Date date, @RequestParam (required = false) String categoryName) {
-        return competitionMapper.fromCompetition(adminService.showCompetitionByNameDateCategory(name, date, categoryName));
-    }
 
 
     /**
