@@ -43,4 +43,31 @@ public class ApplicationService {
         return sportsmanDTOList;
     }
 
+    /**
+     * Выборка всех собственных заявок
+     */
+    @Transactional
+    public List<Application> getMyApplications(int myId) {
+        List<Application> applications = applicationRepository.findApplicationBySportsmanId(myId);
+        return applications;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

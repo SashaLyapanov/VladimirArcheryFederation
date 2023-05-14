@@ -9,6 +9,8 @@ import com.example.kursachrps.service.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/sportsman")
 public class SportsmanController {
@@ -50,8 +52,23 @@ public class SportsmanController {
 
         Application application = applicationMapper.fromApplicationDTO(applicationDTO);
         sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
-
     }
 
+
+    /**
+     * Просмотр всех собственных заявок на соревнования
+     */
+    @GetMapping("/allMyApplication")
+    public List<ApplicationDTO> getMyApplications(@RequestParam int myId) {
+
+        List<Application> applications = applicationService.getMyApplications(myId);
+        List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applications);
+        return applicationDTOList;
+    }
+
+
+    /**
+     * Внести стартовый взнос
+     */
 
 }
