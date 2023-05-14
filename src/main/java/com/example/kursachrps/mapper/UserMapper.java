@@ -27,6 +27,7 @@ public interface UserMapper {
     User convert(UserDTO user);
 
     BowType fromBowTypeDTO(BowTypeDTO value);
+    Set<BowType> fromBowTypeDTO(Set<BowTypeDTO> bowTypeDTOSet);
 
     BowTypeDTO fromBowType(BowType value);
     Set<BowTypeDTO> fromBowType(Set<BowType> value);

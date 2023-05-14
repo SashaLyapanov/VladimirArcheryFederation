@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -72,5 +73,5 @@ public class Competition {
             name = "competition_bow_type",
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
-    private List<BowType> bowTypeList;
+    private Set<BowType> bowTypeList;
 }

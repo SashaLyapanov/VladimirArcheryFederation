@@ -1,8 +1,10 @@
 package com.example.kursachrps.mapper;
 
 
+import com.example.kursachrps.Models.Category;
 import com.example.kursachrps.Models.Competition;
 import com.example.kursachrps.Models.CompetitionType;
+import com.example.kursachrps.dto.AdditionalDTO.CategoryDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CompetitionTypeDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import org.mapstruct.Mapper;
@@ -23,5 +25,13 @@ public interface CompetitionMapper {
     CompetitionType fromCompetitionTypeDTO(CompetitionTypeDTO competitionTypeDTO);
 
     CompetitionTypeDTO fromCompetition(CompetitionType competitionType);
+
+    Category fromCategoryDTO(CategoryDTO categoryDTO);
+
+    List<Category> fromCategoryDTO(List<CategoryDTO> categories);
+
+    CategoryDTO fromCategory(Category category);
+
+    List<CategoryDTO> fromCategory(List<Category> categories);
 
 }

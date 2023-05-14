@@ -209,8 +209,13 @@ public class AdminController {
     }
 
     /**
-     *
+     * Метод редактирования соревнований
      */
+    @PutMapping("editCompetition")
+    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionDTO updatedCompetition) {
+
+        return adminService.editCompetition(id, updatedCompetition);
+    }
 
 
 
