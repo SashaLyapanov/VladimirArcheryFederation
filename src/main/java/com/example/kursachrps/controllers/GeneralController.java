@@ -62,12 +62,12 @@ public class GeneralController {
     /**
      * Метод для просмотра всех заявок на определенные соревнования
      */
-//    @GetMapping("/applicationsForCompetition")
-//    List<ApplicationDTO> getApplications(@RequestParam int competitionId) {
-//
-//        List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
-//        return applicationDTOList;
-//    }
+    @GetMapping("/applicationsForCompetition")
+    List<ApplicationDTO> getApplications(@RequestParam int competitionId) {
+
+        List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
+        return applicationDTOList;
+    }
 
 
     /**

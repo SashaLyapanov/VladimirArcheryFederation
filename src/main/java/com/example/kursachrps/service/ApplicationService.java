@@ -21,9 +21,9 @@ public class ApplicationService {
     /**
      * Метод для выборки всех заявок для определенных соревнований
      */
-//    public List<Application> getApplicationsForCompetition(int competitionId) {
-//        return applicationRepository.findApplicationByCompetition(competitionId);
-//    }
+    public List<Application> getApplicationsForCompetition(int competitionId) {
+        return applicationRepository.findApplicationByCompetitionId(competitionId);
+    }
 
 
 
