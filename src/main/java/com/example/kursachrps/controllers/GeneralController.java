@@ -2,6 +2,7 @@ package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
+import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.service.ApplicationService;
@@ -73,6 +74,13 @@ public class GeneralController {
     /**
      * Метод для просмотра всех заявившихся спорстменов на определенные соревнования
      */
+    @GetMapping("/declaredSportsmenForCompetition")
+    List<SportsmanDTO> getDeclaredSportsmen(@RequestParam int competitionId) {
+        List<ApplicationDTO> applicationDTOList = getApplications(competitionId);
+        List<SportsmanDTO> sportsmanDTOList = applicationService.getSportsmenFromApplications(applicationDTOList);
+        return sportsmanDTOList;
+    }
+
 }
 
 
