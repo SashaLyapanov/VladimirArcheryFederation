@@ -1,5 +1,6 @@
 package com.example.kursachrps.Models;
 
+import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -25,7 +26,8 @@ public class Competition {
     @NotEmpty(message = "Место должно быть!")
     private String place;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "type_id")
     private CompetitionType type;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -38,7 +40,6 @@ public class Competition {
 
 
     @Column(name = "competition_date")
-    @NotEmpty(message = "Соревнование должно иметь дату проведения")
     private Date date;
 
     //Решить с судьями!!! Т.к. у нас в системе 1 судья, нам надо просто каждым соревам присваивать строкове имя судьи,

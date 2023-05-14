@@ -11,10 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 public class AdminService {
 
     private final SportsmanRepository sportsmanRepository;
@@ -74,11 +75,13 @@ public class AdminService {
     }
 
     //Метод, позволяющий захешировать пароль при создании спортсмена Администратором
+    @Transactional
     public SportsmanDTO hashPassword(SportsmanDTO sportsmanDTO) {
         sportsmanDTO.setPassword(passwordEncoder.encode(sportsmanDTO.getPassword()));
         return sportsmanDTO;
     }
     //Метод, позволяющий захешировать пароль при создании Тренера Администратором
+    @Transactional
     public CoachDTO hashPassword(CoachDTO coachDTO) {
         coachDTO.setPassword(passwordEncoder.encode(coachDTO.getPassword()));
         return coachDTO;
@@ -184,6 +187,51 @@ public class AdminService {
 
     @Transactional
     public List<Competition> showAllCompetitions() { return competitionRepository.findAll(); }
+
+    @Transactional
+    public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }
+
+
+    //Метод выборки соревнований по названию, дате, категории (пока не работает)
+    @Transactional
+    public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
+        return competitionRepository.findCompetitionByNameAndDateAndCategories(name, date, categories);
+    }
+
+    @Transactional
+    public void createCompetition(Competition competition) {
+        competitionRepository.save(competition);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

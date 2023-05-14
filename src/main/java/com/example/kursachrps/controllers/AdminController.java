@@ -1,6 +1,7 @@
 package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.Models.Coach;
+import com.example.kursachrps.Models.Competition;
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -173,15 +175,38 @@ public class AdminController {
      */
     @GetMapping("competitions")
     public List<CompetitionDTO> getCompetitions() {
-
         return competitionMapper.fromCompetition(adminService.showAllCompetitions());
     }
 
+    /**
+     * Метод для вывода соревнования по названию
+     */
+    @GetMapping("competition")
+    public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
+        return competitionMapper.fromCompetition(adminService.showCompetitionByDate(date));
+    }
 
 
+    /**
+     * Метод для поиска соревнований по названию, дате и категории спортсмена
+     */
+    @GetMapping("competitionNDC")
+    public List<CompetitionDTO> getCompetitions(@RequestParam (required = false) String name, @RequestParam (required = false) Date date, @RequestParam (required = false) String categoryName) {
+        return competitionMapper.fromCompetition(adminService.showCompetitionByNameDateCategory(name, date, categoryName));
+    }
 
 
+    /**
+     * Метод для создания соревнований администратором
+     */
+    @PostMapping("createCompetition")
+    public CompetitionDTO createCompetition(@RequestBody CompetitionDTO competitionDTO) {
 
+        Competition competition = competitionMapper.fromCompetitionDTO(competitionDTO);
+        adminService.createCompetition(competition);
+
+        return competitionDTO;
+    }
 
 
 
