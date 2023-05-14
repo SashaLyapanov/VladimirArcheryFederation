@@ -48,7 +48,10 @@ public class SportsmanService {
 
     }
 
-
+    /**
+     * Метод для редактирования собственного профиля у спортсмена
+     */
+    @Transactional
     public Sportsman editProfile(int sportsmanId, Sportsman updatedSportsman) {
 
         Sportsman sportsman = sportsmanMainRepository.findById(sportsmanId).orElse(null);
