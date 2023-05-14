@@ -268,7 +268,7 @@ insert into admins (id) values (1);
 
 -- создание квалификаций
 insert into qualifications (qualifications_name) values ('Начинающий');
-insert into qualifications (qualifications_name) values ('Провессионал');
+insert into qualifications (qualifications_name) values ('Профессионал');
 insert into qualifications (qualifications_name) values ('Мастер');
 
 -- создание команды
@@ -294,3 +294,42 @@ insert into users (email, user_password, role, status, first_name, last_name, pa
 values ('sportsman@mail.ru', '$2a$12$FbG/RhA5yloQfG7vKFKo8.EJQd8Ob0wiHdmVMPNDnB4ZVk0cDF7xy', 'SPORTSMAN', 'ACTIVE', 'sportsman', 'sportsman', 'sportsman', '2003-01-20');
 insert into sportsmen (team_id, sports_title_id, coach_id, id)
 values (1, 1, 2, 3);
+
+-- Создание типов лука
+insert into bow_types (bow_type_name)
+values ('Длинный лук');
+insert into bow_types (bow_type_name)
+values ('Блочный лук');
+insert into bow_types (bow_type_name)
+values ('Монгольский лук');
+insert into bow_types (bow_type_name)
+values ('Составной лук');
+
+-- Создание категорий (возрастные+пол) для соревнований
+insert into categorise (name)
+values ('Мужчины 14+');
+insert into categorise (name)
+values ('Женщины 14+');
+insert into categorise (name)
+values ('Мальчики до 14 лет');
+insert into categorise (name)
+values ('Девочки 14 лет');
+insert into categorise (name)
+values ('Юноши до 18 лет');
+insert into categorise (name)
+values ('Девушки до 18 лет');
+insert into categorise (name)
+values ('Юниоры до 21 года');
+insert into categorise (name)
+values ('Юниорки до 21 года');
+insert into categorise (name)
+values ('Мужчины');
+insert into categorise (name)
+values ('Женщины');
+
+
+-- Создание типов соревнований (3Д, таргет)
+insert into competition_type (name)
+values ('3D');
+insert into competition_type (name)
+values ('Target archery');
