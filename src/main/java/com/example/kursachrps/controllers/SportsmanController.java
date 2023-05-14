@@ -1,8 +1,11 @@
 package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.Models.Application;
+import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.dto.ApplicationDTO;
+import com.example.kursachrps.dto.SportsmanMainDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
+import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.CompetitionService;
 import com.example.kursachrps.service.SportsmanService;
@@ -18,16 +21,18 @@ public class SportsmanController {
     private final ApplicationMapper applicationMapper;
     private final ApplicationService applicationService;
     private final SportsmanService sportsmanService;
+    private final SportsmanMapper sportsmanMapper;
     private final CompetitionService competitionService;
 
     @Autowired
     public SportsmanController(ApplicationMapper applicationMapper,
                                ApplicationService applicationService,
                                SportsmanService sportsmanService,
-                               CompetitionService competitionService) {
+                               SportsmanMapper sportsmanMapper, CompetitionService competitionService) {
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
         this.sportsmanService = sportsmanService;
+        this.sportsmanMapper = sportsmanMapper;
         this.competitionService = competitionService;
     }
 
@@ -65,6 +70,26 @@ public class SportsmanController {
         List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applications);
         return applicationDTOList;
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////Методы, связанные ЛК////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Метод для редактирования личного кабинета
+     */
+    @PutMapping("/editProfile")
+    public SportsmanMainDTO editProfile(@RequestParam int sportsmanId, @RequestBody SportsmanMainDTO sportsmanMainDTO) {
+
+        Sportsman sportsman = sportsmanMapper.fromSportsmanMainDTO(sportsmanMainDTO);
+        Sportsman resultSportsman = sportsmanService.editProfile(sportsmanId, sportsman);
+
+         return sportsmanMapper.fromSportsman(resultSportsman);
+    }
+
+
 
 
     /**

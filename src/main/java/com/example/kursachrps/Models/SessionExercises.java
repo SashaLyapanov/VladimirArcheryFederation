@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "session_sessionExercises")
+@Table(name = "session_session_exercises")
 public class SessionExercises {
     @Id
     @Column

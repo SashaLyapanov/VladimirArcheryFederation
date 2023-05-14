@@ -32,7 +32,7 @@ public class Session {
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(
-//            name = "session_sessionExercises",
+//            name = "session_session_exercises",
 //            joinColumns = @JoinColumn(name = "session_id"),
 //            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
 //    private List<SessionExercises> sessionExercisesList;

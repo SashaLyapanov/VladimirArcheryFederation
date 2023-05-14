@@ -127,6 +127,11 @@ public class AdminService {
         sportsman.setSurname(updatedSportsman.getSurname());
         sportsman.setPatronymic(updatedSportsman.getPatronymic());
         sportsman.setBirthDate(updatedSportsman.getBirthDate());
+
+        Team team = updatedSportsman.getTeam();
+        if (updatedSportsman.getTeam().getId() == 0) {
+            teamRepository.save(team);
+        }
         sportsman.setTeam(updatedSportsman.getTeam());
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
         sportsman.setPersonal_coach(updatedSportsman.getPersonal_coach());

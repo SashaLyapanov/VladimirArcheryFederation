@@ -237,7 +237,7 @@ CREATE TABLE personal_exercises (
 -- );
 
 --таблица для связи пользовательских упражнений с конкретной тренировкой
-DROP TABLE IF EXISTS personalExercises_sessionExercises;
+DROP TABLE IF EXISTS personal_exercises_session_exercises;
 CREATE TABLE personalExercises_sessionExercises (
     personal_exercise_id int NOT NULL,
     session_exercise_id int NOT NULL,
@@ -247,7 +247,7 @@ CREATE TABLE personalExercises_sessionExercises (
 
 
 --таблица для связи таблиц записей тренировок с конкретной тренировкой (которая содержит набор упражнений)
-DROP TABLE IF EXISTS session_sessionExercises;
+DROP TABLE IF EXISTS session_session_exercises;
 CREATE TABLE session_sessionExercises (
     session_id int NOT NULL,
     session_exercise_id int NOT NULL,
