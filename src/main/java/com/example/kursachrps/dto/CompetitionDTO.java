@@ -5,6 +5,7 @@ import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CategoryDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CompetitionTypeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.util.Date;
@@ -19,7 +20,10 @@ public class CompetitionDTO {
     private CompetitionTypeDTO type;
     private List<CategoryDTO> categories;
     private List<BowTypeDTO> bowTypeList;
-    private String judge;
+    private String mainJudge;
+    private String secretary;
+    private String zamJudge;
+    private String judges;
     private Date date;
 
 }

@@ -105,6 +105,9 @@ CREATE TABLE competitions (
     place varchar(250) NOT NULL,
     competition_date date,
     judge varchar(250),
+    secretary varchar(100),
+    zam_judge varchar(100),
+    judges varchar(500),
     type_id int,
     FOREIGN KEY (type_id) references competition_type (id)
 );

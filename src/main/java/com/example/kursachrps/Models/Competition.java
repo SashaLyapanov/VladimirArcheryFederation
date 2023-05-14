@@ -1,6 +1,5 @@
 package com.example.kursachrps.Models;
 
-import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -8,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
+
 @Data
 @Entity
 @Table(name = "competitions")
@@ -42,10 +42,21 @@ public class Competition {
     @Column(name = "competition_date")
     private Date date;
 
-    //Решить с судьями!!! Т.к. у нас в системе 1 судья, нам надо просто каждым соревам присваивать строкове имя судьи,
-    //который по факту ведет соревнования.
+    //Главный судья
     @Column(name = "judge")
-    private String judge;
+    private String mainJudge;
+
+    //Главный секретарь
+    @Column(name = "secretary")
+    private String secretary;
+
+    //Заместитель главного судьи
+    @Column(name = "zam_judge")
+    private String zamJudge;
+
+    //Судьи помогаторы
+    @Column(name = "judges")
+    private String judges;
 
     @OneToMany(mappedBy = "competition")
     private List<Application> applications;
