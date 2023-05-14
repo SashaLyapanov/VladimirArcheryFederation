@@ -5,6 +5,7 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.repositories.CompetitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class GeneralService {
 
 
     @Transactional
-    public List<Competition> showAllCompetitions() { return competitionRepository.findAll(); }
+    public List<Competition> showAllCompetitions() { return competitionRepository.findAll(Sort.by("date")); }
 
     @Transactional
     public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }

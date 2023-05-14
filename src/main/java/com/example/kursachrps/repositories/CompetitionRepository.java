@@ -3,6 +3,7 @@ package com.example.kursachrps.repositories;
 import com.example.kursachrps.Models.Competition;
 import com.example.kursachrps.dto.CompetitionDTO;
 import jakarta.persistence.TemporalType;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, Integer> {
 
-    List<Competition> findAll();
+    List<Competition> findAll(Sort sort);
 
     @Override
     Optional<Competition> findById(Integer integer);
