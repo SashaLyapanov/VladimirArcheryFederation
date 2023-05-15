@@ -9,6 +9,7 @@ import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.CompetitionService;
 import com.example.kursachrps.service.SportsmanService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,13 +82,17 @@ public class SportsmanController {
      * Метод для редактирования личного кабинета
      */
     @PutMapping("/editProfile")
-    public SportsmanMainDTO editProfile(@RequestParam int sportsmanId, @RequestBody SportsmanMainDTO sportsmanMainDTO) {
+    public SportsmanMainDTO editProfile(@RequestParam int id, @RequestBody @Valid SportsmanMainDTO sportsmanMainDTO) {
 
+        if (sportsmanMainDTO.getPassword() != null) {
+            sportsmanService.hashPassword(sportsmanMainDTO);
+        }
         Sportsman sportsman = sportsmanMapper.fromSportsmanMainDTO(sportsmanMainDTO);
-        Sportsman resultSportsman = sportsmanService.editProfile(sportsmanId, sportsman);
+        sportsmanService.editProfile(id, sportsman);
 
-         return sportsmanMapper.fromSportsman(resultSportsman);
+         return sportsmanMainDTO;
     }
+
 
 
 
