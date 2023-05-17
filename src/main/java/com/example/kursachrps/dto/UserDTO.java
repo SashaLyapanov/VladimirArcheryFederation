@@ -1,11 +1,7 @@
 package com.example.kursachrps.dto;
 
 import com.example.kursachrps.Models.Role;
-import com.example.kursachrps.Models.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,6 +15,8 @@ public class UserDTO {
     private String email;
 
     private String password;
+
+    private Role role;
 
     private String firstName;
 
