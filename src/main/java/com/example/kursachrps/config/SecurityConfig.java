@@ -1,11 +1,9 @@
 package com.example.kursachrps.config;
 
-import com.example.kursachrps.Models.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -46,15 +44,13 @@ public class SecurityConfig {
         return http
                 .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                    .invalidSessionUrl("/api/auth/signin"))
+                    .invalidSessionUrl("/api/v1/auth/signin"))
                 .cors(withDefaults())
                 .csrf().disable()
-//                .authorizeHttpRequests(auth -> {
-                .authorizeHttpRequests((auth) ->
-                    auth.requestMatchers("/**").permitAll()
-                            .requestMatchers("/api/auth/**").permitAll()
-                            .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/**").permitAll();
+                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.anyRequest().authenticated();
 
 //                    auth.requestMatchers("/api/auth/signin").permitAll();
 //                    auth.requestMatchers("/index.html").permitAll();
@@ -70,7 +66,7 @@ public class SecurityConfig {
 //                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_DELETE.getPermission());
 //                    auth.requestMatchers(HttpMethod.PATCH, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_UPDATE.getPermission());
 //                    auth.requestMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.SPORTSMEN_READ.getPermission());
-//                })
+                })
                 .logout((logout) -> logout
                 .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
 

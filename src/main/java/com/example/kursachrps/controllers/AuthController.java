@@ -1,10 +1,18 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.Models.Role;
+import com.example.kursachrps.Models.Sportsman;
+import com.example.kursachrps.Models.Status;
 import com.example.kursachrps.dto.AuthAndRegistration.LoginDTO;
+import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
+import com.example.kursachrps.dto.UserDTO;
+import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.mapper.UserMapper;
+import com.example.kursachrps.repositories.SportsmanMainRepository;
 import com.example.kursachrps.repositories.UserMainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,36 +36,47 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SportsmanMapper sportsmanMapper;
 
-//    @PostMapping("/signin")
-//    public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDTO) {
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        return new ResponseEntity<>("User signed-in successfully!", HttpStatus.OK);
-//        //////
-//        //вот в этом методе короче надо на фронт передавать json, в котором хранится весь пользователь (UserDTO), откуда мы узнаем и роль и т.д.
-//    }
+    @Autowired
+    private SportsmanMainRepository sportsmanMainRepository;
+
+
 
     @PostMapping("/signin")
-    public User authenticateUser(@RequestBody LoginDTO loginDTO) {
+    public UserDTO authenticateUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-//        UserDTO userDTO = userMapper.transform(userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null));
-        User user = userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null);
-        return user;
+        UserDTO userDTO = userMapper.transform(userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null));
+//        User user = userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null);
+        return userDTO;
         //////
         //вот в этом методе короче надо на фронт передавать json, в котором хранится весь пользователь (UserDTO), откуда мы узнаем и роль и т.д.
     }
 
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<String> registrationUser(@RequestBody RegistrationDTO registrationDTO) {
-//
-//    }
+    @PostMapping("/signup")
+    public ResponseEntity<String> registrationUser(@RequestBody SignUpDTO signUpDTO) {
 
+        // Проверка на условие, что такого пользователя еще нет в БД
+        if (userMainRepository.existsByEmail(signUpDTO.getEmail())) {
+            return new ResponseEntity<>("This email address is already registered in the system.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Создаем спортсмена
+        Sportsman sportsman = new Sportsman();
+        sportsman = sportsmanMapper.fromSignUpDTO(signUpDTO);
+        sportsman.setRole(Role.SPORTSMAN);
+        sportsman.setStatus(Status.ACTIVE);
+        sportsman.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
+
+        sportsmanMainRepository.save(sportsman);
+
+        return new ResponseEntity<>("Sportsman registered successfully", HttpStatus.OK);
+
+    }
 }
 
