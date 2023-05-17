@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,11 @@ public class Competition {
 
     @Column(name = "competition_date")
     private Date date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    @Value("FUTURE")
+    private StatusOfCompetition status;
 
     //Главный судья
     @Column(name = "judge")

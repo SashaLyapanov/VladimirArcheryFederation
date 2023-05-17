@@ -195,6 +195,7 @@ public class AdminService {
 
     @Transactional
     public void createCompetition(Competition competition) {
+        competition.setStatus(StatusOfCompetition.FUTURE);
         competitionRepository.save(competition);
     }
 
@@ -213,6 +214,15 @@ public class AdminService {
         competition.setJudges(updatedCompetition.getJudges());
         competition.setDate(updatedCompetition.getDate());
 
+        return competition;
+    }
+
+
+    @Transactional
+    public Competition changeStatusOfCompetition(int id) {
+        Competition competition = competitionRepository.findById(id).orElse(null);
+        assert competition != null;
+        competition.setStatus(StatusOfCompetition.PRESENT);
         return competition;
     }
 

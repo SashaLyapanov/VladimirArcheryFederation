@@ -193,6 +193,15 @@ public class AdminController {
     }
 
 
+    /**
+     * Метод для смены статуса соревнованиям
+     */
+    @PutMapping("changeStatusCompetition")
+    public void changeStatusOfCompetition(@RequestParam int id) {
+        adminService.changeStatusOfCompetition(id);
+    }
+
+
 
 
 

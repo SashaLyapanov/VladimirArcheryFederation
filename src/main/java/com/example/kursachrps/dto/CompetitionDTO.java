@@ -1,6 +1,7 @@
 package com.example.kursachrps.dto;
 
 
+import com.example.kursachrps.Models.StatusOfCompetition;
 import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CategoryDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CompetitionTypeDTO;
@@ -19,6 +20,7 @@ public class CompetitionDTO {
     private String name;
     private String place;
     private CompetitionTypeDTO type;
+    private StatusOfCompetition status;
     private List<CategoryDTO> categories;
     private Set<BowTypeDTO> bowTypeList;
     private String mainJudge;

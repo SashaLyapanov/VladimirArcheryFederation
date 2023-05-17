@@ -49,24 +49,28 @@ public class SecurityConfig {
                     .invalidSessionUrl("/api/auth/signin"))
                 .cors(withDefaults())
                 .csrf().disable()
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/**").permitAll();
-                    auth.requestMatchers("/api/auth/signin").permitAll();
-                    auth.requestMatchers("/index.html").permitAll();
-                    auth.requestMatchers("/api/v1/admin/sportsmen").permitAll();
-                    auth.requestMatchers("/api/v1/admin/coaches").permitAll();
-                    auth.requestMatchers("/api/v1/admin/coach**").permitAll();
-                    auth.requestMatchers("/api/v1/admin/sportsman**").permitAll();
-                    auth.requestMatchers("/api/v1/admin/editSportsman**").permitAll();
-                    auth.requestMatchers("/api/v1/admin/competitions").permitAll();
-                    auth.requestMatchers("/api/v1/admin/blockUser**").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
-                    auth.requestMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
-                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_DELETE.getPermission());
-                    auth.requestMatchers(HttpMethod.PATCH, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_UPDATE.getPermission());
-                    auth.requestMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.SPORTSMEN_READ.getPermission());
+//                .authorizeHttpRequests(auth -> {
+                .authorizeHttpRequests((auth) ->
+                    auth.requestMatchers("/**").permitAll()
+                            .requestMatchers("/api/auth/**").permitAll()
+                            .anyRequest().authenticated()
+                )
 
-                })
+//                    auth.requestMatchers("/api/auth/signin").permitAll();
+//                    auth.requestMatchers("/index.html").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/sportsmen").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/coaches").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/coach**").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/sportsman**").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/editSportsman**").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/competitions").permitAll();
+//                    auth.requestMatchers("/api/v1/admin/blockUser**").permitAll();
+//                    auth.requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
+//                    auth.requestMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_WRITE.getPermission());
+//                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_DELETE.getPermission());
+//                    auth.requestMatchers(HttpMethod.PATCH, "/api/v1/admin/**").hasAuthority(Permission.SPORTSMAN_UPDATE.getPermission());
+//                    auth.requestMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.SPORTSMEN_READ.getPermission());
+//                })
                 .logout((logout) -> logout
                 .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
 

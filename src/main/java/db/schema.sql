@@ -104,6 +104,7 @@ CREATE TABLE competitions (
     competition_name varchar(250) NOT NULL,
     place varchar(250) NOT NULL,
     competition_date date,
+    status varchar(20),
     judge varchar(250),
     secretary varchar(100),
     zam_judge varchar(100),
