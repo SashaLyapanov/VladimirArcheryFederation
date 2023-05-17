@@ -3,7 +3,6 @@ package com.example.kursachrps.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
 
@@ -15,6 +14,11 @@ import java.util.List;
 @Table(name = "sportsmen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Sportsman extends User {
+
+    @ManyToOne
+    @JoinColumn(name = "region_id", referencedColumnName = "id")
+    private Region region;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "team_id", referencedColumnName = "id")

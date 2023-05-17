@@ -1,5 +1,6 @@
 package com.example.kursachrps.dto;
 
+import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
@@ -17,6 +18,8 @@ public class SportsmanMainDTO {
     private String email;
 
     private String password;
+
+    private RegionDTO region;
 
     private String firstName;
 

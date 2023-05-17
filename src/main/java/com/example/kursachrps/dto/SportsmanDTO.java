@@ -1,5 +1,6 @@
 package com.example.kursachrps.dto;
 
+import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class SportsmanDTO {
     private String email;
 
     private String password;
+
+    private RegionDTO region;
 
     private String firstName;
 
