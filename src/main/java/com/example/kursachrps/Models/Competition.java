@@ -46,8 +46,8 @@ public class Competition {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    @Value("FUTURE")
     private StatusOfCompetition status;
+
 
     //Главный судья
     @Column(name = "judge")

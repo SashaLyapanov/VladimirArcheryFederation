@@ -7,6 +7,7 @@ import com.example.kursachrps.Models.User;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CoachDTO;
+import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
@@ -175,19 +176,19 @@ public class AdminController {
      * Метод для создания соревнований администратором
      */
     @PostMapping("createCompetition")
-    public CompetitionDTO createCompetition(@RequestBody CompetitionDTO competitionDTO) {
+    public CompetitionCreateDTO createCompetition(@RequestBody CompetitionCreateDTO competitionCreateDTO) {
 
-        Competition competition = competitionMapper.fromCompetitionDTO(competitionDTO);
+        Competition competition = competitionMapper.fromCompetitionCreateDTO(competitionCreateDTO);
         adminService.createCompetition(competition);
 
-        return competitionDTO;
+        return competitionCreateDTO;
     }
 
     /**
      * Метод редактирования соревнований
      */
     @PutMapping("editCompetition")
-    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionDTO updatedCompetition) {
+    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionCreateDTO updatedCompetition) {
 
         return adminService.editCompetition(id, updatedCompetition);
     }

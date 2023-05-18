@@ -2,7 +2,7 @@ package com.example.kursachrps.service;
 
 import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.CoachDTO;
-import com.example.kursachrps.dto.CompetitionDTO;
+import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -33,6 +33,7 @@ public class AdminService {
     private final TeamRepository teamRepository;
     private final CompetitionRepository competitionRepository;
     private final CompetitionMapper competitionMapper;
+    private final CompetitionTypeRepository competitionTypeRepository;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
@@ -46,7 +47,7 @@ public class AdminService {
                         UserMainRepository userMainRepository,
                         SportsTitleRepository sportsTitleRepository,
                         UserMapper userMapper,
-                        TeamRepository teamRepository, CompetitionRepository competitionRepository, CompetitionMapper competitionMapper) {
+                        TeamRepository teamRepository, CompetitionRepository competitionRepository, CompetitionMapper competitionMapper, CompetitionTypeRepository competitionTypeRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
         this.coachRepository = coachRepository;
@@ -61,6 +62,7 @@ public class AdminService {
         this.teamRepository = teamRepository;
         this.competitionRepository = competitionRepository;
         this.competitionMapper = competitionMapper;
+        this.competitionTypeRepository = competitionTypeRepository;
     }
 
 
@@ -200,12 +202,13 @@ public class AdminService {
     }
 
     @Transactional
-    public Competition editCompetition(int id, CompetitionDTO updatedCompetition) {
+    public Competition editCompetition(int id, CompetitionCreateDTO updatedCompetition) {
         Competition competition = competitionRepository.findById(id).orElse(null);
 
         competition.setName(updatedCompetition.getName());
         competition.setPlace(updatedCompetition.getPlace());
         competition.setType(competitionMapper.fromCompetitionTypeDTO(updatedCompetition.getType()));
+        competition.setStatus(StatusOfCompetition.FUTURE);
         competition.setCategories(competitionMapper.fromCategoryDTO(updatedCompetition.getCategories()));
         competition.setBowTypeList(userMapper.fromBowTypeDTO(updatedCompetition.getBowTypeList()));
         competition.setMainJudge(updatedCompetition.getMainJudge());
