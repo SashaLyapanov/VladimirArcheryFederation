@@ -8,7 +8,6 @@ import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
-import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -190,7 +189,9 @@ public class AdminController {
     @PutMapping("editCompetition")
     public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionCreateDTO updatedCompetition) {
 
-        return adminService.editCompetition(id, updatedCompetition);
+        Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
+        adminService.editCompetition(id, competition);
+        return competition;
     }
 
 

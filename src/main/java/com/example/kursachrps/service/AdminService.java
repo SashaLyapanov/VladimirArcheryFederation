@@ -2,7 +2,6 @@ package com.example.kursachrps.service;
 
 import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.CoachDTO;
-import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-//@Transactional(readOnly = true)
 public class AdminService {
 
     private final SportsmanRepository sportsmanRepository;
@@ -202,20 +200,20 @@ public class AdminService {
     }
 
     @Transactional
-    public Competition editCompetition(int id, CompetitionCreateDTO updatedCompetition) {
+    public Competition editCompetition(int id, Competition updatedCompetition) {
         Competition competition = competitionRepository.findById(id).orElse(null);
 
         competition.setName(updatedCompetition.getName());
         competition.setPlace(updatedCompetition.getPlace());
-        competition.setType(competitionMapper.fromCompetitionTypeDTO(updatedCompetition.getType()));
-        competition.setStatus(StatusOfCompetition.FUTURE);
-        competition.setCategories(competitionMapper.fromCategoryDTO(updatedCompetition.getCategories()));
-        competition.setBowTypeList(userMapper.fromBowTypeDTO(updatedCompetition.getBowTypeList()));
+        competition.setType(updatedCompetition.getType());
+        competition.setCategories(updatedCompetition.getCategories());
+        competition.setBowTypeList(updatedCompetition.getBowTypeList());
         competition.setMainJudge(updatedCompetition.getMainJudge());
         competition.setSecretary(updatedCompetition.getSecretary());
         competition.setZamJudge(updatedCompetition.getZamJudge());
         competition.setJudges(updatedCompetition.getJudges());
         competition.setDate(updatedCompetition.getDate());
+        competition.setStatus(StatusOfCompetition.FUTURE);
 
         return competition;
     }
