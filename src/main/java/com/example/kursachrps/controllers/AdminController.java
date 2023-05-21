@@ -58,7 +58,6 @@ public class AdminController {
     /**
      * Метод для вывода спортсмена (Sportsman)
      */
-//    @GetMapping("sportsman/{email}")
     @GetMapping("sportsman")
     public SportsmanAdmDTO getSportsman(@RequestParam String email) {
         SportsmanAdmDTO sportsmanAdmDTO = userMapper.fromSportsman(adminService.getSportsmanByEmail(email));
@@ -95,8 +94,6 @@ public class AdminController {
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Реализация CRUD тренеров/////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
-////////!!!!!!!!!!!!!!!!!!У тренеров почему-то не выводится список типов лука, из которых они стреляют!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     /**
      * Метод для получения всех тренеров в системе
      */

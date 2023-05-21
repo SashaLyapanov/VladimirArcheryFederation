@@ -19,6 +19,10 @@ public class Sportsman extends User {
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     private Region region;
 
+    @ManyToOne
+    @JoinColumn(name = "sex_id", referencedColumnName = "id")
+    private Sex sex;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "team_id", referencedColumnName = "id")

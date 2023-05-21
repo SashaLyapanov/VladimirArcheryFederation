@@ -14,7 +14,7 @@ public class ApplicationDTO {
 
     private BowTypeDTO bowType;
 
-    private CompetitionDTO competition;
+    private CompetitionCreateDTO competition;
 
     private SportsmanDTO sportsman;
 }
