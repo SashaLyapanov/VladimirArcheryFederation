@@ -2,8 +2,9 @@ package com.example.kursachrps.service;
 
 import com.example.kursachrps.ExcelGenerator2;
 import com.example.kursachrps.Models.Application;
+import com.example.kursachrps.Models.Competition;
 import com.example.kursachrps.repositories.ApplicationRepository;
-import com.example.kursachrps.repositories.SportsmanMainRepository;
+import com.example.kursachrps.repositories.CompetitionRepository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,21 @@ import java.util.List;
 @Service
 public class JudgeService {
 
-    private SportsmanMainRepository sportsmanMainRepository;
     private ApplicationRepository applicationRepository;
+    private CompetitionRepository competitionRepository;
+
     private ExcelGenerator2 excelGenerator2 = new ExcelGenerator2();
 
+
     @Autowired
-    public JudgeService(SportsmanMainRepository sportsmanMainRepository,
-                        ApplicationRepository applicationRepository) {
-        this.sportsmanMainRepository = sportsmanMainRepository;
+    public JudgeService(ApplicationRepository applicationRepository, CompetitionRepository competitionRepository) {
         this.applicationRepository = applicationRepository;
+        this.competitionRepository = competitionRepository;
     }
 
-
+    /**
+     * Метод для генерации EXCEL протокола 3D соревнований.
+     */
     public void generateProtocol(int competitionId) throws IOException {
         //Это наш шаблон, чтобы скопировать его в новый файл
         File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filesExcel\\TestPattern.xlsx");
@@ -70,5 +74,13 @@ public class JudgeService {
             }
             System.out.println("Протокол успешно создан");
         }
+    }
+
+
+    /**
+     * Метод для вывода списка соревнований, где status = Present
+     */
+    public List<Competition> getPresentCompetitions() {
+        return competitionRepository.findAllPresent();
     }
 }
