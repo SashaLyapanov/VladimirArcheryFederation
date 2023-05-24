@@ -29,8 +29,8 @@ public class JudgeController {
 
 
     @GetMapping("/generateProtocol")
-    public void generateProtocol() throws IOException {
-        judgeService.generateProtocol();
+    public void generateProtocol(@RequestParam int competitionId) throws IOException {
+        judgeService.generateProtocol(competitionId);
     }
 
 }

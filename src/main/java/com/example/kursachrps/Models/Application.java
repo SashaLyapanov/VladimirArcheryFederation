@@ -20,7 +20,6 @@ public class Application {
     @JoinColumn(name = "competition_id", referencedColumnName = "id")
     private Competition competition;
 
-
     //В зависимости от данного поля у нас будет генерироваться протокол (Если оплата есть, то вносим в протокол). Нет, то сорян
     @Column(name = "payment")
     private boolean payment;
