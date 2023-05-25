@@ -17,6 +17,10 @@ public class Application {
     private Sportsman sportsman;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coach_id", referencedColumnName = "id")
+    private Coach coach;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "id")
     private Competition competition;
 

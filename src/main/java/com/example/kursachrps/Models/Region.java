@@ -20,4 +20,7 @@ public class Region {
 
     @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
     private List<Sportsman> sportsmen;
+
+    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
+    private List<Coach>  coaches;
 }

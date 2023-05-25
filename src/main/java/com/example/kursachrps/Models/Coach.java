@@ -1,5 +1,6 @@
 package com.example.kursachrps.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
@@ -11,6 +12,19 @@ import java.util.Set;
 @Entity
 @Table(name="coaches")
 public class Coach extends User {
+    @ManyToOne
+    @JoinColumn(name = "region_id", referencedColumnName = "id")
+    private Region region;
+
+    @ManyToOne
+    @JoinColumn(name = "sex_id", referencedColumnName = "id")
+    private Sex sex;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
+    private SportsTitle sportsTitle;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qualification_id", referencedColumnName = "id")
     private Qualification qualification;
@@ -29,4 +43,8 @@ public class Coach extends User {
 
     @OneToMany(mappedBy = "personal_coach", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sportsman> sportsmen;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "coach")
+    private List<Application> applicationList;
 }

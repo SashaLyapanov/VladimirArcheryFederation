@@ -19,4 +19,7 @@ public class SportsTitle {
 
     @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Sportsman> sportsmanList;
+
+    @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Coach> coachList;
 }

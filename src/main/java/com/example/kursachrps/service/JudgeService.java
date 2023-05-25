@@ -1,13 +1,16 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.ExcelGenerator2;
-import com.example.kursachrps.Models.Application;
-import com.example.kursachrps.Models.Competition;
+import com.example.kursachrps.Models.*;
+import com.example.kursachrps.mapper.CoachMapper;
+import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;
 import com.example.kursachrps.repositories.CompetitionRepository;
+import com.example.kursachrps.repositories.UserMainRepository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -18,14 +21,24 @@ public class JudgeService {
 
     private ApplicationRepository applicationRepository;
     private CompetitionRepository competitionRepository;
+    private UserMainRepository userMainRepository;
+    private SportsmanMapper sportsmanMapper;
+    private CoachMapper coachMapper;
 
     private ExcelGenerator2 excelGenerator2 = new ExcelGenerator2();
 
 
     @Autowired
-    public JudgeService(ApplicationRepository applicationRepository, CompetitionRepository competitionRepository) {
+    public JudgeService(ApplicationRepository applicationRepository,
+                        CompetitionRepository competitionRepository,
+                        UserMainRepository userMainRepository,
+                        SportsmanMapper sportsmanMapper,
+                        CoachMapper coachMapper) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
+        this.userMainRepository = userMainRepository;
+        this.sportsmanMapper = sportsmanMapper;
+        this.coachMapper = coachMapper;
     }
 
     /**
@@ -82,5 +95,28 @@ public class JudgeService {
      */
     public List<Competition> getPresentCompetitions() {
         return competitionRepository.findAllPresent();
+    }
+
+
+    /**
+     * Метод для регистрации спортсмена/тренера на соревнования
+     */
+    @Transactional
+    public void registrateParticipantToCompetition(String email, int competitionId, Application application) {
+
+        Competition competition = competitionRepository.findById(competitionId).orElse(null);
+        User participant = userMainRepository.findByEmail(email).orElse(null);
+
+        application.setCompetition(competition);
+        if (participant.getRole() == Role.SPORTSMAN) {
+            Sportsman sportsman = sportsmanMapper.fromUser(participant);
+            application.setSportsman(sportsman);
+        } else if(participant.getRole() == Role.COACH) {
+            Coach coach = coachMapper.fromUser(participant);
+            application.setCoach(coach);
+        }
+        application.setPayment(true);
+
+        applicationRepository.save(application);
     }
 }
