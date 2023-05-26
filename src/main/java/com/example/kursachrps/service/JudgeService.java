@@ -77,7 +77,6 @@ public class JudgeService {
                 os.close();
             }
 
-//            List<Sportsman> sportsmen = sportsmanMainRepository.findAll();
             List<Application> applications = applicationRepository.findApplicationByCompetitionId(competitionId);
 
             try {

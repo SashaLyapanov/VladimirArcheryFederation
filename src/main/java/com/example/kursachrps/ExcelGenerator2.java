@@ -17,14 +17,26 @@ public class ExcelGenerator2 {
         Map<Integer, Object[]> data = new HashMap<>();
         for (Application application: applications) {
             rowNum++;
-            Sportsman sportsman = application.getSportsman();
-            Sex sexName = sportsman.getSex();
-            SportsTitle sportsTitle = sportsman.getSportsTitle();
-            Region region = sportsman.getRegion();
-            BowType bowType = application.getBowType();
-            if (sexName != null && sportsTitle != null && region != null) {
-                data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
-                        sexName.getName(), sportsman.getBirthDate(), region.getName(), sportsTitle.getName(), bowType.getBowTypeName()});
+            if (application.getCoach() == null) {
+                Sportsman sportsman = application.getSportsman();
+                Sex sexName = sportsman.getSex();
+                SportsTitle sportsTitle = sportsman.getSportsTitle();
+                Region region = sportsman.getRegion();
+                BowType bowType = application.getBowType();
+                if (sexName != null && sportsTitle != null && region != null) {
+                    data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                            sexName.getName(), sportsman.getBirthDate(), region.getName(), sportsTitle.getName(), bowType.getBowTypeName()});
+                }
+            } else if(application.getSportsman() == null) {
+                Coach coach = application.getCoach();
+                Sex sexName = coach.getSex();
+                SportsTitle sportsTitle = coach.getSportsTitle();
+                Region region = coach.getRegion();
+                BowType bowType = application.getBowType();
+                if (sexName != null && sportsTitle != null && region != null) {
+                    data.put(rowNum, new Object[]{coach.getSurname() + " " + coach.getFirstName() + " " + coach.getPatronymic(),
+                            sexName.getName(), coach.getBirthDate(), region.getName(), sportsTitle.getName(), bowType.getBowTypeName()});
+                }
             }
         }
         return data;
