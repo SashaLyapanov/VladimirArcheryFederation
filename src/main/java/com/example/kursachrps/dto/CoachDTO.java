@@ -1,15 +1,11 @@
 package com.example.kursachrps.dto;
 
-import com.example.kursachrps.Models.BowType;
-import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
-import com.example.kursachrps.dto.AdditionalDTO.QualificationDTO;
-import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
+import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -26,6 +22,12 @@ public class CoachDTO {
     private String surname;
 
     private String patronymic;
+
+    private RegionDTO region;
+
+    private SexDTO sex;
+
+    private SportsTitleDTO sportsTitle;
 
     private Date birthDate;
 

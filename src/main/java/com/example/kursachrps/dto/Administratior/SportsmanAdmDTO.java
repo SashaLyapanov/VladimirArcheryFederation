@@ -1,5 +1,7 @@
 package com.example.kursachrps.dto.Administratior;
 
+import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
+import com.example.kursachrps.dto.AdditionalDTO.SexDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,6 +22,10 @@ public class SportsmanAdmDTO {
     private String surname;
 
     private String patronymic;
+
+    private RegionDTO region;
+
+    private SexDTO sex;
 
     private TeamDTO team;
 

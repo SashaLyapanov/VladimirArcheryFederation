@@ -3,10 +3,7 @@ package com.example.kursachrps.service;
 import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
-import com.example.kursachrps.mapper.CompetitionMapper;
-import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.repositories.*;
-import com.example.kursachrps.repositories.RegistrAndAuth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,50 +14,26 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private final SportsmanRepository sportsmanRepository;
     private final SportsmanMainRepository sportsmanMainRepository;
-    private final CoachRepository coachRepository;
     private final CoachMainRepository coachMainRepository;
-    private final JudgeRepository judgeRepository;
-    private final AdminRepository adminRepository;
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
-    private final SportsTitleRepository sportsTitleRepository;
-    private final UserMapper userMapper;
     private final TeamRepository teamRepository;
     private final CompetitionRepository competitionRepository;
-    private final CompetitionMapper competitionMapper;
-    private final CompetitionTypeRepository competitionTypeRepository;
 
     @Autowired
-    public AdminService(SportsmanRepository sportsmanRepository,
-                        SportsmanMainRepository sportsmanMainRepository,
-                        CoachRepository coachRepository,
+    public AdminService(SportsmanMainRepository sportsmanMainRepository,
                         CoachMainRepository coachMainRepository,
-                        JudgeRepository judgeRepository,
-                        AdminRepository adminRepository,
-                        UserRepository userRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
-                        SportsTitleRepository sportsTitleRepository,
-                        UserMapper userMapper,
-                        TeamRepository teamRepository, CompetitionRepository competitionRepository, CompetitionMapper competitionMapper, CompetitionTypeRepository competitionTypeRepository) {
-        this.sportsmanRepository = sportsmanRepository;
+                        TeamRepository teamRepository,
+                        CompetitionRepository competitionRepository) {
         this.sportsmanMainRepository = sportsmanMainRepository;
-        this.coachRepository = coachRepository;
         this.coachMainRepository = coachMainRepository;
-        this.judgeRepository = judgeRepository;
-        this.adminRepository = adminRepository;
-        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
-        this.sportsTitleRepository = sportsTitleRepository;
-        this.userMapper = userMapper;
         this.teamRepository = teamRepository;
         this.competitionRepository = competitionRepository;
-        this.competitionMapper = competitionMapper;
-        this.competitionTypeRepository = competitionTypeRepository;
     }
 
 
@@ -79,15 +52,13 @@ public class AdminService {
 
     //Метод, позволяющий захешировать пароль при создании спортсмена Администратором
     @Transactional
-    public SportsmanDTO hashPassword(SportsmanDTO sportsmanDTO) {
+    public void hashPassword(SportsmanDTO sportsmanDTO) {
         sportsmanDTO.setPassword(passwordEncoder.encode(sportsmanDTO.getPassword()));
-        return sportsmanDTO;
     }
     //Метод, позволяющий захешировать пароль при создании Тренера Администратором
     @Transactional
-    public CoachDTO hashPassword(CoachDTO coachDTO) {
+    public void hashPassword(CoachDTO coachDTO) {
         coachDTO.setPassword(passwordEncoder.encode(coachDTO.getPassword()));
-        return coachDTO;
     }
 
 
@@ -106,6 +77,7 @@ public class AdminService {
     @Transactional
     public User blockingUser(String email) {
         User user = userMainRepository.findByEmail(email).orElse(null);
+        assert user != null;
         user.setStatus(Status.BANNED);
         return user;
     }
@@ -113,20 +85,24 @@ public class AdminService {
     @Transactional
     public User unblockingUser(String email) {
         User user = userMainRepository.findByEmail(email).orElse(null);
+        assert user != null;
         user.setStatus(Status.ACTIVE);
         return user;
     }
 
 
     @Transactional
-    public Sportsman editSportsman(String email, Sportsman updatedSportsman) {
+    public void editSportsman(String email, Sportsman updatedSportsman) {
 
         Sportsman sportsman = sportsmanMainRepository.findByEmail(email).orElse(null);
 
+        assert sportsman != null;
         sportsman.setFirstName(updatedSportsman.getFirstName());
         sportsman.setSurname(updatedSportsman.getSurname());
         sportsman.setPatronymic(updatedSportsman.getPatronymic());
         sportsman.setBirthDate(updatedSportsman.getBirthDate());
+        sportsman.setRegion(updatedSportsman.getRegion());
+        sportsman.setSex(updatedSportsman.getSex());
 
         Team team = updatedSportsman.getTeam();
         if (updatedSportsman.getTeam().getId() == 0) {
@@ -135,8 +111,6 @@ public class AdminService {
         sportsman.setTeam(updatedSportsman.getTeam());
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
         sportsman.setPersonal_coach(updatedSportsman.getPersonal_coach());
-
-        return sportsman;
     }
 
 
@@ -166,14 +140,18 @@ public class AdminService {
 
 
     @Transactional
-    public Coach editCoach(String email, Coach updatedCoach) {
+    public void editCoach(String email, Coach updatedCoach) {
 
         Coach coach = coachMainRepository.findByEmail(email).orElse(null);
 
+        assert coach != null;
         coach.setFirstName(updatedCoach.getFirstName());
         coach.setSurname(updatedCoach.getSurname());
         coach.setPatronymic(updatedCoach.getPatronymic());
         coach.setBirthDate(updatedCoach.getBirthDate());
+        coach.setRegion(updatedCoach.getRegion());
+        coach.setSex(updatedCoach.getSex());
+        coach.setSportsTitle(updatedCoach.getSportsTitle());
 
         Team team = updatedCoach.getTeam();
         if (updatedCoach.getTeam().getId() == 0) {
@@ -184,8 +162,6 @@ public class AdminService {
         coach.setQualification(updatedCoach.getQualification());
         coach.setTeam(updatedCoach.getTeam());
         coach.setBowTypeList(updatedCoach.getBowTypeList());
-
-        return coach;
     }
 
 
@@ -200,9 +176,10 @@ public class AdminService {
     }
 
     @Transactional
-    public Competition editCompetition(int id, Competition updatedCompetition) {
+    public void editCompetition(int id, Competition updatedCompetition) {
         Competition competition = competitionRepository.findById(id).orElse(null);
 
+        assert competition != null;
         competition.setName(updatedCompetition.getName());
         competition.setPlace(updatedCompetition.getPlace());
         competition.setType(updatedCompetition.getType());
@@ -214,17 +191,14 @@ public class AdminService {
         competition.setJudges(updatedCompetition.getJudges());
         competition.setDate(updatedCompetition.getDate());
         competition.setStatus(StatusOfCompetition.FUTURE);
-
-        return competition;
     }
 
 
     @Transactional
-    public Competition changeStatusOfCompetition(int id) {
+    public void changeStatusOfCompetition(int id) {
         Competition competition = competitionRepository.findById(id).orElse(null);
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PRESENT);
-        return competition;
     }
 
 
