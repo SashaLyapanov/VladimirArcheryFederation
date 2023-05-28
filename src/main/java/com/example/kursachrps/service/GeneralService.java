@@ -71,4 +71,11 @@ public class GeneralService {
     public List<BowType> getAllBowType() {
         return bowTypeRepository.findAll();
     }
+
+
+    public String getProtocolNameByCompetitionId(int competitionId) {
+        Competition competition  = competitionRepository.findById(competitionId).orElse(null);
+        assert competition != null;
+        return competition.getPdfFile();
+    }
 }
