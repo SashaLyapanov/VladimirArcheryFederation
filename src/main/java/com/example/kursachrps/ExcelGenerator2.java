@@ -52,7 +52,16 @@ public class ExcelGenerator2 {
         CellStyle dataStyle = workbook.createCellStyle();
         dataStyle.setDataFormat(format.getFormat("yyyy"));
 
-        sheet.autoSizeColumn(1);
+        CellStyle style = workbook.createCellStyle();
+        //Стиль для шрифта
+        Font font = workbook.createFont();
+        font.setFontName("Arial");
+        style.setFont(font);
+        //Стиль для рамки вокруг ячеек
+        style.setBorderBottom(BorderStyle.MEDIUM);
+        style.setBorderTop(BorderStyle.MEDIUM);
+        style.setBorderRight(BorderStyle.MEDIUM);
+        style.setBorderLeft(BorderStyle.MEDIUM);
         //////////////////
 
         //Значение 4 четко под формат TestPattern.xlsx
@@ -65,21 +74,33 @@ public class ExcelGenerator2 {
         for(Integer key: keySet) {
             Row row = sheet.getRow(rowNum++);
             Object[] objArr = data.get(key);
-            int cellNum = 1;
+            int cellNum = 0;
             for(Object obj: objArr) {
                 Cell cell = row.createCell(cellNum++);
                 if (obj instanceof String) {
                     cell.setCellValue((String) obj);
+                    cell.setCellStyle(style);
                 } else if (obj instanceof Integer) {
                     cell.setCellValue((Integer) obj);
+                    cell.setCellStyle(style);
                 } else if (obj instanceof Date) {
-                    cell.setCellStyle(dataStyle);
                     cell.setCellValue((Date) obj);
+                    cell.setCellStyle(dataStyle);
+                    cell.setCellStyle(style);
                 } else {
                     cell.setCellValue((String) obj);
+                    cell.setCellStyle(style);
                 }
             }
         }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        sheet.autoSizeColumn(3);
+        sheet.autoSizeColumn(4);
+        sheet.autoSizeColumn(5);
+        sheet.autoSizeColumn(6);
         try {
             FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);

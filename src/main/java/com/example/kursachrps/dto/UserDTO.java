@@ -12,6 +12,8 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
+    private int id;
+
     private String email;
 
     private String password;
