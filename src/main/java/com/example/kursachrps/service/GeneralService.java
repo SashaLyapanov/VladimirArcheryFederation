@@ -1,9 +1,11 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.mapper.CompetitionMapper;
-import com.example.kursachrps.mapper.UserMapper;
+import com.example.kursachrps.Models.Region;
+import com.example.kursachrps.Models.SportsTitle;
 import com.example.kursachrps.repositories.CompetitionRepository;
+import com.example.kursachrps.repositories.RegionRepository;
+import com.example.kursachrps.repositories.SportsTitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,16 +18,16 @@ import java.util.List;
 public class GeneralService {
 
     private final CompetitionRepository competitionRepository;
-    private final UserMapper userMapper;
-    private final CompetitionMapper competitionMapper;
+    private final RegionRepository regionRepository;
+    private final SportsTitleRepository sportsTitleRepository;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
-                           UserMapper userMapper,
-                           CompetitionMapper competitionMapper) {
+                           RegionRepository regionRepository,
+                           SportsTitleRepository sportsTitleRepository) {
         this.competitionRepository = competitionRepository;
-        this.userMapper = userMapper;
-        this.competitionMapper = competitionMapper;
+        this.regionRepository = regionRepository;
+        this.sportsTitleRepository = sportsTitleRepository;
     }
 
 
@@ -40,5 +42,16 @@ public class GeneralService {
     @Transactional
     public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
         return competitionRepository.findCompetitionByNameAndDateAndCategories(name, date, categories);
+    }
+
+
+    @Transactional
+    public List<Region> getAllRegions() {
+        return regionRepository.findAll();
+    }
+
+    @Transactional
+    public List<SportsTitle> getAllSportsTitle() {
+        return sportsTitleRepository.findAll();
     }
 }

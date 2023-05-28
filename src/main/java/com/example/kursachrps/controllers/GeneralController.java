@@ -1,10 +1,13 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
+import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
+import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.GeneralService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +26,15 @@ public class GeneralController {
     private final GeneralService generalService;
     private final ApplicationService applicationService;
     private final ApplicationMapper applicationMapper;
+    private final GeneralMapper generalMapper;
 
     public GeneralController (CompetitionMapper competitionMapper,
-                              GeneralService generalService, ApplicationService applicationService, ApplicationMapper applicationMapper) {
+                              GeneralService generalService, ApplicationService applicationService, ApplicationMapper applicationMapper, GeneralMapper generalMapper) {
         this.competitionMapper = competitionMapper;
         this.generalService = generalService;
         this.applicationService = applicationService;
         this.applicationMapper = applicationMapper;
+        this.generalMapper = generalMapper;
     }
 
 
@@ -81,6 +86,18 @@ public class GeneralController {
         return sportsmanDTOList;
     }
 
+    /**
+     * Запрос на получение всех регионов
+     */
+    @GetMapping("allRegions")
+    List<RegionDTO> getRegions() {
+        return generalMapper.fromRegion(generalService.getAllRegions());
+    }
+
+    @GetMapping("allSportsTitle")
+    List<SportsTitleDTO> getAllSportsTitle() {
+        return generalMapper.fromSportsTitle(generalService.getAllSportsTitle());
+    }
 
 
     /**
