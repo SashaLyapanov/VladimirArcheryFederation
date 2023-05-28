@@ -17,4 +17,6 @@ public class ApplicationDTO {
     private CompetitionCreateDTO competition;
 
     private SportsmanDTO sportsman;
+
+    private CoachDTO coach;
 }
