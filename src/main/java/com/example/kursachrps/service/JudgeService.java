@@ -121,7 +121,7 @@ public class JudgeService {
     /**
      * Метод для преобразования xlsx в PDF
      */
-    public void convertXLSXToPDF(String excelFileName) throws Exception {
+    public String convertXLSXToPDF(String excelFileName) throws Exception {
         Workbook workbook = new Workbook(excelFileName);
 
         PdfSaveOptions options = new PdfSaveOptions();
@@ -129,6 +129,8 @@ public class JudgeService {
 
         LocalDate today = LocalDate.now();
         workbook.save("C:/Users/-/IdeaProjects/KursachRPS/src/filePDF/" + today + ".pdf", options);
+
+        return today + ".pdf";
     }
 
 
@@ -161,5 +163,11 @@ public class JudgeService {
         application.setPayment(true);
 
         applicationRepository.save(application);
+    }
+
+    @Transactional
+    public void addPathFileInCompetition(int competitionId, String name) {
+        Competition competition = competitionRepository.findById(competitionId).orElse(null);
+        competition.setPdfFile(name);
     }
 }

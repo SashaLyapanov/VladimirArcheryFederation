@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -69,9 +67,10 @@ public class JudgeController {
      * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
      */
     @PostMapping("/uploadFile")
-    public void handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception {
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam int competitionId) throws Exception {
         String path = judgeService.uploadFile(file);
-        judgeService.convertXLSXToPDF(path);
+        String newFile = judgeService.convertXLSXToPDF(path);
+        judgeService.addPathFileInCompetition(competitionId, newFile);
     }
 
 

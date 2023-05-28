@@ -609,6 +609,7 @@ CREATE TABLE competitions (
                               zam_judge varchar(100),
                               judges varchar(500),
                               type_id int,
+                              pdf_file varchar(250),
                               FOREIGN KEY (type_id) references competition_type (id)
 );
 
