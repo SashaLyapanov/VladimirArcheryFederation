@@ -1,9 +1,7 @@
 package com.example.kursachrps.mapper;
 
-import com.example.kursachrps.Models.Region;
-import com.example.kursachrps.Models.SportsTitle;
-import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
-import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
+import com.example.kursachrps.Models.*;
+import com.example.kursachrps.dto.AdditionalDTO.*;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -15,4 +13,10 @@ public interface GeneralMapper {
 
     SportsTitleDTO fromSportsTitle(SportsTitle sportsTitle);
     List<SportsTitleDTO> fromSportsTitle(List<SportsTitle> sportsTitle);
+
+    List<QualificationDTO> fromQualification(List<Qualification> qualifications);
+
+    List<TeamDTO> fromTeam(List<Team> teams);
+
+    List<BowTypeDTO> fromBowType(List<BowType> bowTypes);
 }

@@ -1,7 +1,6 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
-import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
+import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
@@ -94,10 +93,38 @@ public class GeneralController {
         return generalMapper.fromRegion(generalService.getAllRegions());
     }
 
+    /**
+     * Запрос на получение всех регионов
+     */
     @GetMapping("allSportsTitle")
     List<SportsTitleDTO> getAllSportsTitle() {
         return generalMapper.fromSportsTitle(generalService.getAllSportsTitle());
     }
+
+    /**
+     * Запрос на получение всех квалификаций у тренеров
+     */
+    @GetMapping("allQualification")
+    List<QualificationDTO> getAllQualifications() {
+        return generalMapper.fromQualification(generalService.getAllQualifications());
+    }
+
+    /**
+     * Запрос на получение всех команд
+     */
+    @GetMapping("allTeams")
+    List<TeamDTO> getAllTeams() {
+        return generalMapper.fromTeam(generalService.getAllTeams());
+    }
+
+    /**
+     * Запрос на получение всех типов луков
+     */
+    @GetMapping("allBowTypes")
+    List<BowTypeDTO> getAllBowType() {
+        return generalMapper.fromBowType(generalService.getAllBowType());
+    }
+
 
 
     /**

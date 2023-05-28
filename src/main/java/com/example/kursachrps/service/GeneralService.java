@@ -1,11 +1,7 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.Models.Region;
-import com.example.kursachrps.Models.SportsTitle;
-import com.example.kursachrps.repositories.CompetitionRepository;
-import com.example.kursachrps.repositories.RegionRepository;
-import com.example.kursachrps.repositories.SportsTitleRepository;
+import com.example.kursachrps.Models.*;
+import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,14 +16,20 @@ public class GeneralService {
     private final CompetitionRepository competitionRepository;
     private final RegionRepository regionRepository;
     private final SportsTitleRepository sportsTitleRepository;
+    private final QualificatinoRepository qualificatinoRepository;
+    private final BowTypeRepository bowTypeRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
                            RegionRepository regionRepository,
-                           SportsTitleRepository sportsTitleRepository) {
+                           SportsTitleRepository sportsTitleRepository, QualificatinoRepository qualificatinoRepository, BowTypeRepository bowTypeRepository, TeamRepository teamRepository) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
+        this.qualificatinoRepository = qualificatinoRepository;
+        this.bowTypeRepository = bowTypeRepository;
+        this.teamRepository = teamRepository;
     }
 
 
@@ -53,5 +55,20 @@ public class GeneralService {
     @Transactional
     public List<SportsTitle> getAllSportsTitle() {
         return sportsTitleRepository.findAll();
+    }
+
+    @Transactional
+    public List<Qualification> getAllQualifications() {
+        return qualificatinoRepository.findAll();
+    }
+
+    @Transactional
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
+
+    @Transactional
+    public List<BowType> getAllBowType() {
+        return bowTypeRepository.findAll();
     }
 }
