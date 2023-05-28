@@ -48,15 +48,14 @@ public class ExcelGenerator2 {
         Sheet sheet = workbook.getSheetAt(0);
 
         //////////////////
-        DataFormat format = workbook.createDataFormat();
-        CellStyle dataStyle = workbook.createCellStyle();
-        dataStyle.setDataFormat(format.getFormat("yyyy"));
-
         CellStyle style = workbook.createCellStyle();
         //Стиль для шрифта
         Font font = workbook.createFont();
         font.setFontName("Arial");
         style.setFont(font);
+        //Стиль для даты
+        DataFormat format = workbook.createDataFormat();
+        style.setDataFormat(format.getFormat("yyyy"));
         //Стиль для рамки вокруг ячеек
         style.setBorderBottom(BorderStyle.MEDIUM);
         style.setBorderTop(BorderStyle.MEDIUM);
@@ -85,7 +84,6 @@ public class ExcelGenerator2 {
                     cell.setCellStyle(style);
                 } else if (obj instanceof Date) {
                     cell.setCellValue((Date) obj);
-                    cell.setCellStyle(dataStyle);
                     cell.setCellStyle(style);
                 } else {
                     cell.setCellValue((String) obj);

@@ -9,11 +9,18 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.GeneralService;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -124,6 +131,26 @@ public class GeneralController {
     List<BowTypeDTO> getAllBowType() {
         return generalMapper.fromBowType(generalService.getAllBowType());
     }
+
+
+    /**
+     * Метод для скачивания pdf протокола
+     */
+//    @GetMapping("/savePDFProtocol")
+//    public ResponseEntity<Resource> savePDFProtocol(@RequestParam Date date) throws IOException {
+//        //Реализация скачивания файла
+//        InputStreamResource resource = new InputStreamResource(new FileInputStream(fileName));
+//        HttpHeaders header = new HttpHeaders();
+//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName.getName());
+//        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+//        header.add("Pragma", "no-cache");
+//        header.add("Expires", "0");
+//        return ResponseEntity.ok()
+//                .headers(header)
+//                .contentLength(fileName.length())
+//                .contentType(MediaType.parseMediaType("application/octet-stream"))
+//                .body(resource);
+//    }
 
 
 

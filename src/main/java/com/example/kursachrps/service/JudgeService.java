@@ -1,5 +1,7 @@
 package com.example.kursachrps.service;
 
+import com.aspose.cells.PdfSaveOptions;
+import com.aspose.cells.Workbook;
 import com.example.kursachrps.ExcelGenerator2;
 import com.example.kursachrps.Models.*;
 import com.example.kursachrps.mapper.CoachMapper;
@@ -11,6 +13,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -44,7 +47,8 @@ public class JudgeService {
     /**
      * Метод для генерации EXCEL протокола 3D соревнований.
      */
-    public void generateProtocol(int competitionId) throws IOException {
+    @Transactional
+    public File generateProtocol(int competitionId) throws IOException {
         //Это наш шаблон, чтобы скопировать его в новый файл
         File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filesExcel\\TestPattern.xlsx");
         //Создадим новый файл
@@ -86,7 +90,47 @@ public class JudgeService {
             }
             System.out.println("Протокол успешно создан");
         }
+
+        return protocol;
     }
+
+    /**
+     * Метод для загрузки файла на сервер (заменяет существующий, сгенерированный ранее протокол)
+     */
+    @Transactional
+    public String uploadFile(MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                LocalDate today = LocalDate.now();
+                File oldFile = new File("C:/Users/-/IdeaProjects/KursachRPS/src/filesExcel/" + today + ".xlsx");
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(oldFile));
+                stream.write(bytes);
+                stream.close();
+                return oldFile.toString();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Метод для преобразования xlsx в PDF
+     */
+    public void convertXLSXToPDF(String excelFileName) throws Exception {
+        Workbook workbook = new Workbook(excelFileName);
+
+        PdfSaveOptions options = new PdfSaveOptions();
+        options.setOnePagePerSheet(true);
+
+        LocalDate today = LocalDate.now();
+        workbook.save("C:/Users/-/IdeaProjects/KursachRPS/src/filePDF/" + today + ".pdf", options);
+    }
+
 
 
     /**
