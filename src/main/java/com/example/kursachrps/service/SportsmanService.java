@@ -81,7 +81,7 @@ public class SportsmanService {
         }
         sportsman.setTeam(updatedSportsman.getTeam());
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
-        sportsman.setPersonal_coach(updatedSportsman.getPersonal_coach());
+        sportsman.setPersonalCoach(updatedSportsman.getPersonalCoach());
 
         return sportsman;
     }

@@ -3,6 +3,7 @@ package com.example.kursachrps.mapper;
 import com.example.kursachrps.Models.Sportsman;
 import com.example.kursachrps.Models.User;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
+import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.dto.SportsmanMainDTO;
 import org.mapstruct.Mapper;
 
@@ -24,4 +25,6 @@ public interface SportsmanMapper {
     SignUpDTO fromSportsmanForAuth(Sportsman sportsman);
 
     Sportsman fromUser(User user);
+
+    List<SportsmanDTO> fromSportsmanToSportsmanDTO(List<Sportsman> sportsmen);
 }

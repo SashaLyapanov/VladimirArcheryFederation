@@ -34,5 +34,5 @@ public class SportsmanMainDTO {
     //Данное поле будет отображаться только у Администратора, чтобы он по результатам соревнований мог изменять разряд спортсмена
     private SportsTitleDTO sportsTitle;
 
-    private CoachAdmDTO personal_coach;
+    private CoachAdmDTO personalCoach;
 }

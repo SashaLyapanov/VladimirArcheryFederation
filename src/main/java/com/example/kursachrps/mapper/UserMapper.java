@@ -49,14 +49,14 @@ public interface UserMapper {
     @Mappings({
             @Mapping(target = "team", source = "team"),
             @Mapping(target = "sportsTitle", source = "sportsTitle"),
-            @Mapping(target = "personal_coach", source = "personal_coach")
+            @Mapping(target = "personalCoach", source = "personalCoach")
     })
     SportsmanAdmDTO fromSportsman(Sportsman sportsman);
 
     @Mappings({
             @Mapping(target = "team", source = "team"),
             @Mapping(target = "sportsTitle", source = "sportsTitle"),
-            @Mapping(target = "personal_coach", source = "personal_coach")
+            @Mapping(target = "personalCoach", source = "personalCoach")
     })
     List<SportsmanAdmDTO> fromSportsmanList(List<Sportsman> sportsmen);
 

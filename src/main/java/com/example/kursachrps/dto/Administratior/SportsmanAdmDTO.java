@@ -31,7 +31,7 @@ public class SportsmanAdmDTO {
 
     private SportsTitleDTO sportsTitle;
 
-    private CoachAdmDTO personal_coach;
+    private CoachAdmDTO personalCoach;
 
     private Date birthDate;
 

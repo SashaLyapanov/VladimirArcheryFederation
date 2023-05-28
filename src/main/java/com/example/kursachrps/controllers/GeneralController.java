@@ -46,8 +46,6 @@ public class GeneralController {
         this.generalMapper = generalMapper;
     }
 
-
-
     /**
      *Метод для вывода всех соревнований
      */

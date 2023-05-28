@@ -41,7 +41,7 @@ public class Coach extends User {
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private Set<BowType> bowTypeList;
 
-    @OneToMany(mappedBy = "personal_coach", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "personalCoach", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sportsman> sportsmen;
 
     @JsonIgnore

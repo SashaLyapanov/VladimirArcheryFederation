@@ -31,7 +31,7 @@ public class Sportsman extends User {
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
-    private Coach personal_coach;
+    private Coach personalCoach;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
@@ -67,10 +67,10 @@ public class Sportsman extends User {
     }
 
     public Sportsman(String email, String password, Role role, Status status, String firstName, String surname, String patronymic, Date birthDate,
-                     Team team, Coach personal_coach, SportsTitle sportsTitle) {
+                     Team team, Coach personalCoach, SportsTitle sportsTitle) {
         super(email, password, role, status, firstName, surname,patronymic,birthDate);
         this.team = team;
-        this.personal_coach = personal_coach;
+        this.personalCoach = personalCoach;
         this.sportsTitle = sportsTitle;
     }
 
