@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.List;
@@ -64,6 +63,10 @@ public class Competition {
     //Судьи помогаторы
     @Column(name = "judges")
     private String judges;
+
+    //Название pdf Протокола
+    @Column(name = "pdf_file")
+    private String pdfFile;
 
     @OneToMany(mappedBy = "competition")
     private List<Application> applications;
