@@ -1,13 +1,11 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.Coach;
-import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.Models.*;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
+import com.example.kursachrps.dto.NewDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -209,9 +207,19 @@ public class AdminController {
     /**
      * Метод для шаблонного создания новости
      */
+    @PostMapping("createNew")
+    public void createNew(@RequestBody NewDTO newDTO) {
+
+    }
 
 
+    /**
+     * Метод для шаблонного редактирования новости
+     */
+    @PutMapping("changeNew")
+    public void changeNew(@RequestParam int newId, @RequestBody NewDTO newDTO) {
 
+    }
 
 
 

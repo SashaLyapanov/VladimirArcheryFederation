@@ -3,6 +3,7 @@ package com.example.kursachrps.controllers;
 import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
+import com.example.kursachrps.dto.NewDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
@@ -14,10 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -171,14 +169,21 @@ public class GeneralController {
 
 
     /**
-     * Метод для вывода всех новостей в
+     * Метод для полечения всех новостей
      */
-
+    @GetMapping("/news")
+    public List<NewDTO> getAllNews() {
+        return generalMapper.fromNews(generalService.getAllNews());
+    }
 
 
     /**
      * Метод для отображения определенной новости (страница этой новости)
      */
+    @GetMapping("new")
+    public NewDTO getNew(@RequestParam int newId) {
+        return generalMapper.fromNew(generalService.getNew(newId));
+    }
 }
 
 

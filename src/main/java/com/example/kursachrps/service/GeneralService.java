@@ -19,17 +19,19 @@ public class GeneralService {
     private final QualificatinoRepository qualificatinoRepository;
     private final BowTypeRepository bowTypeRepository;
     private final TeamRepository teamRepository;
+    private final NewRepository newRepository;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
                            RegionRepository regionRepository,
-                           SportsTitleRepository sportsTitleRepository, QualificatinoRepository qualificatinoRepository, BowTypeRepository bowTypeRepository, TeamRepository teamRepository) {
+                           SportsTitleRepository sportsTitleRepository, QualificatinoRepository qualificatinoRepository, BowTypeRepository bowTypeRepository, TeamRepository teamRepository, NewRepository newRepository) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
         this.qualificatinoRepository = qualificatinoRepository;
         this.bowTypeRepository = bowTypeRepository;
         this.teamRepository = teamRepository;
+        this.newRepository = newRepository;
     }
 
 
@@ -84,5 +86,14 @@ public class GeneralService {
      */
     public List<Competition> getPresentCompetitions() {
         return competitionRepository.findAllPast();
+    }
+
+
+    public List<New> getAllNews() {
+        return newRepository.findAll();
+    }
+
+    public New getNew(int newId) {
+        return newRepository.findById(newId).orElse(null);
     }
 }
