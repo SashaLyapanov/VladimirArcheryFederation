@@ -28,10 +28,6 @@ public class PersonalExercise {
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "personal_exercises_session_exercises",
-            joinColumns = @JoinColumn(name = "personal_exercise_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
+    @OneToMany(mappedBy = "personalExercise")
     private List<SessionExercises> sessionExercisesList;
 }

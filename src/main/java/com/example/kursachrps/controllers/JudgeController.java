@@ -70,6 +70,7 @@ public class JudgeController {
     public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam int competitionId) throws Exception {
         String path = judgeService.uploadFile(file);
         String newFile = judgeService.convertXLSXToPDF(path);
+        judgeService.changeStatusOfCompetition(competitionId);
         judgeService.addPathFileInCompetition(competitionId, newFile);
     }
 

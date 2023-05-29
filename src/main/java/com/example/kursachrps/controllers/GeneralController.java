@@ -160,6 +160,15 @@ public class GeneralController {
     }
 
 
+    /**
+     * Метод для вывода всех соревнований, у которых статус PAST
+     */
+    @GetMapping("/allPastCompetitions")
+    public List<CompetitionDTO> getAllPastCompetition() {
+        List<CompetitionDTO> competitionDTOList = competitionMapper.fromCompetition(generalService.getPresentCompetitions());
+        return competitionDTOList;
+    }
+
 
     /**
      * Метод для вывода всех новостей в

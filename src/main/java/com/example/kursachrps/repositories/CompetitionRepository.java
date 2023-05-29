@@ -24,4 +24,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
 
     @Query("SELECT c FROM Competition c WHERE c.status = 'PRESENT'")
     List<Competition> findAllPresent();
+
+    @Query("SELECT c FROM Competition c WHERE c.status = 'PAST'")
+    List<Competition> findAllPast();
 }

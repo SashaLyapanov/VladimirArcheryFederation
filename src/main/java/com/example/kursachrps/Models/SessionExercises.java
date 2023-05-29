@@ -3,26 +3,37 @@ package com.example.kursachrps.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
-@Table(name = "session_session_exercises")
+@Table(name = "session_exercises")
 public class SessionExercises {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
-//    private List<Session> sessionList;
+    @Column(name = "order_exercise")
+    private Integer orderExercise;
 
-    @OneToOne(mappedBy = "sessionExercises")
-    private Session sessionList;
+    @Column(name = "count_approach")
+    private Integer countApproach;
 
-    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
-    private List<Exercise> exerciseList;
+    @Column(name = "count_repeat")
+    private Integer countRepeat;
 
-    @ManyToMany(mappedBy = "sessionExercisesList", fetch = FetchType.LAZY)
-    private List<PersonalExercise> personalExerciseList;
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_id", referencedColumnName = "id")
+    private Session sessionExercises;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercises_id",referencedColumnName = "id")
+    private Exercise exercise;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personal_exercises_id",referencedColumnName = "id")
+    private PersonalExercise personalExercise;
+
 }

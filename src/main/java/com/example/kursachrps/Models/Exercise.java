@@ -25,10 +25,8 @@ public class Exercise {
     @Column(name = "photo")
     private String photo;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "exercises_sessionExercises",
-            joinColumns = @JoinColumn(name = "exercise_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
-    private List<SessionExercises> sessionExercisesList;
+    @OneToMany(mappedBy = "exercise")
+    private List<SessionExercises> sessionExercises;
+
 }
+

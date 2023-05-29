@@ -78,4 +78,11 @@ public class GeneralService {
         assert competition != null;
         return competition.getPdfFile();
     }
+
+    /**
+     * Метод для вывода списка соревнований, где status = Past
+     */
+    public List<Competition> getPresentCompetitions() {
+        return competitionRepository.findAllPast();
+    }
 }

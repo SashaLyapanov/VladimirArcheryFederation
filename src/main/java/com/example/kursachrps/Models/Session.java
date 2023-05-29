@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,6 +18,11 @@ public class Session {
     //dateTime - нужно подобрать тип данных для работы с датой и временем.
     @Column(name = "date_time")
     private Date dateTime;
+
+    //date - чисто дата тренировки
+    @Column(name = "date")
+    private Date date;
+
     //duration - нужно подобрать тип данных для работы с датой и временем.
     @Column(name = "duration")
     private Time duration;
@@ -30,14 +36,8 @@ public class Session {
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "session_session_exercises",
-//            joinColumns = @JoinColumn(name = "session_id"),
-//            inverseJoinColumns = @JoinColumn(name = "session_exercise_id"))
-//    private List<SessionExercises> sessionExercisesList;
+    @OneToMany(mappedBy = "sessionExercises")
+    private List<SessionExercises> sessionExercisesList;
 
-    @OneToOne
-    @JoinColumn(name = "session_exercise_id")
-    private SessionExercises sessionExercises;
 }
+

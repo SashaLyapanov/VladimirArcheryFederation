@@ -168,6 +168,15 @@ public class JudgeService {
     @Transactional
     public void addPathFileInCompetition(int competitionId, String name) {
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
+        assert competition != null;
         competition.setPdfFile(name);
+    }
+
+
+    @Transactional
+    public void changeStatusOfCompetition(int competitionId) {
+        Competition competition = competitionRepository.findById(competitionId).orElse(null);
+        assert competition != null;
+        competition.setStatus(StatusOfCompetition.PAST);
     }
 }
