@@ -11,4 +11,5 @@ import java.util.List;
 public interface DiaryRepository extends JpaRepository<Session,Integer> {
     List<Session> findSessionBySportsman_Email(String email);
     List<Session> findSessionBySportsman_EmailAndDate(String email, Date date);
+
 }

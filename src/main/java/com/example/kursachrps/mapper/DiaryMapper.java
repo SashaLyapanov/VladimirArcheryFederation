@@ -20,8 +20,6 @@ public interface DiaryMapper {
     })
     GetExercisesDTO fromExercises(Session sessionExercises);
 
-    CreateSessionDTO transform(Session session);
-
     Session convert(CreateSessionDTO session);
 
     ExerciseDTO fromExercise(Exercise exercise);
@@ -30,17 +28,14 @@ public interface DiaryMapper {
 
     Exercise fromExerciseDTO(ExerciseDTO exerciseDTO);
 
-    List<Exercise> fromExerciseDTOList(List<ExerciseDTO> exerciseDTOList);
-
     PersonalExerciseDTO fromPersonalExercise(PersonalExercise personalExercise);
 
     List<PersonalExerciseDTO> fromPersonalExercise(List<PersonalExercise> personalExercises);
 
     PersonalExercise fromPersonalExerciseDTO(PersonalExerciseDTO personalExerciseDTO);
 
-    List<PersonalExercise> fromPersonalExerciseDTO(List<PersonalExerciseDTO> personalExerciseDTOS);
-
     SessionExercises fromSessionExercisesDTO(SessionExercisesDTO sessionExercisesDTO);
 
+    List<SessionTypeDTO> fromSessionType(List<SessionType> sessionTypes);
 
 }

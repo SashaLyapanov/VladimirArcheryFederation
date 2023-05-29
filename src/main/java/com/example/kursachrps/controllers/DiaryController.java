@@ -118,5 +118,13 @@ public class DiaryController {
         diaryService.down(sessionId, exerciseId);
     }
 
+    /**
+     * Метод для получения всех типов тренировок
+     */
+    @GetMapping("allSessionType")
+    public List<SessionTypeDTO> getAllSessionType() {
+        return diaryMapper.fromSessionType(diaryService.getAllSessionType());
+    }
+
 
 }

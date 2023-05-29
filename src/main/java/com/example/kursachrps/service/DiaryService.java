@@ -13,26 +13,22 @@ import java.util.List;
 @Service
 @Transactional(readOnly=true)
 public class DiaryService {
-    private final SportsmanRepository sportsmanRepository;
     private final DiaryRepository diaryRepository;
     private final ExerciseRepository exerciseRepository;
     private final PersonalExerciseRepository personalExerciseRepository;
     private final SessionExercisesRepository sessionExercisesRepository;
     private final SportsmanMainRepository sportsmanMainRepository;
+    private final SessionTypeRepository sessionTypeRepository;
 
     @Autowired
-    public DiaryService(SportsmanRepository sportsmanRepository, DiaryRepository diaryRepository,
-                        ExerciseRepository exerciseRepository, PersonalExerciseRepository personalExerciseRepository, SessionExercisesRepository sessionExercisesRepository, SportsmanMainRepository sportsmanMainRepository) {
-        this.sportsmanRepository = sportsmanRepository;
+    public DiaryService(DiaryRepository diaryRepository,
+                        ExerciseRepository exerciseRepository, PersonalExerciseRepository personalExerciseRepository, SessionExercisesRepository sessionExercisesRepository, SportsmanMainRepository sportsmanMainRepository, SessionTypeRepository sessionTypeRepository) {
         this.diaryRepository = diaryRepository;
         this.exerciseRepository = exerciseRepository;
         this.personalExerciseRepository = personalExerciseRepository;
         this.sessionExercisesRepository = sessionExercisesRepository;
         this.sportsmanMainRepository = sportsmanMainRepository;
-    }
-
-    public List<Session> showAllSessions() {
-        return diaryRepository.findAll();
+        this.sessionTypeRepository = sessionTypeRepository;
     }
 
     @Transactional
@@ -72,8 +68,7 @@ public class DiaryService {
 
     @Transactional
     public void addExerciseInSession(int sessionId, SessionExercises sessionExercises) {
-        Session session = new Session();
-        session = showSession(sessionId);
+        Session session = showSession(sessionId);
         sessionExercises.setSessionExercises(session);
 
 //        логика присваивания порядкового номера упражнения в тренировке
@@ -128,4 +123,8 @@ public class DiaryService {
         upperSessionExercise.setOrderExercise(downOrderExercise);
     }
 
+    @Transactional
+    public List<SessionType> getAllSessionType() {
+        return sessionTypeRepository.findAll();
+    }
 }
