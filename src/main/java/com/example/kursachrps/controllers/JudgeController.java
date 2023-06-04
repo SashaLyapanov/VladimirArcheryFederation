@@ -8,6 +8,7 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.JudgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -87,11 +88,12 @@ public class JudgeController {
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
     @PostMapping("/regParticipantToCompetition")
-    public String regParticipantToCompetition(@RequestParam int competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) {
+    public String regParticipantToCompetition(@RequestParam int competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
         if (applicationService.checkRegistrationInCompetition(competitionId, email)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             judgeService.registrateParticipantToCompetition(email, competitionId, application);
-            return "Регистрация прошла успешно";
+            PayController payController = new PayController();
+            return payController.getLinkToPay();
         }
         else
             return "Участник уже зарегистрирован на данные соревнования";

@@ -8,8 +8,10 @@ import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -46,11 +48,12 @@ public class CoachController {
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
     @PostMapping("/regInCompetition")
-    public String regInCompetition(@RequestParam int coachId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+    public String regInCompetition(@RequestParam int coachId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
         if (applicationService.checkRegistrationInCompetition(competitionId, coachId)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             coachService.registrateCoach(coachId, competitionId, application);
-            return "Регистрация прошла успешно";
+            PayController payController = new PayController();
+            return payController.getLinkToPay();
         }
         else
             return "Вы уже зарегистрированы на данных соревнованиях";
