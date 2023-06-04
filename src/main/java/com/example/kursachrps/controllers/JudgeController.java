@@ -5,6 +5,7 @@ import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
+import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.JudgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -25,14 +26,17 @@ public class JudgeController {
     private JudgeService judgeService;
     private CompetitionMapper competitionMapper;
     private ApplicationMapper applicationMapper;
+    private ApplicationService applicationService;
 
     @Autowired
     public JudgeController(JudgeService judgeService,
                            CompetitionMapper competitionMapper,
-                           ApplicationMapper applicationMapper) {
+                           ApplicationMapper applicationMapper,
+                           ApplicationService applicationService) {
         this.judgeService = judgeService;
         this.competitionMapper = competitionMapper;
         this.applicationMapper = applicationMapper;
+        this.applicationService = applicationService;
     }
 
 
@@ -83,10 +87,14 @@ public class JudgeController {
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
     @PostMapping("/regParticipantToCompetition")
-    public void regParticipantToCompetition(@RequestParam int competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) {
-
-        Application application = applicationMapper.fromApplicationDTO(applicationDTO);
-        judgeService.registrateParticipantToCompetition(email, competitionId, application);
+    public String regParticipantToCompetition(@RequestParam int competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) {
+        if (applicationService.checkRegistrationInCompetition(competitionId, email)) {
+            Application application = applicationMapper.fromApplicationDTO(applicationDTO);
+            judgeService.registrateParticipantToCompetition(email, competitionId, application);
+            return "Регистрация прошла успешно";
+        }
+        else
+            return "Участник уже зарегистрирован на данные соревнования";
     }
 
 }

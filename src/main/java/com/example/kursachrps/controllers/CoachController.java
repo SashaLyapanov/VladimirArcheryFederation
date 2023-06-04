@@ -46,10 +46,16 @@ public class CoachController {
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
     @PostMapping("/regInCompetition")
-    public void regInCompetition(@RequestParam int coachId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+    public String regInCompetition(@RequestParam int coachId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+        if (applicationService.checkRegistrationInCompetition(competitionId, coachId)) {
+            Application application = applicationMapper.fromApplicationDTO(applicationDTO);
+            coachService.registrateCoach(coachId, competitionId, application);
+            return "Регистрация прошла успешно";
+        }
+        else
+            return "Вы уже зарегистрированы на данных соревнованиях";
 
-        Application application = applicationMapper.fromApplicationDTO(applicationDTO);
-        coachService.registrateCoach(coachId, competitionId, application);
+
     }
 
 

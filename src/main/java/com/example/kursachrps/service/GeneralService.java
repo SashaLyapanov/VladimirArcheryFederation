@@ -100,4 +100,6 @@ public class GeneralService {
     public New getNew(int newId) {
         return newRepository.findById(newId).orElse(null);
     }
+
+
 }

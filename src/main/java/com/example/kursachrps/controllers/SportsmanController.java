@@ -60,11 +60,23 @@ public class SportsmanController {
      * Дальше на странице соревнований будет кнопка зарегистрироваться, при нажатии на которую у нас происходи выполнение данного метода.
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
-    @PostMapping("/regInCompetition")
-    public void regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+//    @PostMapping("/regInCompetition")
+//    public void regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+//
+//        Application application = applicationMapper.fromApplicationDTO(applicationDTO);
+//        sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
+//    }
 
-        Application application = applicationMapper.fromApplicationDTO(applicationDTO);
-        sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
+    @PostMapping("/regInCompetition")
+    public String regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+        if (applicationService.checkRegistrationInCompetition(competitionId, sportsmanId)) {
+            Application application = applicationMapper.fromApplicationDTO(applicationDTO);
+            sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
+            return "Регистрация прошла успешно";
+        }
+        else
+            return "Вы уже зарегистрированы на данных соревнованиях";
+
     }
 
 

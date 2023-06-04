@@ -57,6 +57,32 @@ public class ApplicationService {
         }
     }
 
+
+    /**
+     * Метод валидирующий подачу заявки спортсменом и тренером.
+     */
+    public boolean checkRegistrationInCompetition(int competitionId, int participantId) {
+        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantId);
+        Application coachApplication = applicationRepository.findApplicationByCoachAndCompetition(competitionId, participantId);
+
+        if (sportsmanApplication == null && coachApplication == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkRegistrationInCompetition(int competitionId, String participantEmail) {
+        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantEmail);
+        Application coachApplication = applicationRepository.findApplicationByCoachAndCompetition(competitionId, participantEmail);
+
+        if (sportsmanApplication == null && coachApplication == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 
 

@@ -26,11 +26,11 @@ public class PayController {
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("POST");
         http.setDoOutput(true);
-        http.setRequestProperty("Idempotence-Key", "9294b692-9a32-48b5-afc2-f8b1abffe3356");
+        http.setRequestProperty("Idempotence-Key", "9294b692-9a32-48b5-afc2-f8b1abffe3358");
         http.setRequestProperty("Content-Type", "application/json");
         http.setRequestProperty("Authorization", "Basic MzIzNzkwOnRlc3RfcGx0VUJfWjRDVmNTa2czQUM4M1BWMllzRTNudlFzTzRMVVpmaU9MbzRiQQ==");
 
-        String data = "{\n        \"amount\": {\n          \"value\": \"100.00\",\n          \"currency\": \"RUB\"\n        },\n        \"capture\": true,\n        \"confirmation\": {\n          \"type\": \"redirect\",\n          \"return_url\": \"https://www.example.com/return_url\"\n        },\n        \"description\": \"Заказ №1\"\n      }";
+        String data = "{\n        \"amount\": {\n          \"value\": \"100.00\",\n          \"currency\": \"RUB\"\n        },\n        \"capture\": true,\n        \"confirmation\": {\n          \"type\": \"redirect\",\n          \"return_url\": \"http://localhost:3000/\"\n        },\n        \"description\": \"Заказ №1\"\n      }";
 
         byte[] out = data.getBytes(StandardCharsets.UTF_8);
 
