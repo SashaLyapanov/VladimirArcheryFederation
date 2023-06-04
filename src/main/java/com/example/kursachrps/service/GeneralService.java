@@ -75,6 +75,10 @@ public class GeneralService {
     }
 
 
+    @Transactional
+    public List<BowType> getAllBowTypeByCompetitionId(int competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
+
+
     public String getProtocolNameByCompetitionId(int competitionId) {
         Competition competition  = competitionRepository.findById(competitionId).orElse(null);
         assert competition != null;

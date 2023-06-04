@@ -131,6 +131,14 @@ public class GeneralController {
         return generalMapper.fromBowType(generalService.getAllBowType());
     }
 
+    /**
+     * Запрос на получение всех типов лука при регистраци на определенные соревновния.
+     */
+    @GetMapping("allBowTypesByCompetition")
+    List<BowTypeDTO> getAllBowTypeByCompetitionId(@RequestParam int competitionId) {
+        return generalMapper.fromBowType(generalService.getAllBowTypeByCompetitionId(competitionId));
+    }
+
 
     /**
      * Метод для скачивания pdf протокола
