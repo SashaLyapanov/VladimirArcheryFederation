@@ -38,7 +38,7 @@ public class DiaryController {
      * Метод для вывода всех тренировок спортсмена по дате (для дневника)
      */
     @GetMapping("allSportsmanSessionsByDay")
-    public List<SessionDTO> getAllSessionsByData(@RequestParam String email, @RequestParam Date date) {
+    public List<SessionDTO> getAllSessionsByDate(@RequestParam String email, @RequestParam Date date) {
         List<Session> sessions = diaryService.showSessionsBySportsmanEmailAndData(email,date);
         List<SessionDTO> dto = diaryMapper.fromSession(sessions);
         return dto;

@@ -13,13 +13,13 @@ public class SessionExercises {
     private int id;
 
     @Column(name = "order_exercise")
-    private Integer orderExercise;
+    private int orderExercise;
 
     @Column(name = "count_approach")
-    private Integer countApproach;
+    private int countApproach;
 
     @Column(name = "count_repeat")
-    private Integer countRepeat;
+    private int countRepeat;
 
     @Column(name = "description")
     private String description;

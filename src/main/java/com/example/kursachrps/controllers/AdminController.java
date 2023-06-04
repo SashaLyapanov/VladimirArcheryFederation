@@ -70,6 +70,7 @@ public class AdminController {
      */
     @Transactional
     @PostMapping("createSportsman")
+//    @RequestMapping(value = "createSportsman", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Sportsman createSportsman(@RequestBody @Valid SportsmanDTO sportsmanDTO) {
 
         adminService.hashPassword(sportsmanDTO);

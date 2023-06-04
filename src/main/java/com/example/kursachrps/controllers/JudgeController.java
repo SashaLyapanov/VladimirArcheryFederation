@@ -36,12 +36,6 @@ public class JudgeController {
     }
 
 
-//    @GetMapping("/generateProtocol")
-//    public void generateProtocol(@RequestParam int competitionId) throws IOException {
-//        String fileName = judgeService.generateProtocol(competitionId);
-//        judgeService.importExcelFile(fileName);
-//    }
-
     /**
      * Метод для генерирования протокола и автоматического скачивания файла на локальный пк пользователя
      */
