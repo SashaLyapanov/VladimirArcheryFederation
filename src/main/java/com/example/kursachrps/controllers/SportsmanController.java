@@ -11,6 +11,7 @@ import com.example.kursachrps.service.CompetitionService;
 import com.example.kursachrps.service.SportsmanService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,19 +61,13 @@ public class SportsmanController {
      * Дальше на странице соревнований будет кнопка зарегистрироваться, при нажатии на которую у нас происходи выполнение данного метода.
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
-//    @PostMapping("/regInCompetition")
-//    public void regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
-//
-//        Application application = applicationMapper.fromApplicationDTO(applicationDTO);
-//        sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
-//    }
-
     @PostMapping("/regInCompetition")
-    public String regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) {
+    public String regInCompetition(@RequestParam int sportsmanId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
         if (applicationService.checkRegistrationInCompetition(competitionId, sportsmanId)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
-            return "Регистрация прошла успешно";
+            PayController payController = new PayController();
+            return payController.getLinkToPay();
         }
         else
             return "Вы уже зарегистрированы на данных соревнованиях";

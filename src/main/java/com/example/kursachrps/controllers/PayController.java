@@ -16,21 +16,52 @@ import java.nio.charset.StandardCharsets;
 public class PayController {
 
     public String gen_uuid() {
-        return "9294b692-798456-48b5-afc2-f8b1abff123";
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        StringBuilder sb = new StringBuilder(37);
+
+        for (int i = 0; i < 8; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        sb.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        sb.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        sb.append("-");
+        for (int i = 0; i < 4; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        sb.append("-");
+        for (int i = 0; i < 13; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return sb.toString();
     }
 
 
     @PostMapping("/toPay")
     public String getLinkToPay() throws IOException, InterruptedException, JSONException {
+        System.out.println(gen_uuid());
         URL url = new URL("https://api.yookassa.ru/v3/payments");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("POST");
         http.setDoOutput(true);
-        http.setRequestProperty("Idempotence-Key", "9294b692-9a32-48b5-afc2-f8b1abffe3358");
+        http.setRequestProperty("Idempotence-Key", gen_uuid());
         http.setRequestProperty("Content-Type", "application/json");
         http.setRequestProperty("Authorization", "Basic MzIzNzkwOnRlc3RfcGx0VUJfWjRDVmNTa2czQUM4M1BWMllzRTNudlFzTzRMVVpmaU9MbzRiQQ==");
 
-        String data = "{\n        \"amount\": {\n          \"value\": \"100.00\",\n          \"currency\": \"RUB\"\n        },\n        \"capture\": true,\n        \"confirmation\": {\n          \"type\": \"redirect\",\n          \"return_url\": \"http://localhost:3000/\"\n        },\n        \"description\": \"Заказ №1\"\n      }";
+        String data = "{\n        \"amount\": {\n          \"value\": \"500.00\",\n          \"currency\": \"RUB\"\n        },\n        \"capture\": true,\n        \"confirmation\": {\n          \"type\": \"redirect\",\n          \"return_url\": \"http://localhost:3000/\"\n        },\n        \"description\": \"Заказ №1\"\n      }";
 
         byte[] out = data.getBytes(StandardCharsets.UTF_8);
 
