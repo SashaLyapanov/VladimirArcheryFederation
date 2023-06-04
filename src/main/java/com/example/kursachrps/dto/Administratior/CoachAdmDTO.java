@@ -15,6 +15,8 @@ public class CoachAdmDTO {
 
     private int id;
 
+    private String email;
+
     private String firstName;
 
     private String surname;
