@@ -48,8 +48,13 @@ public class ApplicationService {
      */
     @Transactional
     public List<Application> getMyApplications(int myId) {
-        List<Application> applications = applicationRepository.findApplicationBySportsmanId(myId);
-        return applications;
+        List<Application> applicationsOfSportsman = applicationRepository.findApplicationBySportsmanId(myId);
+        List<Application> applicationOfCoach = applicationRepository.findApplicationByCoachId(myId);
+        if (applicationsOfSportsman.isEmpty()) {
+            return applicationOfCoach;
+        } else {
+            return applicationsOfSportsman;
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.SportsmanMapper;
+import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,14 @@ public class CoachController {
     private final CoachService coachService;
     private final SportsmanMapper sportsmanMapper;
     private final ApplicationMapper applicationMapper;
+    private final ApplicationService applicationService;
 
     @Autowired
-    public CoachController (CoachService coachService, SportsmanMapper sportsmanMapper, ApplicationMapper applicationMapper) {
+    public CoachController (CoachService coachService, SportsmanMapper sportsmanMapper, ApplicationMapper applicationMapper, ApplicationService applicationService) {
         this.coachService = coachService;
         this.sportsmanMapper = sportsmanMapper;
         this.applicationMapper = applicationMapper;
+        this.applicationService = applicationService;
     }
 
     /**
@@ -47,6 +50,18 @@ public class CoachController {
 
         Application application = applicationMapper.fromApplicationDTO(applicationDTO);
         coachService.registrateCoach(coachId, competitionId, application);
+    }
+
+
+    /**
+     * Просмотр всех собственных заявок на соревнования
+     */
+    @GetMapping("/allMyApplication")
+    public List<ApplicationDTO> getMyApplications(@RequestParam int myId) {
+
+        List<Application> applications = applicationService.getMyApplications(myId);
+        List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applications);
+        return applicationDTOList;
     }
 
 }
