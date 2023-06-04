@@ -53,7 +53,9 @@ public class CoachController {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             coachService.registrateCoach(coachId, competitionId, application);
             PayController payController = new PayController();
-            return payController.getLinkToPay();
+            String link =  payController.getLinkToPay();
+            System.out.println(link);
+            return link;
         }
         else
             return "Вы уже зарегистрированы на данных соревнованиях";
