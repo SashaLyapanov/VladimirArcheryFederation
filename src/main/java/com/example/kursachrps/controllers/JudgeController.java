@@ -93,7 +93,9 @@ public class JudgeController {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             judgeService.registrateParticipantToCompetition(email, competitionId, application);
             PayController payController = new PayController();
-            return payController.getLinkToPay();
+            String link =  payController.getLinkToPay();
+            System.out.println(link);
+            return link;
         }
         else
             return "Участник уже зарегистрирован на данные соревнования";
