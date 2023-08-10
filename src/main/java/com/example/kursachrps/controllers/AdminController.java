@@ -1,6 +1,6 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CoachDTO;

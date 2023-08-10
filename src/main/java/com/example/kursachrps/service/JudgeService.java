@@ -3,7 +3,7 @@ package com.example.kursachrps.service;
 import com.aspose.cells.PdfSaveOptions;
 import com.aspose.cells.Workbook;
 import com.example.kursachrps.ExcelGenerator2;
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.CoachMapper;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;

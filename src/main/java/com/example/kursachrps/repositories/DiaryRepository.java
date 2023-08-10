@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories;
 
-import com.example.kursachrps.Models.Session;
+import com.example.kursachrps.models.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,6 @@
 package com.example.kursachrps;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;

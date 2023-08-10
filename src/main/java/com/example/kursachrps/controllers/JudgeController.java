@@ -1,6 +1,6 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.Application;
+import com.example.kursachrps.models.Application;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;

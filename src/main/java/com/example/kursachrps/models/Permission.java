@@ -1,4 +1,4 @@
-package com.example.kursachrps.Models;
+package com.example.kursachrps.models;
 
 public enum Permission {
     SPORTSMEN_READ("sportsmen:read"),

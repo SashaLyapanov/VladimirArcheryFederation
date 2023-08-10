@@ -1,9 +1,9 @@
 package com.example.kursachrps.mapper;
 
 
-import com.example.kursachrps.Models.Category;
-import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.Models.CompetitionType;
+import com.example.kursachrps.models.Category;
+import com.example.kursachrps.models.Competition;
+import com.example.kursachrps.models.CompetitionType;
 import com.example.kursachrps.dto.AdditionalDTO.CategoryDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CompetitionTypeDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;

@@ -1,6 +1,6 @@
 package com.example.kursachrps.dto;
 
-import com.example.kursachrps.Models.Role;
+import com.example.kursachrps.models.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

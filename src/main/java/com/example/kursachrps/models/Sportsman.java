@@ -1,4 +1,4 @@
-package com.example.kursachrps.Models;
+package com.example.kursachrps.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

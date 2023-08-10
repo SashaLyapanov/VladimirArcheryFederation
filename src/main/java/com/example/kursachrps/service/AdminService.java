@@ -1,6 +1,6 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;

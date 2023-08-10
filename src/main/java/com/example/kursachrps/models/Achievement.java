@@ -1,9 +1,8 @@
-package com.example.kursachrps.Models;
+package com.example.kursachrps.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 @Data
 @Entity

@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories;
 
-import com.example.kursachrps.Models.SessionExercises;
+import com.example.kursachrps.models.SessionExercises;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

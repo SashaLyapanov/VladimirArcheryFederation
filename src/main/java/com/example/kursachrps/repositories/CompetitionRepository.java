@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories;
 
-import com.example.kursachrps.Models.Competition;
+import com.example.kursachrps.models.Competition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

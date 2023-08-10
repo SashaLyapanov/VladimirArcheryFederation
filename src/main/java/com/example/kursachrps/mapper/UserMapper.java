@@ -1,6 +1,6 @@
 package com.example.kursachrps.mapper;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import com.example.kursachrps.dto.AdditionalDTO.QualificationDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;

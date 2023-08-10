@@ -1,7 +1,7 @@
 package com.example.kursachrps.mapper;
 
-import com.example.kursachrps.Models.Coach;
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.models.Coach;
+import com.example.kursachrps.models.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

@@ -1,4 +1,4 @@
-package com.example.kursachrps.Models;
+package com.example.kursachrps.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

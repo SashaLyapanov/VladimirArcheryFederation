@@ -1,8 +1,8 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.PersonalExercise;
-import com.example.kursachrps.Models.Session;
-import com.example.kursachrps.Models.SessionExercises;
+import com.example.kursachrps.models.PersonalExercise;
+import com.example.kursachrps.models.Session;
+import com.example.kursachrps.models.SessionExercises;
 import com.example.kursachrps.dto.diary.*;
 import com.example.kursachrps.mapper.DiaryMapper;
 import com.example.kursachrps.service.DiaryService;

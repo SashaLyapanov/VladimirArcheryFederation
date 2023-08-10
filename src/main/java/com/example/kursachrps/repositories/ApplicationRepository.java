@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories;
 
-import com.example.kursachrps.Models.Application;
+import com.example.kursachrps.models.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

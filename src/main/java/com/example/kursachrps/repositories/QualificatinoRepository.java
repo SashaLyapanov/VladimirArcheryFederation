@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories;
 
-import com.example.kursachrps.Models.Qualification;
+import com.example.kursachrps.models.Qualification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

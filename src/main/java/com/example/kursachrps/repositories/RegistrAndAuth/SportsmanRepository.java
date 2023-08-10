@@ -1,6 +1,6 @@
 package com.example.kursachrps.repositories.RegistrAndAuth;
 
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.models.User;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 

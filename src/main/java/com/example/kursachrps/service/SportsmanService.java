@@ -1,9 +1,9 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.Application;
-import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.Team;
+import com.example.kursachrps.models.Application;
+import com.example.kursachrps.models.Competition;
+import com.example.kursachrps.models.Sportsman;
+import com.example.kursachrps.models.Team;
 import com.example.kursachrps.dto.SportsmanMainDTO;
 import com.example.kursachrps.repositories.ApplicationRepository;
 import com.example.kursachrps.repositories.CompetitionRepository;

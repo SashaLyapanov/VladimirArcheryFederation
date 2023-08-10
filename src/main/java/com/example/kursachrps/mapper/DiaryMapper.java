@@ -1,6 +1,6 @@
 package com.example.kursachrps.mapper;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.diary.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

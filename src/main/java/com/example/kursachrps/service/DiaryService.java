@@ -1,8 +1,7 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.*;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
-import com.example.kursachrps.repositories.RegistrAndAuth.SportsmanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;

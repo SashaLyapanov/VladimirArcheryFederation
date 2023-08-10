@@ -1,7 +1,7 @@
 package com.example.kursachrps.security;
 
-import com.example.kursachrps.Models.Status;
-import com.example.kursachrps.Models.User;
+import com.example.kursachrps.models.Status;
+import com.example.kursachrps.models.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

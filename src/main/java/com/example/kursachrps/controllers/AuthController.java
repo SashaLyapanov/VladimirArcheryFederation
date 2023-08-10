@@ -1,8 +1,8 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.Models.Role;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.Status;
+import com.example.kursachrps.models.Role;
+import com.example.kursachrps.models.Sportsman;
+import com.example.kursachrps.models.Status;
 import com.example.kursachrps.dto.AuthAndRegistration.LoginDTO;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
 import com.example.kursachrps.dto.UserDTO;
