@@ -2,6 +2,7 @@ package com.example.kursachrps.mapper;
 
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AdditionalDTO.*;
+import com.example.kursachrps.dto.CompetitionDTO;
 import com.example.kursachrps.dto.NewDTO;
 import org.mapstruct.Mapper;
 
@@ -28,4 +29,12 @@ public interface GeneralMapper {
     New fromNewDTO(NewDTO newDTO);
 
     NewDTO fromNew(New new1);
+
+    Competition fromCompetitionDTO(CompetitionDTO competitionDTO);
+
+    List<Competition> fromCompetitionDTO(List<CompetitionDTO> competitionDTOList);
+
+    CompetitionDTO fromCompetition(Competition competition);
+
+    List<CompetitionDTO> fromCompetition(List<Competition> competitions);
 }

@@ -1,18 +1,17 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.models.Application;
-import com.example.kursachrps.models.Competition;
-import com.example.kursachrps.models.Sportsman;
-import com.example.kursachrps.models.Team;
+import com.example.kursachrps.Models.Application;
+import com.example.kursachrps.Models.Competition;
+import com.example.kursachrps.Models.Sportsman;
+import com.example.kursachrps.Models.Team;
 import com.example.kursachrps.dto.SportsmanMainDTO;
-import com.example.kursachrps.repositories.ApplicationRepository;
-import com.example.kursachrps.repositories.CompetitionRepository;
-import com.example.kursachrps.repositories.SportsmanMainRepository;
-import com.example.kursachrps.repositories.TeamRepository;
+import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class SportsmanService {
@@ -21,17 +20,23 @@ public class SportsmanService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationService applicationService;
     private final SportsmanMainRepository sportsmanMainRepository;
+    private final CoachMainRepository coachMainRepository;
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public SportsmanService(CompetitionRepository competitionRepository,
                             ApplicationRepository applicationRepository,
-                            ApplicationService applicationService, SportsmanMainRepository sportsmanMainRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder) {
+                            ApplicationService applicationService,
+                            SportsmanMainRepository sportsmanMainRepository,
+                            CoachMainRepository coachMainRepository,
+                            TeamRepository teamRepository,
+                            PasswordEncoder passwordEncoder) {
         this.competitionRepository = competitionRepository;
         this.applicationRepository = applicationRepository;
         this.applicationService = applicationService;
         this.sportsmanMainRepository = sportsmanMainRepository;
+        this.coachMainRepository = coachMainRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -45,9 +50,11 @@ public class SportsmanService {
 
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         Sportsman sportsman = sportsmanMainRepository.findById(sportsmanId).orElse(null);
+        Coach coach = coachMainRepository.findBySportsmen(sportsman).orElse(null);
 
         application.setCompetition(competition);
         application.setSportsman(sportsman);
+        application.setCoach(coach);
         applicationRepository.save(application);
 
     }

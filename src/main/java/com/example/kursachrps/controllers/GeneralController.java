@@ -192,6 +192,21 @@ public class GeneralController {
     public NewDTO getNew(@RequestParam int newId) {
         return generalMapper.fromNew(generalService.getNew(newId));
     }
+
+
+
+
+
+    /**
+     * Метод для поиска соревнований по названию, типу лука, категории
+     */
+//    @GetMapping("/searchCompetitions")
+//    public List<CompetitionDTO> searchCompetitions(@RequestParam String competitionName, @RequestParam Integer bowType, @RequestParam Integer competitinoCategory) {
+//
+//        return  generalMapper.fromCompetition(generalService.searchCompetitions(competitionName, bowType, competitinoCategory));
+//
+//    }
+
 }
 
 

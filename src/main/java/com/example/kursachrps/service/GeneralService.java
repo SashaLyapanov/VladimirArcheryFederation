@@ -102,4 +102,18 @@ public class GeneralService {
     }
 
 
+//    public List<Competition> searchCompetitions(String competitionName, Integer bowType, Integer competitinoCategory) {
+//
+//        if (competitionName != null && bowType != null && competitinoCategory != null) {
+//            competitionRepository.findCompetitionByNameAndBowTypeAndCategories(competitionName, bowType, competitinoCategory);
+//        } else if (competitionName != null && bowType  == null && competitinoCategory == null) {
+//            competitionRepository.findCompetitionByName(competitionName);
+//        } else if (competitionName != null && bowType != null && competitinoCategory == null) {
+//            competitionRepository.findCompetitionByNameAndBowType(competitionName, bowType);
+//        } else if (competitionName != null && bowType != null && competitinoCategory != null) {
+//            return null;
+//        }
+//
+//        return null;
+//    }
 }
