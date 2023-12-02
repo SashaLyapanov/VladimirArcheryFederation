@@ -8,11 +8,12 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "session_types")
-public class SessionType {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class SessionType extends GenericEntity{
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+
     @Column(name = "session_type_name")
     private String sessionTypeName;
 

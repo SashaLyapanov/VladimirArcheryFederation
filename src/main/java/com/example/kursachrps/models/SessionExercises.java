@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "session_exercises")
-public class SessionExercises {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class SessionExercises extends GenericEntity{
+//    @Id
+//    @Column
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
 
     @Column(name = "order_exercise")
     private int orderExercise;

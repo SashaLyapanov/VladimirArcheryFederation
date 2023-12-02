@@ -15,7 +15,7 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompetitionDTO {
 
-    private int id;
+    private String id;
     private String name;
     private String place;
     private CompetitionTypeDTO type;

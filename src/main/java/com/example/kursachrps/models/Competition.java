@@ -12,11 +12,11 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "competitions")
-public class Competition {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Competition extends GenericEntity{
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
 
     @Column(name = "competition_name")
     @NotEmpty(message = "Название соревнованй не может быть пустым")

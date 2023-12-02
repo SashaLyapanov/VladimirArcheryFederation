@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 public class SessionDTO {
-    private int id;
+    private String id;
     private Date date;
     private Date dateTime;
     private Time duration;

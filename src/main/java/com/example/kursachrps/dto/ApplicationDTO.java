@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationDTO {
 
-    private int id;
+    private String id;
 
     private boolean payment;
 

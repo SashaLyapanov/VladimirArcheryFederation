@@ -14,23 +14,23 @@ import java.util.Optional;
 @Repository
 public interface SessionExercisesRepository extends JpaRepository<SessionExercises, Integer> {
 
-    Optional<SessionExercises> findById(int id);
+    Optional<SessionExercises> findById(String id);
 
     @Modifying
     @Query(value = "insert into session_exercises (order_exercise, count_approach, count_repeat, description, session_id,personal_exercises_id)" +
             " values (:orderExercise, :countApproach, :countRepeat, :description, :sessionExercises, :personalExercise)", nativeQuery = true)
     void addExerciseInSession1(@Param("orderExercise") int orderExercise, @Param("countApproach") int countApproach,
-                               @Param("countRepeat") int countRepeat, @Param("description") String description, @Param("sessionExercises") int sessionExercises,
-                               @Param("personalExercise") int personalExercise);
+                               @Param("countRepeat") int countRepeat, @Param("description") String description, @Param("sessionExercises") String sessionExercises,
+                               @Param("personalExercise") String personalExercise);
     @Modifying
     @Query(value = "insert into session_exercises (order_exercise, count_approach, count_repeat, description, session_id, exercises_id)" +
             " values (:orderExercise, :countApproach, :countRepeat, :description, :sessionExercises, :exercise)", nativeQuery = true)
     void addExerciseInSession2(@Param("orderExercise") int orderExercise, @Param("countApproach") int countApproach,
-                               @Param("countRepeat") int countRepeat, @Param("description") String description, @Param("sessionExercises") int sessionExercises,
-                               @Param("exercise") int exercise);
+                               @Param("countRepeat") int countRepeat, @Param("description") String description, @Param("sessionExercises") String sessionExercises,
+                               @Param("exercise") String exercise);
 
-    List<SessionExercises> findSessionExercisesBySessionExercisesId(int sessionId);
+    List<SessionExercises> findSessionExercisesBySessionExercisesId(String sessionId);
 
-    SessionExercises findSessionExerciseByOrderExerciseAndSessionExercisesId(int orderExercise, int sessionId);
+    SessionExercises findSessionExerciseByOrderExerciseAndSessionExercisesId(int orderExercise, String sessionId);
 
 }

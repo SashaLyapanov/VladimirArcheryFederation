@@ -105,7 +105,8 @@ public class AdminService {
         sportsman.setSex(updatedSportsman.getSex());
 
         Team team = updatedSportsman.getTeam();
-        if (updatedSportsman.getTeam().getId() == 0) {
+//        if (updatedSportsman.getTeam().getId() == 0) {
+        if (updatedSportsman.getTeam().getId() != null) {
             teamRepository.save(team);
         }
         sportsman.setTeam(updatedSportsman.getTeam());
@@ -124,7 +125,8 @@ public class AdminService {
         coach.setStatus(Status.ACTIVE);
 
         Team team = coach.getTeam();
-        if (coach.getTeam().getId() == 0) {
+//        if (coach.getTeam().getId() == 0) {
+        if (coach.getTeam().getId() != null) {
             teamRepository.save(team);
         }
 
@@ -154,7 +156,8 @@ public class AdminService {
         coach.setSportsTitle(updatedCoach.getSportsTitle());
 
         Team team = updatedCoach.getTeam();
-        if (updatedCoach.getTeam().getId() == 0) {
+//        if (updatedCoach.getTeam().getId() == 0) {
+        if (updatedCoach.getTeam().getId() != null) {
             teamRepository.save(team);
         }
 
@@ -176,7 +179,7 @@ public class AdminService {
     }
 
     @Transactional
-    public void editCompetition(int id, Competition updatedCompetition) {
+    public void editCompetition(String id, Competition updatedCompetition) {
         Competition competition = competitionRepository.findById(id).orElse(null);
 
         assert competition != null;
@@ -195,7 +198,7 @@ public class AdminService {
 
 
     @Transactional
-    public void changeStatusOfCompetition(int id) {
+    public void changeStatusOfCompetition(String id) {
         Competition competition = competitionRepository.findById(id).orElse(null);
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PRESENT);

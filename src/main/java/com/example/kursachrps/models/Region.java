@@ -8,12 +8,12 @@ import java.util.List;
 @Entity
 @Table(name = "regions")
 @Data
-public class Region {
+public class Region extends GenericEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id")
+//    private int id;
 
     @Column(name = "name")
     private String name;

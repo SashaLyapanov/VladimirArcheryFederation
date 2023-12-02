@@ -7,7 +7,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SexDTO {
 
-    private int id;
+    private String id;
     private String name;
 
 }

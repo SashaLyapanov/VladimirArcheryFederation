@@ -45,7 +45,7 @@ public class JudgeController {
      * Метод для генерирования протокола и автоматического скачивания файла на локальный пк пользователя
      */
     @GetMapping("/generateProtocol")
-    public ResponseEntity<Resource> generateProtocol(@RequestParam int competitionId) throws IOException {
+    public ResponseEntity<Resource> generateProtocol(@RequestParam String competitionId) throws IOException {
         File fileName = judgeService.generateProtocol(competitionId);
 
         //Реализация скачивания файла
@@ -88,8 +88,8 @@ public class JudgeController {
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
     @PostMapping("/regParticipantToCompetition")
-    public String regParticipantToCompetition(@RequestParam int competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
-        if (applicationService.checkRegistrationInCompetition(competitionId, email)) {
+    public String regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
+        if (applicationService.checkRegistrationInCompetitionByParticipantEmail(competitionId, email)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             judgeService.registrateParticipantToCompetition(email, competitionId, application);
             PayController payController = new PayController();

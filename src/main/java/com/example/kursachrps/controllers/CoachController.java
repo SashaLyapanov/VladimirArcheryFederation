@@ -48,7 +48,7 @@ public class CoachController {
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
     @PostMapping("/regInCompetition")
-    public String regInCompetition(@RequestParam int coachId, @RequestParam int competitionId, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
+    public String regInCompetition(@RequestParam String coachId, @RequestParam String competitionId, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
         if (applicationService.checkRegistrationInCompetition(competitionId, coachId)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             coachService.registrateCoach(coachId, competitionId, application);
@@ -68,7 +68,7 @@ public class CoachController {
      * Просмотр всех собственных заявок на соревнования
      */
     @GetMapping("/allMyApplication")
-    public List<ApplicationDTO> getMyApplications(@RequestParam int myId) {
+    public List<ApplicationDTO> getMyApplications(@RequestParam String myId) {
 
         List<Application> applications = applicationService.getMyApplications(myId);
         List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applications);

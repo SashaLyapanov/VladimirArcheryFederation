@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SessionTypeDTO {
-    private int id;
+    private String id;
     private String sessionTypeName;
 }

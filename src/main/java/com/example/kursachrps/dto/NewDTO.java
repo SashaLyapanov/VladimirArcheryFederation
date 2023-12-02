@@ -9,7 +9,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NewDTO {
 
-    private int id;
+    private String id;
     private String name;
     private String body;
     private Date date;

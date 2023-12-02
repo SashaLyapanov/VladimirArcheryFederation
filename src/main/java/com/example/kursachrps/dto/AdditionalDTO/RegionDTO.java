@@ -7,6 +7,6 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RegionDTO {
 
-    private int id;
+    private String id;
     private String name;
 }

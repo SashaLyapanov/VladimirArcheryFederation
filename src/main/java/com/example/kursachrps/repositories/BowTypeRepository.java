@@ -13,6 +13,6 @@ public interface BowTypeRepository extends JpaRepository<BowType, Integer> {
 
 
     @Query("SELECT bt FROM BowType bt JOIN bt.competitionList btc where btc.id = :competitionId")
-    List<BowType> findAllByCompetitionId(@Param("competitionId") int competitionId);
+    List<BowType> findAllByCompetitionId(@Param("competitionId") String competitionId);
 
 }

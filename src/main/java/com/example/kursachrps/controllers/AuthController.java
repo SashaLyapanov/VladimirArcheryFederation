@@ -67,8 +67,8 @@ public class AuthController {
         }
 
         // Создаем спортсмена
-        Sportsman sportsman = new Sportsman();
-        sportsman = sportsmanMapper.fromSignUpDTO(signUpDTO);
+//        Sportsman sportsman = new Sportsman();
+        Sportsman sportsman = sportsmanMapper.fromSignUpDTO(signUpDTO);
         sportsman.setRole(Role.SPORTSMAN);
         sportsman.setStatus(Status.ACTIVE);
         sportsman.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));

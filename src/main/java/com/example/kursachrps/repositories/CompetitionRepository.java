@@ -16,10 +16,11 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
 
     List<Competition> findAll(Sort sort);
 
-    @Override
-    Optional<Competition> findById(Integer integer);
+    Optional<Competition> findById(String id);
 
     List<Competition> findByDate(Date date);
+
+    Competition findByName(String name);
 
     List<Competition> findCompetitionByNameAndDateAndCategories(String name, Date date, String categories);
 

@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Session,Integer> {
+    Optional<Session> findById(String integer);
     List<Session> findSessionBySportsman_Email(String email);
     List<Session> findSessionBySportsman_EmailAndDate(String email, Date date);
 

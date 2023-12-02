@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface SportsmanMainRepository extends JpaRepository<Sportsman, Integer> {
 
-    Optional<Sportsman> findById(int id);
+    Optional<Sportsman> findById(String id);
 
     Optional<Sportsman> findByEmail(String email);
 
     @Query("SELECT s FROM Sportsman s WHERE s.personalCoach.id = :coachId")
-    List<Sportsman> findAllSportsmanByPersonalCoach(@Param("coachId") int coachId);
+    List<Sportsman> findAllSportsmanByPersonalCoach(@Param("coachId") String coachId);
 }

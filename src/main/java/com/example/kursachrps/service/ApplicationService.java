@@ -26,7 +26,7 @@ public class ApplicationService {
      * Метод для выборки всех заявок для определенных соревнований
      */
     @Transactional
-    public List<Application> getApplicationsForCompetition(int competitionId) {
+    public List<Application> getApplicationsForCompetition(String competitionId) {
         return applicationRepository.findApplicationByCompetitionId(competitionId);
     }
 
@@ -47,7 +47,7 @@ public class ApplicationService {
      * Выборка всех собственных заявок
      */
     @Transactional
-    public List<Application> getMyApplications(int myId) {
+    public List<Application> getMyApplications(String myId) {
         List<Application> applicationsOfSportsman = applicationRepository.findApplicationBySportsmanId(myId);
         List<Application> applicationOfCoach = applicationRepository.findApplicationByCoachId(myId);
         if (applicationsOfSportsman.isEmpty()) {
@@ -61,7 +61,7 @@ public class ApplicationService {
     /**
      * Метод валидирующий подачу заявки спортсменом и тренером.
      */
-    public boolean checkRegistrationInCompetition(int competitionId, int participantId) {
+    public boolean checkRegistrationInCompetition(String competitionId, String participantId) {
         Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantId);
         Application coachApplication = applicationRepository.findApplicationByCoachAndCompetition(competitionId, participantId);
 
@@ -72,9 +72,9 @@ public class ApplicationService {
         }
     }
 
-    public boolean checkRegistrationInCompetition(int competitionId, String participantEmail) {
-        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantEmail);
-        Application coachApplication = applicationRepository.findApplicationByCoachAndCompetition(competitionId, participantEmail);
+    public boolean checkRegistrationInCompetitionByParticipantEmail(String competitionId, String participantEmail) {
+        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanEmailAndCompetition(competitionId, participantEmail);
+        Application coachApplication = applicationRepository.findApplicationByCoachEmailAndCompetition(competitionId, participantEmail);
 
         if (sportsmanApplication == null && coachApplication == null) {
             return true;

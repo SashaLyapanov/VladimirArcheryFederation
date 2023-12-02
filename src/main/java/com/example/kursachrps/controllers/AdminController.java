@@ -183,7 +183,8 @@ public class AdminController {
      * Метод редактирования соревнований
      */
     @PutMapping("editCompetition")
-    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionCreateDTO updatedCompetition) {
+//    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionCreateDTO updatedCompetition) {
+    public Competition editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
 
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
         adminService.editCompetition(id, competition);
@@ -195,7 +196,7 @@ public class AdminController {
      * Метод для смены статуса соревнованиям
      */
     @PutMapping("changeStatusCompetition")
-    public void changeStatusOfCompetition(@RequestParam int id) {
+    public void changeStatusOfCompetition(@RequestParam String id) {
         adminService.changeStatusOfCompetition(id);
     }
 
@@ -218,16 +219,7 @@ public class AdminController {
      * Метод для шаблонного редактирования новости
      */
     @PutMapping("changeNew")
-    public void changeNew(@RequestParam int newId, @RequestBody NewDTO newDTO) {
+    public void changeNew(@RequestParam String newId, @RequestBody NewDTO newDTO) {
 
     }
-
-
-
-
-
-
-
-
-
 }

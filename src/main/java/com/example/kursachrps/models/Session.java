@@ -10,11 +10,12 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "sessions")
-public class Session {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Session extends GenericEntity {
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+
     //dateTime - нужно подобрать тип данных для работы с датой и временем.
     @Column(name = "date_time")
     private Date dateTime;

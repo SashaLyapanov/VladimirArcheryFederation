@@ -13,7 +13,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SportsmanMainDTO {
 
-    private int id;
+    private String id;
 
     private String email;
 

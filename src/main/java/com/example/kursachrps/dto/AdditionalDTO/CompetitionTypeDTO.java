@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompetitionTypeDTO {
-    private int id;
+    private String id;
     private String name;
 }

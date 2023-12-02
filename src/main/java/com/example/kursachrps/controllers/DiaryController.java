@@ -78,7 +78,7 @@ public class DiaryController {
      * Метод для получения всех собственных упражнений
      */
     @GetMapping("getAllPersonExercises")
-    public List<PersonalExerciseDTO> getAllPersonalExercises(@RequestParam int sportsman_id) {
+    public List<PersonalExerciseDTO> getAllPersonalExercises(@RequestParam String sportsman_id) {
         List<PersonalExerciseDTO> personalExercises = diaryMapper.fromPersonalExercise(diaryService.getAllPersonalExercises(sportsman_id));
         return personalExercises;
     }
@@ -87,7 +87,7 @@ public class DiaryController {
      * Метод для внесения упражнения в тренировку
      */
     @PostMapping("addExerciseToSessionById")
-    public void addExercise(@RequestParam int sessionId, @RequestBody SessionExercisesDTO sessionExercisesDTO) {
+    public void addExercise(@RequestParam String sessionId, @RequestBody SessionExercisesDTO sessionExercisesDTO) {
         SessionExercises sessionExercises = diaryMapper.fromSessionExercisesDTO(sessionExercisesDTO);
 
         diaryService.addExerciseInSession(sessionId, sessionExercises);
@@ -106,7 +106,7 @@ public class DiaryController {
      * Метод для смены упражнений в тренировке (нижнее поднять)
      */
     @PostMapping("upExerciseInSession")
-    public void up(@RequestParam int sessionId, @RequestParam int exerciseId) {
+    public void up(@RequestParam String sessionId, @RequestParam String exerciseId) {
         diaryService.up(sessionId, exerciseId);
     }
 
@@ -114,7 +114,7 @@ public class DiaryController {
      * Метод для смены упражнений в тренировке (верхнее опустить)
      */
     @PostMapping("downExerciseInSession")
-    public void down(@RequestParam int sessionId, @RequestParam int exerciseId) {
+    public void down(@RequestParam String sessionId, @RequestParam String exerciseId) {
         diaryService.down(sessionId, exerciseId);
     }
 

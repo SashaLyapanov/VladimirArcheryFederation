@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "bow_types")
-public class BowType {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class BowType extends GenericEntity {
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
 
     @Column(name = "bow_type_name")
     private String bowTypeName;

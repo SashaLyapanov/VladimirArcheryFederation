@@ -12,10 +12,10 @@ import java.util.List;
 @Repository
 public interface PersonalExerciseRepository extends JpaRepository<PersonalExercise, Integer> {
 
-    List<PersonalExercise> findAllBySportsmanId(int sportsman_id);
+    List<PersonalExercise> findAllBySportsmanId(String sportsman_id);
 
     @Modifying
     @Query(value = "INSERT INTO personal_exercises (sportsman_id, exercise_name, description, photo) VALUES (:sportsmanId, :name, :description , :photo)", nativeQuery = true)
-    void addPersonalExerciseInSystem(@Param("name") String name, @Param("description") String description, @Param("photo") String photo, @Param("sportsmanId") int sportsmanId);
+    void addPersonalExerciseInSystem(@Param("name") String name, @Param("description") String description, @Param("photo") String photo, @Param("sportsmanId") String sportsmanId);
 
 }

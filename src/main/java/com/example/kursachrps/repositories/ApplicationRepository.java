@@ -12,24 +12,24 @@ import java.util.List;
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId")
-    List<Application> findApplicationByCompetitionId(@Param("competitionId") int competitionId);
+    List<Application> findApplicationByCompetitionId(@Param("competitionId") String competitionId);
 
     @Query("SELECT a FROM Application a WHERE a.sportsman.id = :sportsmanId")
-    List<Application> findApplicationBySportsmanId(@Param("sportsmanId") int sportsmanId);
+    List<Application> findApplicationBySportsmanId(@Param("sportsmanId") String sportsmanId);
 
     @Query("SELECT a FROM Application a WHERE a.coach.id = :coachId")
-    List<Application> findApplicationByCoachId(@Param("coachId") int coachId);
+    List<Application> findApplicationByCoachId(@Param("coachId") String coachId);
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.sportsman.id = :sportsmanId")
-    Application findApplicationBySportsmanAndCompetition(@Param("competitionId") int competitionId, @Param("sportsmanId") int sportsmanId);
+    Application findApplicationBySportsmanAndCompetition(@Param("competitionId") String competitionId, @Param("sportsmanId") String sportsmanId);
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.coach.id = :coachId")
-    Application findApplicationByCoachAndCompetition(@Param("competitionId") int competitionId, @Param("coachId") int coachId);
+    Application findApplicationByCoachAndCompetition(@Param("competitionId") String competitionId, @Param("coachId") String coachId);
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.sportsman.email = :email")
-    Application findApplicationBySportsmanAndCompetition(@Param("competitionId") int competitionId, @Param("email") String email);
+    Application findApplicationBySportsmanEmailAndCompetition(@Param("competitionId") String competitionId, @Param("email") String email);
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.coach.email = :email")
-    Application findApplicationByCoachAndCompetition(@Param("competitionId") int competitionId, @Param("email") String email);
+    Application findApplicationByCoachEmailAndCompetition(@Param("competitionId") String competitionId, @Param("email") String email);
 
 }

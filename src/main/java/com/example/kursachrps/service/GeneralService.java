@@ -41,6 +41,9 @@ public class GeneralService {
     @Transactional
     public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }
 
+    @Transactional
+    public Competition showCompetitionByName(String name) { return competitionRepository.findByName(name); }
+
 
     //Метод выборки соревнований по названию, дате, категории (пока не работает)
     @Transactional
@@ -76,7 +79,7 @@ public class GeneralService {
 
 
     @Transactional
-    public List<BowType> getAllBowTypeByCompetitionId(int competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
+    public List<BowType> getAllBowTypeByCompetitionId(String competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
 
 
     public String getProtocolNameByCompetitionId(int competitionId) {

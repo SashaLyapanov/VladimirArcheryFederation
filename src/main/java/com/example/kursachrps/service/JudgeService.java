@@ -48,7 +48,7 @@ public class JudgeService {
      * Метод для генерации EXCEL протокола 3D соревнований.
      */
     @Transactional
-    public File generateProtocol(int competitionId) throws IOException {
+    public File generateProtocol(String competitionId) throws IOException {
         //Это наш шаблон, чтобы скопировать его в новый файл
         File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filesExcel\\TestPattern.xlsx");
         //Создадим новый файл
@@ -147,7 +147,7 @@ public class JudgeService {
      * Метод для регистрации спортсмена/тренера на соревнования
      */
     @Transactional
-    public void registrateParticipantToCompetition(String email, int competitionId, Application application) {
+    public void registrateParticipantToCompetition(String email, String competitionId, Application application) {
 
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         User participant = userMainRepository.findByEmail(email).orElse(null);

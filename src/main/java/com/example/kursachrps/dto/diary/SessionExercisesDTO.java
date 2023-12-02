@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SessionExercisesDTO {
-    private int id;
+    private String id;
     private Integer orderExercise;
     private Integer countApproach;
     private Integer countRepeat;

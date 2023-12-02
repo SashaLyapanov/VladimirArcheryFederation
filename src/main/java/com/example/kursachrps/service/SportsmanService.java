@@ -1,9 +1,6 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.Models.Application;
-import com.example.kursachrps.Models.Competition;
-import com.example.kursachrps.Models.Sportsman;
-import com.example.kursachrps.Models.Team;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.SportsmanMainDTO;
 import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +43,7 @@ public class SportsmanService {
      * Метод для регистрации спортсмена на соревнования
      */
     @Transactional
-    public void registrateSportsman(int sportsmanId, int competitionId, Application application) {
+    public void registrateSportsman(String sportsmanId, String competitionId, Application application) {
 
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         Sportsman sportsman = sportsmanMainRepository.findById(sportsmanId).orElse(null);
@@ -83,7 +80,8 @@ public class SportsmanService {
         sportsman.setBirthDate(updatedSportsman.getBirthDate());
 
         Team team = updatedSportsman.getTeam();
-        if (updatedSportsman.getTeam().getId() == 0) {
+//        if (updatedSportsman.getTeam().getId() == 0) {
+        if (updatedSportsman.getTeam().getId() != null) {
             teamRepository.save(team);
         }
         sportsman.setTeam(updatedSportsman.getTeam());

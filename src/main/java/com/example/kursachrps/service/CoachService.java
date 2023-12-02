@@ -41,7 +41,6 @@ public class CoachService {
 
     public List<Sportsman> findAllMySportsmen(String coachEmail) {
         Coach coach = coachMainRepository.findByEmail(coachEmail).orElse(null);
-        System.out.println(coach.getId());
         assert coach != null;
         return sportsmanMainRepository.findAllSportsmanByPersonalCoach(coach.getId());
     }
@@ -50,7 +49,7 @@ public class CoachService {
      * Метод для регистрации спортсмена на соревнования
      */
     @Transactional
-    public void registrateCoach(int coachId, int competitionId, Application application) {
+    public void registrateCoach(String coachId, String  competitionId, Application application) {
 
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         Coach coach = coachMainRepository.findById(coachId).orElse(null);

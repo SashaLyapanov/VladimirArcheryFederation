@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SportsmanDiaryDTO {
-    private int id;
+    private String id;
 }

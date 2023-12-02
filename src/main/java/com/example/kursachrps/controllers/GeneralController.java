@@ -53,11 +53,19 @@ public class GeneralController {
     }
 
     /**
-     * Метод для вывода соревнования по названию
+     * Метод для вывода соревнования по дате
      */
     @GetMapping("competition")
     public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
         return competitionMapper.fromCompetition(generalService.showCompetitionByDate(date));
+    }
+
+    /**
+     * Метод для вывода соревнования по дате
+     */
+    @GetMapping("competitionByName")
+    public CompetitionDTO getCompetitionByName(@RequestParam String name) {
+        return competitionMapper.fromCompetition(generalService.showCompetitionByName(name));
     }
 
 
@@ -74,7 +82,7 @@ public class GeneralController {
      * Метод для просмотра всех заявок на определенные соревнования
      */
     @GetMapping("/applicationsForCompetition")
-    List<ApplicationDTO> getApplications(@RequestParam int competitionId) {
+    List<ApplicationDTO> getApplications(@RequestParam String competitionId) {
 
         List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
         return applicationDTOList;
@@ -85,7 +93,7 @@ public class GeneralController {
      * Метод для просмотра всех заявившихся спорстменов на определенные соревнования
      */
     @GetMapping("/declaredSportsmenForCompetition")
-    List<SportsmanDTO> getDeclaredSportsmen(@RequestParam int competitionId) {
+    List<SportsmanDTO> getDeclaredSportsmen(@RequestParam String competitionId) {
         List<ApplicationDTO> applicationDTOList = getApplications(competitionId);
         List<SportsmanDTO> sportsmanDTOList = applicationService.getSportsmenFromApplications(applicationDTOList);
         return sportsmanDTOList;
@@ -135,7 +143,7 @@ public class GeneralController {
      * Запрос на получение всех типов лука при регистраци на определенные соревновния.
      */
     @GetMapping("allBowTypesByCompetition")
-    List<BowTypeDTO> getAllBowTypeByCompetitionId(@RequestParam int competitionId) {
+    List<BowTypeDTO> getAllBowTypeByCompetitionId(@RequestParam String competitionId) {
         return generalMapper.fromBowType(generalService.getAllBowTypeByCompetitionId(competitionId));
     }
 

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SportsTitleDTO {
 
-    private int id;
+    private String id;
 
     private String name;
 }

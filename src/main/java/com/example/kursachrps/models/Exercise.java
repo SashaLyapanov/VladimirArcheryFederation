@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "exercises")
-public class Exercise {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Exercise extends GenericEntity{
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
 
     @NotEmpty
     @Column(name = "exercise_name")

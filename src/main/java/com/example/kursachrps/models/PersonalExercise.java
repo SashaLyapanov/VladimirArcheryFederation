@@ -9,12 +9,12 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "personal_exercises")
-public class PersonalExercise {
+public class PersonalExercise extends GenericEntity {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
 
     @Column(name = "exercise_name")
     @NotEmpty(message = "Упражнение обязательно должно иметь название")

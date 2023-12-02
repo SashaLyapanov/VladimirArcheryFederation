@@ -31,7 +31,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public Session showSession(int id) {
+    public Session showSession(String id) {
         return diaryRepository.findById(id).orElse(null);
     }
 
@@ -61,12 +61,12 @@ public class DiaryService {
         return exerciseRepository.findAll();
     }
 
-    public List<PersonalExercise> getAllPersonalExercises(int sportsman_id) {
+    public List<PersonalExercise> getAllPersonalExercises(String sportsman_id) {
         return personalExerciseRepository.findAllBySportsmanId(sportsman_id);
     }
 
     @Transactional
-    public void addExerciseInSession(int sessionId, SessionExercises sessionExercises) {
+    public void addExerciseInSession(String sessionId, SessionExercises sessionExercises) {
         Session session = showSession(sessionId);
         sessionExercises.setSessionExercises(session);
 
@@ -99,7 +99,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public void up(int sessionId, int exerciseId) {
+    public void up(String sessionId, String exerciseId) {
         SessionExercises downSessionExercise = sessionExercisesRepository.findById(exerciseId).orElse(null);
         assert downSessionExercise != null;
         int currentOrderExercise = downSessionExercise.getOrderExercise();
@@ -111,7 +111,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public void down(int sessionId, int exerciseId) {
+    public void down(String sessionId, String exerciseId) {
         SessionExercises upperSessionExercise = sessionExercisesRepository.findById(exerciseId).orElse(null);
         assert upperSessionExercise != null;
         int currentOrderExercise = upperSessionExercise.getOrderExercise();
