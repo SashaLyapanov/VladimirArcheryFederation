@@ -2,7 +2,6 @@ package com.example.kursachrps.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 
@@ -10,17 +9,8 @@ import java.util.List;
 @Entity
 @Table(name = "bow_types")
 public class BowType extends GenericEntity {
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-
     @Column(name = "bow_type_name")
     private String bowTypeName;
-
-    @ManyToMany(mappedBy = "bowTypeList")
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    private List<Coach> coachList;
 
     @OneToMany(mappedBy = "bowType")
     private List<Application> applicationList;

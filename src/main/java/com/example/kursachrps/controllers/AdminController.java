@@ -1,9 +1,7 @@
 package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.models.*;
-import com.example.kursachrps.dto.Administratior.CoachAdmDTO;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
-import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.NewDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
@@ -89,62 +87,8 @@ public class AdminController {
     }
 
 
-
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD тренеров/////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Метод для получения всех тренеров в системе
-     */
-    @GetMapping("coaches")
-    public List<CoachAdmDTO> getCoaches() {
-
-        List<Coach> coaches = adminService.showAllCoaches();
-
-        List<CoachAdmDTO> coachesDTO = userMapper.fromCoachList(coaches);
-
-        return coachesDTO;
-    }
-
-    /**
-     * Метод для получения тренера по email
-     */
-    @GetMapping("coach")
-    public CoachAdmDTO getCoach(@RequestParam String email) {
-
-        Coach coach = adminService.getCoachByEmail(email);
-
-        CoachAdmDTO coachesDTO = userMapper.fromCoach(coach);
-
-        return coachesDTO;
-    }
-
-    /**
-     * Метод для создания тренера в системе (регистрация от Админа)
-     * JSON (email, password, firstName, surname, patronymic, birthDate)
-     */
-    @Transactional
-    @PostMapping("createCoach")
-    public Coach createCoach(@RequestBody @Valid CoachDTO coachDTO) {
-
-        adminService.hashPassword(coachDTO);
-        Coach coach = userMapper.fromCoachDTO(coachDTO);
-        return adminService.saveCoach(coach);
-    }
-
-
-    @PutMapping("editCoach")
-    public CoachAdmDTO editCoach(@RequestParam String email, @RequestBody @Valid CoachAdmDTO coachAdmDTO) {
-
-        Coach coach = userMapper.fromcoachAdmDTO(coachAdmDTO);
-        adminService.editCoach(email, coach);
-
-        return coachAdmDTO;
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Универсальные методя для всех////////////////////////////
+    ////////////////////////Универсальные методы для всех////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
 
 
@@ -163,9 +107,6 @@ public class AdminController {
     /////////////////////////////////////////////////////////////////////////////////
     ////////////////////////Реализация CRUD соревнований/////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
-
-
-
 
     /**
      * Метод для создания соревнований администратором

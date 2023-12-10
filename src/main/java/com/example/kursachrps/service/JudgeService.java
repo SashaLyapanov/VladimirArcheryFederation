@@ -4,7 +4,6 @@ import com.aspose.cells.PdfSaveOptions;
 import com.aspose.cells.Workbook;
 import com.example.kursachrps.ExcelGenerator2;
 import com.example.kursachrps.models.*;
-import com.example.kursachrps.mapper.CoachMapper;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;
 import com.example.kursachrps.repositories.CompetitionRepository;
@@ -26,7 +25,6 @@ public class JudgeService {
     private CompetitionRepository competitionRepository;
     private UserMainRepository userMainRepository;
     private SportsmanMapper sportsmanMapper;
-    private CoachMapper coachMapper;
 
     private ExcelGenerator2 excelGenerator2 = new ExcelGenerator2();
 
@@ -35,13 +33,11 @@ public class JudgeService {
     public JudgeService(ApplicationRepository applicationRepository,
                         CompetitionRepository competitionRepository,
                         UserMainRepository userMainRepository,
-                        SportsmanMapper sportsmanMapper,
-                        CoachMapper coachMapper) {
+                        SportsmanMapper sportsmanMapper) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
         this.sportsmanMapper = sportsmanMapper;
-        this.coachMapper = coachMapper;
     }
 
     /**
@@ -156,9 +152,6 @@ public class JudgeService {
         if (participant.getRole() == Role.SPORTSMAN) {
             Sportsman sportsman = sportsmanMapper.fromUser(participant);
             application.setSportsman(sportsman);
-        } else if(participant.getRole() == Role.COACH) {
-            Coach coach = coachMapper.fromUser(participant);
-            application.setCoach(coach);
         }
         application.setPayment(true);
 

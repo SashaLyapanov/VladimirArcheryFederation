@@ -1,7 +1,6 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.models.*;
-import com.example.kursachrps.dto.CoachDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +14,18 @@ import java.util.List;
 public class AdminService {
 
     private final SportsmanMainRepository sportsmanMainRepository;
-    private final CoachMainRepository coachMainRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
-    private final TeamRepository teamRepository;
     private final CompetitionRepository competitionRepository;
 
     @Autowired
     public AdminService(SportsmanMainRepository sportsmanMainRepository,
-                        CoachMainRepository coachMainRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
-                        TeamRepository teamRepository,
                         CompetitionRepository competitionRepository) {
         this.sportsmanMainRepository = sportsmanMainRepository;
-        this.coachMainRepository = coachMainRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
-        this.teamRepository = teamRepository;
         this.competitionRepository = competitionRepository;
     }
 
@@ -55,13 +48,6 @@ public class AdminService {
     public void hashPassword(SportsmanDTO sportsmanDTO) {
         sportsmanDTO.setPassword(passwordEncoder.encode(sportsmanDTO.getPassword()));
     }
-    //Метод, позволяющий захешировать пароль при создании Тренера Администратором
-    @Transactional
-    public void hashPassword(CoachDTO coachDTO) {
-        coachDTO.setPassword(passwordEncoder.encode(coachDTO.getPassword()));
-    }
-
-
 
     //Метод для получения спортсмена (Sportsman) по email
     @Transactional
@@ -104,67 +90,7 @@ public class AdminService {
         sportsman.setRegion(updatedSportsman.getRegion());
         sportsman.setSex(updatedSportsman.getSex());
 
-        Team team = updatedSportsman.getTeam();
-//        if (updatedSportsman.getTeam().getId() == 0) {
-        if (updatedSportsman.getTeam().getId() != null) {
-            teamRepository.save(team);
-        }
-        sportsman.setTeam(updatedSportsman.getTeam());
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
-        sportsman.setPersonalCoach(updatedSportsman.getPersonalCoach());
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD тренеров/////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////
-
-    @Transactional
-    public Coach saveCoach(Coach coach) {
-        coach.setRole(Role.COACH);
-        coach.setStatus(Status.ACTIVE);
-
-        Team team = coach.getTeam();
-//        if (coach.getTeam().getId() == 0) {
-        if (coach.getTeam().getId() != null) {
-            teamRepository.save(team);
-        }
-
-        return coachMainRepository.save(coach);
-    }
-
-
-    @Transactional
-    public List<Coach> showAllCoaches() { return coachMainRepository.findAll(); }
-
-    @Transactional
-    public Coach getCoachByEmail(String email) { return coachMainRepository.findByEmail(email).orElse(null); }
-
-
-    @Transactional
-    public void editCoach(String email, Coach updatedCoach) {
-
-        Coach coach = coachMainRepository.findByEmail(email).orElse(null);
-
-        assert coach != null;
-        coach.setFirstName(updatedCoach.getFirstName());
-        coach.setSurname(updatedCoach.getSurname());
-        coach.setPatronymic(updatedCoach.getPatronymic());
-        coach.setBirthDate(updatedCoach.getBirthDate());
-        coach.setRegion(updatedCoach.getRegion());
-        coach.setSex(updatedCoach.getSex());
-        coach.setSportsTitle(updatedCoach.getSportsTitle());
-
-        Team team = updatedCoach.getTeam();
-//        if (updatedCoach.getTeam().getId() == 0) {
-        if (updatedCoach.getTeam().getId() != null) {
-            teamRepository.save(team);
-        }
-
-        coach.setTeam(updatedCoach.getTeam());
-        coach.setQualification(updatedCoach.getQualification());
-        coach.setTeam(updatedCoach.getTeam());
-        coach.setBowTypeList(updatedCoach.getBowTypeList());
     }
 
 

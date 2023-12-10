@@ -4,18 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Entity
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "news")
-public class New extends GenericEntity{
-
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
+@Table(name = "articles")
+public class Article extends GenericEntity{
 
     @Column(name = "name")
     private String name;
@@ -26,7 +22,15 @@ public class New extends GenericEntity{
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "picture")
-    private String picture;
+    @Lob
+    @Column(name = "picture1")
+    private Blob picture1;
 
+    @Lob
+    @Column(name = "picture2")
+    private Blob picture2;
+
+    @Lob
+    @Column(name = "picture3")
+    private Blob picture3;
 }

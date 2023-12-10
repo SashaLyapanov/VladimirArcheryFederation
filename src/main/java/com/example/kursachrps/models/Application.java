@@ -7,18 +7,9 @@ import lombok.Data;
 @Entity
 @Table(name = "applications")
 public class Application extends GenericEntity{
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coach_id", referencedColumnName = "id")
-    private Coach coach;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "id")

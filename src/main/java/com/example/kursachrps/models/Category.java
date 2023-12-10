@@ -7,13 +7,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "categorise")
+@Table(name = "categories")
 public class Category extends GenericEntity{
-
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
 
     @Column(name = "name")
     private String name;

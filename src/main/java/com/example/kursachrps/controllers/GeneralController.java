@@ -116,27 +116,19 @@ public class GeneralController {
     }
 
     /**
-     * Запрос на получение всех квалификаций у тренеров
-     */
-    @GetMapping("allQualification")
-    List<QualificationDTO> getAllQualifications() {
-        return generalMapper.fromQualification(generalService.getAllQualifications());
-    }
-
-    /**
-     * Запрос на получение всех команд
-     */
-    @GetMapping("allTeams")
-    List<TeamDTO> getAllTeams() {
-        return generalMapper.fromTeam(generalService.getAllTeams());
-    }
-
-    /**
      * Запрос на получение всех типов луков
      */
     @GetMapping("allBowTypes")
     List<BowTypeDTO> getAllBowType() {
         return generalMapper.fromBowType(generalService.getAllBowType());
+    }
+
+    /**
+     * Запрос на получение всех гендеров
+     */
+    @GetMapping("allSex")
+    List<SexDTO> getAllSex() {
+        return generalMapper.fromSex(generalService.getAllSex());
     }
 
     /**

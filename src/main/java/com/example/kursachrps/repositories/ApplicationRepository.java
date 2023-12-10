@@ -14,22 +14,15 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId")
     List<Application> findApplicationByCompetitionId(@Param("competitionId") String competitionId);
 
+    List<Application> findApplicationByCompetition_IdAndAndBowType_BowTypeName(String competitionId, String bowTypeName);
+
     @Query("SELECT a FROM Application a WHERE a.sportsman.id = :sportsmanId")
     List<Application> findApplicationBySportsmanId(@Param("sportsmanId") String sportsmanId);
-
-    @Query("SELECT a FROM Application a WHERE a.coach.id = :coachId")
-    List<Application> findApplicationByCoachId(@Param("coachId") String coachId);
 
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.sportsman.id = :sportsmanId")
     Application findApplicationBySportsmanAndCompetition(@Param("competitionId") String competitionId, @Param("sportsmanId") String sportsmanId);
 
-    @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.coach.id = :coachId")
-    Application findApplicationByCoachAndCompetition(@Param("competitionId") String competitionId, @Param("coachId") String coachId);
-
     @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.sportsman.email = :email")
     Application findApplicationBySportsmanEmailAndCompetition(@Param("competitionId") String competitionId, @Param("email") String email);
-
-    @Query("SELECT a FROM Application a WHERE a.competition.id = :competitionId and a.coach.email = :email")
-    Application findApplicationByCoachEmailAndCompetition(@Param("competitionId") String competitionId, @Param("email") String email);
 
 }

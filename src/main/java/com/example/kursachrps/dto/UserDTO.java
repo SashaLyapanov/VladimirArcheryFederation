@@ -16,11 +16,11 @@ public class UserDTO {
 
     private String email;
 
-    private String password;
+//    private String password;
 
     private Role role;
 
-    private String firstName;
+    private String name;
 
     private String surname;
 

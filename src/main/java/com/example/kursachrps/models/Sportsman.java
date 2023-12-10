@@ -15,6 +15,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Sportsman extends User {
 
+    @Column(name = "club")
+    private String club;
+
+    @Column(name = "avatar_image")
+    private String avatarImage;
+
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     private Region region;
@@ -22,16 +28,6 @@ public class Sportsman extends User {
     @ManyToOne
     @JoinColumn(name = "sex_id", referencedColumnName = "id")
     private Sex sex;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
-    private Team team;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "coach_id", referencedColumnName = "id")
-    private Coach personalCoach;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
@@ -44,15 +40,7 @@ public class Sportsman extends User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "sportsman")
-    private List<Session> sessionList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "sportsman")
     private List<Application> applicationList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "sportsman")
-    private List<PersonalExercise> personalExerciseList;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -66,12 +54,12 @@ public class Sportsman extends User {
     public Sportsman() {
     }
 
-    public Sportsman(String email, String password, Role role, Status status, String firstName, String surname, String patronymic, Date birthDate,
-                     Team team, Coach personalCoach, SportsTitle sportsTitle) {
-        super(email, password, role, status, firstName, surname,patronymic,birthDate);
-        this.team = team;
-        this.personalCoach = personalCoach;
+    public Sportsman(String email, String password, Role role, Status status, String name, String surname, String patronymic, Date birthDate,
+                     SportsTitle sportsTitle, String club, String avatarImage) {
+        super(email, password, role, status, name, surname,patronymic,birthDate);
         this.sportsTitle = sportsTitle;
+        this.club = club;
+        this.avatarImage = avatarImage;
     }
 
 }

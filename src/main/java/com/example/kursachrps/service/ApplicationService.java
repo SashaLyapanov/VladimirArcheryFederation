@@ -31,6 +31,14 @@ public class ApplicationService {
     }
 
     /**
+     * Метод для выборки всех заявок для опредедленных соревнований и типа лука
+     */
+    @Transactional
+    public List<Application> getApplicationsForCompetitionAndBowType(String competitionId, String bowTypeName) {
+        return applicationRepository.findApplicationByCompetition_IdAndAndBowType_BowTypeName(competitionId, bowTypeName);
+    }
+
+    /**
      * Метод для выборки всех спортсменов из списка заявок
      */
     @Transactional
@@ -49,9 +57,8 @@ public class ApplicationService {
     @Transactional
     public List<Application> getMyApplications(String myId) {
         List<Application> applicationsOfSportsman = applicationRepository.findApplicationBySportsmanId(myId);
-        List<Application> applicationOfCoach = applicationRepository.findApplicationByCoachId(myId);
         if (applicationsOfSportsman.isEmpty()) {
-            return applicationOfCoach;
+            return null;
         } else {
             return applicationsOfSportsman;
         }
@@ -63,9 +70,8 @@ public class ApplicationService {
      */
     public boolean checkRegistrationInCompetition(String competitionId, String participantId) {
         Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantId);
-        Application coachApplication = applicationRepository.findApplicationByCoachAndCompetition(competitionId, participantId);
 
-        if (sportsmanApplication == null && coachApplication == null) {
+        if (sportsmanApplication == null) {
             return true;
         } else {
             return false;
@@ -74,9 +80,8 @@ public class ApplicationService {
 
     public boolean checkRegistrationInCompetitionByParticipantEmail(String competitionId, String participantEmail) {
         Application sportsmanApplication = applicationRepository.findApplicationBySportsmanEmailAndCompetition(competitionId, participantEmail);
-        Application coachApplication = applicationRepository.findApplicationByCoachEmailAndCompetition(competitionId, participantEmail);
 
-        if (sportsmanApplication == null && coachApplication == null) {
+        if (sportsmanApplication == null) {
             return true;
         } else {
             return false;

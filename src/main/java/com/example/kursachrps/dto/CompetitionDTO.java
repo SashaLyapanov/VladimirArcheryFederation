@@ -20,6 +20,7 @@ public class CompetitionDTO {
     private String place;
     private CompetitionTypeDTO type;
     private StatusOfCompetitionDTO status;
+    private int price;
     private List<CategoryDTO> categories;
     private Set<BowTypeDTO> bowTypeList;
     private String mainJudge;

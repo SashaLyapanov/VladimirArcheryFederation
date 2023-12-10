@@ -1,5 +1,6 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.models.Application;
 import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.dto.ApplicationDTO;
@@ -118,7 +119,17 @@ public class SportsmanController {
 
 
     /**
-     * Внести стартовый взнос
+     * Поиск всех спортсменов, зарегистрированных на определенные соревнования по id соревнования и типу лука
+     */
+    @GetMapping("/sportsmenByCompetitionAndBowType")
+    public List<SportsmanDTO> getAllSportsmanByCompetitionAndBowType(@RequestParam String id,
+                                                                     @RequestParam String bowTypeName) {
+        List<SportsmanDTO> list = sportsmanService.getAllSportmanByCompetitionAndBowType(id, bowTypeName);
+        return list;
+    }
+
+    /**
+     * Поиск для поиска всех заявок по id соревнования
      */
 
 }

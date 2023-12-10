@@ -3,7 +3,6 @@ package com.example.kursachrps.dto.Administratior;
 import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SexDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
-import com.example.kursachrps.dto.AdditionalDTO.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,11 +26,7 @@ public class SportsmanAdmDTO {
 
     private SexDTO sex;
 
-    private TeamDTO team;
-
     private SportsTitleDTO sportsTitle;
-
-    private CoachAdmDTO personalCoach;
 
     private Date birthDate;
 

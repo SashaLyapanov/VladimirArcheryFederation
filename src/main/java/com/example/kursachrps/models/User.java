@@ -12,18 +12,13 @@ import java.util.Date;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends GenericEntity{
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-
     @NotEmpty(message = "Email should not be empty")
     @Email
     @Column(name = "email")
     private String email;
 
     @NotEmpty(message = "Password should not be empty")
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String password;
 
     @Enumerated(value = EnumType.STRING)
@@ -35,11 +30,11 @@ public class User extends GenericEntity{
     private Status status;
 
     @NotEmpty(message = "Name should not be empty")
-    @Column(name = "first_name")
+    @Column(name = "name")
     private String firstName;
 
     @NotEmpty(message = "Surname should not be empty")
-    @Column(name = "last_name")
+    @Column(name = "surname")
     private String surname;
 
     @NotEmpty(message = "Patronymic should not be empty")

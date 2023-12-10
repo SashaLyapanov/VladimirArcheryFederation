@@ -65,7 +65,6 @@ public class AuthController {
         if (userMainRepository.existsByEmail(signUpDTO.getEmail())) {
             return new ResponseEntity<>("This email address is already registered in the system.", HttpStatus.BAD_REQUEST);
         }
-
         // Создаем спортсмена
 //        Sportsman sportsman = new Sportsman();
         Sportsman sportsman = sportsmanMapper.fromSignUpDTO(signUpDTO);

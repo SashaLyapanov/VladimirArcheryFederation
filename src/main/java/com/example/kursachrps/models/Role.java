@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 public enum Role {
     ADMIN(Set.of(Permission.SPORTSMEN_READ, Permission.SPORTSMAN_UPDATE, Permission.SPORTSMAN_WRITE, Permission.SPORTSMAN_DELETE)),
     SPORTSMAN(Set.of(Permission.SPORTSMEN_READ, Permission.SPORTSMAN_UPDATE)),
-    COACH(Set.of(Permission.SPORTSMEN_READ, Permission.SPORTSMAN_WRITE, Permission.SPORTSMAN_UPDATE)),
     JUDGE(Set.of(Permission.SPORTSMEN_READ, Permission.SPORTSMAN_WRITE));
 
     private final Set<Permission> permissions;

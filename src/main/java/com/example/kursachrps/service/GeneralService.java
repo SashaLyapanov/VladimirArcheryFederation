@@ -16,21 +16,22 @@ public class GeneralService {
     private final CompetitionRepository competitionRepository;
     private final RegionRepository regionRepository;
     private final SportsTitleRepository sportsTitleRepository;
-    private final QualificatinoRepository qualificatinoRepository;
     private final BowTypeRepository bowTypeRepository;
-    private final TeamRepository teamRepository;
+    private final SexRepository sexRepository;
     private final NewRepository newRepository;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
                            RegionRepository regionRepository,
-                           SportsTitleRepository sportsTitleRepository, QualificatinoRepository qualificatinoRepository, BowTypeRepository bowTypeRepository, TeamRepository teamRepository, NewRepository newRepository) {
+                           SportsTitleRepository sportsTitleRepository,
+                           BowTypeRepository bowTypeRepository,
+                           SexRepository sexRepository,
+                           NewRepository newRepository) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
-        this.qualificatinoRepository = qualificatinoRepository;
         this.bowTypeRepository = bowTypeRepository;
-        this.teamRepository = teamRepository;
+        this.sexRepository = sexRepository;
         this.newRepository = newRepository;
     }
 
@@ -63,20 +64,14 @@ public class GeneralService {
     }
 
     @Transactional
-    public List<Qualification> getAllQualifications() {
-        return qualificatinoRepository.findAll();
-    }
-
-    @Transactional
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
-    }
-
-    @Transactional
     public List<BowType> getAllBowType() {
         return bowTypeRepository.findAll();
     }
 
+    @Transactional
+    public List<Sex> getAllSex() {
+        return sexRepository.findAll();
+    }
 
     @Transactional
     public List<BowType> getAllBowTypeByCompetitionId(String competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
@@ -96,11 +91,11 @@ public class GeneralService {
     }
 
 
-    public List<New> getAllNews() {
+    public List<Article> getAllNews() {
         return newRepository.findAll();
     }
 
-    public New getNew(int newId) {
+    public Article getNew(int newId) {
         return newRepository.findById(newId).orElse(null);
     }
 

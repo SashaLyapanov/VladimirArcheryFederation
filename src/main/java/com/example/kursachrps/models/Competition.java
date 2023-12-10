@@ -13,11 +13,6 @@ import java.util.Set;
 @Entity
 @Table(name = "competitions")
 public class Competition extends GenericEntity{
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-
     @Column(name = "competition_name")
     @NotEmpty(message = "Название соревнованй не может быть пустым")
     private String name;
@@ -47,6 +42,8 @@ public class Competition extends GenericEntity{
     @Column(name = "status")
     private StatusOfCompetition status;
 
+    @Column(name = "price")
+    private int price;
 
     //Главный судья
     @Column(name = "judge")

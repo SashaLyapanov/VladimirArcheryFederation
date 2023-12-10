@@ -16,19 +16,19 @@ public interface GeneralMapper {
     SportsTitleDTO fromSportsTitle(SportsTitle sportsTitle);
     List<SportsTitleDTO> fromSportsTitle(List<SportsTitle> sportsTitle);
 
-    List<QualificationDTO> fromQualification(List<Qualification> qualifications);
-
-    List<TeamDTO> fromTeam(List<Team> teams);
-
     List<BowTypeDTO> fromBowType(List<BowType> bowTypes);
 
-    List<New> fromNewsDTO(List<NewDTO> newDTOS);
+    List<SexDTO> fromSex(List<Sex> sex);
 
-    List<NewDTO> fromNews(List<New> news);
+    List<Sex> fromSexDTO(List<SexDTO> sex);
 
-    New fromNewDTO(NewDTO newDTO);
+    List<Article> fromNewsDTO(List<NewDTO> newDTOS);
 
-    NewDTO fromNew(New new1);
+    List<NewDTO> fromNews(List<Article> news);
+
+    Article fromNewDTO(NewDTO newDTO);
+
+    NewDTO fromNew(Article article1);
 
     Competition fromCompetitionDTO(CompetitionDTO competitionDTO);
 
