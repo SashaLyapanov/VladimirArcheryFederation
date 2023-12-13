@@ -16,6 +16,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(source = "firstName", target = "name")
     UserDTO transform(User user);
 
     List<UserDTO> fromUser(List<User> users);

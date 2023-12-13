@@ -2,6 +2,7 @@ package com.example.kursachrps.service;
 
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
+import com.example.kursachrps.repositories.RegistrAndAuth.CompetitionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class GeneralService {
     private final RegionRepository regionRepository;
     private final SportsTitleRepository sportsTitleRepository;
     private final BowTypeRepository bowTypeRepository;
+    private final CategoryRepository categoryRepository;
+    private final CompetitionTypeRepository competitionTypeRepository;
     private final SexRepository sexRepository;
     private final NewRepository newRepository;
 
@@ -25,12 +28,16 @@ public class GeneralService {
                            RegionRepository regionRepository,
                            SportsTitleRepository sportsTitleRepository,
                            BowTypeRepository bowTypeRepository,
+                           CategoryRepository categoryRepository,
+                           CompetitionTypeRepository competitionTypeRepository,
                            SexRepository sexRepository,
                            NewRepository newRepository) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
         this.bowTypeRepository = bowTypeRepository;
+        this.categoryRepository = categoryRepository;
+        this.competitionTypeRepository = competitionTypeRepository;
         this.sexRepository = sexRepository;
         this.newRepository = newRepository;
     }
@@ -69,8 +76,18 @@ public class GeneralService {
     }
 
     @Transactional
+    public List<Category> getAllCategory() {
+        return categoryRepository.findAll();
+    }
+
+    @Transactional
     public List<Sex> getAllSex() {
         return sexRepository.findAll();
+    }
+
+    @Transactional
+    public List<CompetitionType> getAllCompetitionTypes() {
+        return competitionTypeRepository.findAll();
     }
 
     @Transactional

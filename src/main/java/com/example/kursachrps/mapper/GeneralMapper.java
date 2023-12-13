@@ -18,7 +18,11 @@ public interface GeneralMapper {
 
     List<BowTypeDTO> fromBowType(List<BowType> bowTypes);
 
+    List<CategoryDTO> fromCategory(List<Category> categories);
+
     List<SexDTO> fromSex(List<Sex> sex);
+
+    List<CompetitionTypeDTO> fromCompetitionType(List<CompetitionType> competitionTypes);
 
     List<Sex> fromSexDTO(List<SexDTO> sex);
 

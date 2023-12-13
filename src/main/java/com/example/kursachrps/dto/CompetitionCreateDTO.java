@@ -8,7 +8,6 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +19,7 @@ public class CompetitionCreateDTO {
     private CompetitionTypeDTO type;
     private int price;
     private List<CategoryDTO> categories;
-    private Set<BowTypeDTO> bowTypeList;
+    private List<BowTypeDTO> bowTypeList;
     private String mainJudge;
     private String secretary;
     private String zamJudge;

@@ -124,11 +124,27 @@ public class GeneralController {
     }
 
     /**
+     * Запрос на получение всех категорий соревнований
+     */
+    @GetMapping("allCategories")
+    List<CategoryDTO> getAllCategories() {
+        return generalMapper.fromCategory(generalService.getAllCategory());
+    }
+
+    /**
      * Запрос на получение всех гендеров
      */
     @GetMapping("allSex")
     List<SexDTO> getAllSex() {
         return generalMapper.fromSex(generalService.getAllSex());
+    }
+
+    /**
+     * Запрос на получение всех видов соревнований (3D, Target)
+     */
+    @GetMapping("allCompetitionTypes")
+    List<CompetitionTypeDTO> getAllCompetitionTypes() {
+        return generalMapper.fromCompetitionType(generalService.getAllCompetitionTypes());
     }
 
     /**
