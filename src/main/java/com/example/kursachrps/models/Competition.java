@@ -79,5 +79,5 @@ public class Competition extends GenericEntity{
             name = "competition_bow_type",
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
-    private Set<BowType> bowTypeList;
+    private List<BowType> bowTypeList;
 }

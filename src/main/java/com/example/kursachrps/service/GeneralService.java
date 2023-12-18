@@ -21,7 +21,7 @@ public class GeneralService {
     private final CategoryRepository categoryRepository;
     private final CompetitionTypeRepository competitionTypeRepository;
     private final SexRepository sexRepository;
-    private final NewRepository newRepository;
+    private final ArticleRepository articleRepository;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
@@ -31,7 +31,7 @@ public class GeneralService {
                            CategoryRepository categoryRepository,
                            CompetitionTypeRepository competitionTypeRepository,
                            SexRepository sexRepository,
-                           NewRepository newRepository) {
+                           ArticleRepository articleRepository) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
@@ -39,7 +39,7 @@ public class GeneralService {
         this.categoryRepository = categoryRepository;
         this.competitionTypeRepository = competitionTypeRepository;
         this.sexRepository = sexRepository;
-        this.newRepository = newRepository;
+        this.articleRepository = articleRepository;
     }
 
 
@@ -105,15 +105,6 @@ public class GeneralService {
      */
     public List<Competition> getPresentCompetitions() {
         return competitionRepository.findAllPast();
-    }
-
-
-    public List<Article> getAllNews() {
-        return newRepository.findAll();
-    }
-
-    public Article getNew(int newId) {
-        return newRepository.findById(newId).orElse(null);
     }
 
 

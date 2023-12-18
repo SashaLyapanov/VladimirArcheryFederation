@@ -1,18 +1,23 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
-import com.example.kursachrps.dto.NewDTO;
+import com.example.kursachrps.dto.ArticleDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.service.AdminService;
+import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +29,17 @@ public class AdminController {
     private final AdminService adminService;
     private final UserMapper userMapper;
     private final CompetitionMapper competitionMapper;
+    private final ArticleService articleService;
+    private final GeneralMapper generalMapper;
 
     @Autowired
-    public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper) {
+    public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
+                           ArticleService articleService, GeneralMapper generalMapper) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
+        this.articleService = articleService;
+        this.generalMapper = generalMapper;
     }
 
 
@@ -124,12 +134,12 @@ public class AdminController {
      * Метод редактирования соревнований
      */
     @PutMapping("editCompetition")
-//    public Competition editCompetition(@RequestParam int id, @RequestBody CompetitionCreateDTO updatedCompetition) {
     public Competition editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
 
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
-        adminService.editCompetition(id, competition);
-        return competition;
+//        adminService.editCompetition(id, competition);
+//        return competition;
+        return adminService.editCompetition(id, competition);
     }
 
 
@@ -150,9 +160,19 @@ public class AdminController {
     /**
      * Метод для шаблонного создания новости
      */
-    @PostMapping("createNew")
-    public void createNew(@RequestBody NewDTO newDTO) {
+    @PostMapping("createArticle")
+    public void createArticle(@RequestParam(name = "name") String name,
+                              @RequestParam(name = "body") String body,
+                              @RequestParam(name = "file1", required = false) MultipartFile file1) throws IOException {
+        Article article = new Article();
+        article.setName(name);
+        article.setBody(body);
+        articleService.saveArticle(article, file1);
+    }
 
+    @PostMapping("deleteArticle")
+    public void deleteArticle(@RequestParam String articleId) {
+        articleService.deleteArticle(articleId);
     }
 
 
@@ -160,7 +180,7 @@ public class AdminController {
      * Метод для шаблонного редактирования новости
      */
     @PutMapping("changeNew")
-    public void changeNew(@RequestParam String newId, @RequestBody NewDTO newDTO) {
+    public void changeNew(@RequestParam String newId, @RequestBody ArticleDTO articleDTO) {
 
     }
 }

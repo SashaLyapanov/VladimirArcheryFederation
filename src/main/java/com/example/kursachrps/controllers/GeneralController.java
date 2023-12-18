@@ -2,26 +2,30 @@ package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.example.kursachrps.dto.ApplicationDTO;
+import com.example.kursachrps.dto.ArticleDTO;
 import com.example.kursachrps.dto.CompetitionDTO;
-import com.example.kursachrps.dto.NewDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.GeneralMapper;
+import com.example.kursachrps.models.Article;
 import com.example.kursachrps.service.ApplicationService;
+import com.example.kursachrps.service.ArticleService;
 import com.example.kursachrps.service.GeneralService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -34,14 +38,16 @@ public class GeneralController {
     private final ApplicationService applicationService;
     private final ApplicationMapper applicationMapper;
     private final GeneralMapper generalMapper;
+    private final ArticleService articleService;
 
-    public GeneralController (CompetitionMapper competitionMapper,
-                              GeneralService generalService, ApplicationService applicationService, ApplicationMapper applicationMapper, GeneralMapper generalMapper) {
+    public GeneralController (CompetitionMapper competitionMapper, GeneralService generalService, ApplicationService applicationService,
+                              ApplicationMapper applicationMapper, GeneralMapper generalMapper, ArticleService articleService) {
         this.competitionMapper = competitionMapper;
         this.generalService = generalService;
         this.applicationService = applicationService;
         this.applicationMapper = applicationMapper;
         this.generalMapper = generalMapper;
+        this.articleService = articleService;
     }
 
     /**
@@ -68,7 +74,6 @@ public class GeneralController {
         return competitionMapper.fromCompetition(generalService.showCompetitionByName(name));
     }
 
-
     /**
      * Метод для поиска соревнований по названию, дате и категории спортсмена
      */
@@ -76,7 +81,6 @@ public class GeneralController {
     public List<CompetitionDTO> getCompetitions(@RequestParam (required = false) String name, @RequestParam (required = false) Date date, @RequestParam (required = false) String categoryName) {
         return competitionMapper.fromCompetition(generalService.showCompetitionByNameDateCategory(name, date, categoryName));
     }
-
 
     /**
      * Метод для просмотра всех заявок на определенные соревнования
@@ -87,7 +91,6 @@ public class GeneralController {
         List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
         return applicationDTOList;
     }
-
 
     /**
      * Метод для просмотра всех заявившихся спорстменов на определенные соревнования
@@ -155,7 +158,6 @@ public class GeneralController {
         return generalMapper.fromBowType(generalService.getAllBowTypeByCompetitionId(competitionId));
     }
 
-
     /**
      * Метод для скачивания pdf протокола
      */
@@ -181,7 +183,6 @@ public class GeneralController {
                 .body(resource);
     }
 
-
     /**
      * Метод для вывода всех соревнований, у которых статус PAST
      */
@@ -191,38 +192,34 @@ public class GeneralController {
         return competitionDTOList;
     }
 
-
     /**
      * Метод для полечения всех новостей
      */
-    @GetMapping("/news")
-    public List<NewDTO> getAllNews() {
-        return generalMapper.fromNews(generalService.getAllNews());
+    @GetMapping("/getArticles")
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() throws IOException {
+        List<ArticleDTO> articleDTOList = new ArrayList<ArticleDTO>();
+        List<Article> articleList = articleService.getAllArticles();
+        for (Article article: articleList) {
+            ArticleDTO articleDTO = new ArticleDTO();
+            articleDTO.setId(article.getId());
+            articleDTO.setName(article.getName());
+            articleDTO.setBody(article.getBody());
+            articleDTO.setDateTime(article.getDateTime());
+            articleDTO.setLink(article.getLink());
+            articleDTO.setFileName(article.getFile().getOriginalFilename());
+            articleDTO.setFileData(Arrays.toString(article.getFile().getBytes()));
+            articleDTOList.add(articleDTO);
+        }
+        return ResponseEntity.ok(articleDTOList);
     }
-
 
     /**
      * Метод для отображения определенной новости (страница этой новости)
      */
-    @GetMapping("new")
-    public NewDTO getNew(@RequestParam int newId) {
-        return generalMapper.fromNew(generalService.getNew(newId));
+    @GetMapping("getArticle")
+    public ArticleDTO getArticle(@RequestParam String articleId) {
+        return generalMapper.fromArticle(articleService.getArticleById(articleId));
     }
-
-
-
-
-
-    /**
-     * Метод для поиска соревнований по названию, типу лука, категории
-     */
-//    @GetMapping("/searchCompetitions")
-//    public List<CompetitionDTO> searchCompetitions(@RequestParam String competitionName, @RequestParam Integer bowType, @RequestParam Integer competitinoCategory) {
-//
-//        return  generalMapper.fromCompetition(generalService.searchCompetitions(competitionName, bowType, competitinoCategory));
-//
-//    }
-
 }
 
 

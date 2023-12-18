@@ -151,9 +151,7 @@ CREATE TABLE articles (
     name varchar(50) NOT NULL,
     body varchar (1000),
     date date,
-    picture1 bytea,
-    picture2 bytea,
-    picture3 bytea
+    preview_image_id varchar(36)
 );
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

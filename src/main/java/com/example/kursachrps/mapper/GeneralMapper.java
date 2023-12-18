@@ -3,7 +3,7 @@ package com.example.kursachrps.mapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.example.kursachrps.dto.CompetitionDTO;
-import com.example.kursachrps.dto.NewDTO;
+import com.example.kursachrps.dto.ArticleDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -26,13 +26,13 @@ public interface GeneralMapper {
 
     List<Sex> fromSexDTO(List<SexDTO> sex);
 
-    List<Article> fromNewsDTO(List<NewDTO> newDTOS);
+    List<Article> fromArticleDTO(List<ArticleDTO> articleDTOS);
 
-    List<NewDTO> fromNews(List<Article> news);
+    List<ArticleDTO> fromArticle(List<Article> articles);
 
-    Article fromNewDTO(NewDTO newDTO);
+    Article fromArticleDTO(ArticleDTO articleDTO);
 
-    NewDTO fromNew(Article article1);
+    ArticleDTO fromArticle(Article article1);
 
     Competition fromCompetitionDTO(CompetitionDTO competitionDTO);
 

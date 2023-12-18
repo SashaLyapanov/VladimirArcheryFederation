@@ -105,7 +105,7 @@ public class AdminService {
     }
 
     @Transactional
-    public void editCompetition(String id, Competition updatedCompetition) {
+    public Competition editCompetition(String id, Competition updatedCompetition) {
         Competition competition = competitionRepository.findById(id).orElse(null);
 
         assert competition != null;
@@ -120,6 +120,7 @@ public class AdminService {
         competition.setJudges(updatedCompetition.getJudges());
         competition.setDate(updatedCompetition.getDate());
         competition.setStatus(StatusOfCompetition.FUTURE);
+        return competition;
     }
 
 
