@@ -32,5 +32,7 @@ public class SportsmanDTO {
 
     private SportsTitleDTO sportsTitle;
 
+    private Boolean isRegionalTeamSportsman;
+
     private Date birthDate;
 }

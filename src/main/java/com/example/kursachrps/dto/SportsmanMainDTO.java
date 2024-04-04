@@ -27,6 +27,8 @@ public class SportsmanMainDTO {
 
     private Date birthDate;
 
+    private Boolean isRegionalTeamSportsman;
+
     //Данное поле будет отображаться только у Администратора, чтобы он по результатам соревнований мог изменять разряд спортсмена
     private SportsTitleDTO sportsTitle;
 }

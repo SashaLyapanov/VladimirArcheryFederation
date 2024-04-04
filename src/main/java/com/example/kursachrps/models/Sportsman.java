@@ -34,6 +34,9 @@ public class Sportsman extends User {
     @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
     private SportsTitle sportsTitle;
 
+    @Column(name = "is_regional_team_sportsman")
+    private Boolean isRegionalTeamSportsman;
+
     @JsonIgnore
     @OneToMany(mappedBy = "sportsman")
     private List<Achievement> achievementList;

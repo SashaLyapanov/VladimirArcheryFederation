@@ -30,4 +30,6 @@ public class SportsmanAdmDTO {
 
     private Date birthDate;
 
+    private Boolean isRegionalTeamSportsman;
+
 }
