@@ -214,7 +214,7 @@ public class GeneralController {
      */
     @GetMapping("/allPastCompetitions")
     public List<CompetitionDTO> getAllPastCompetition() {
-        return competitionMapper.fromCompetition(generalService.getPresentCompetitions());
+        return competitionMapper.fromCompetition(generalService.getPastCompetitions());
     }
 
 

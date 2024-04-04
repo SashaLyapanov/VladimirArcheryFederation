@@ -1,11 +1,16 @@
 package com.example.kursachrps.repositories;
 
 import com.example.kursachrps.models.SportsTitle;
+import com.example.kursachrps.utils.CommonSpecifications;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.Optional;
+public interface SportsTitleRepository extends JpaRepository<SportsTitle, String>, JpaSpecificationExecutor<SportsTitle> {
 
-public interface SportsTitleRepository extends JpaRepository<SportsTitle, String> {
+    default Page<SportsTitle> findAll(SportsTitle filterObj, Pageable pageable) {
+        return findAll(CommonSpecifications.nameContains(filterObj.getName()), pageable);
+    }
 
-    Optional<SportsTitle> findByName(String name);
 }

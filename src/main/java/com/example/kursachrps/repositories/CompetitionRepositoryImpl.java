@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 import static com.example.kursachrps.utils.DateUtils.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
+@Service
 public class CompetitionRepositoryImpl implements CompetitionRepositoryCustom {
 
     private final CompetitionRepository competitionRepository;

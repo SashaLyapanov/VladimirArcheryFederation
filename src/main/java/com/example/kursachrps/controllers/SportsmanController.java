@@ -8,7 +8,7 @@ import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.SportsmanMainDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.SportsmanMapper;
-import com.example.kursachrps.repositories.SportsTitleRepository1;
+import com.example.kursachrps.repositories.SportsTitleRepository;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.SportsmanService;
 import jakarta.validation.Valid;
@@ -37,19 +37,19 @@ public class SportsmanController {
     private final ApplicationService applicationService;
     private final SportsmanService sportsmanService;
     private final SportsmanMapper sportsmanMapper;
-    private final SportsTitleRepository1 sportsTitleRepository1;
+    private final SportsTitleRepository sportsTitleRepository;
 
     @Autowired
     public SportsmanController(ApplicationMapper applicationMapper,
                                ApplicationService applicationService,
                                SportsmanService sportsmanService,
                                SportsmanMapper sportsmanMapper,
-                               SportsTitleRepository1 sportsTitleRepository1) {
+                               SportsTitleRepository sportsTitleRepository) {
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
         this.sportsmanService = sportsmanService;
         this.sportsmanMapper = sportsmanMapper;
-        this.sportsTitleRepository1 = sportsTitleRepository1;
+        this.sportsTitleRepository = sportsTitleRepository;
     }
 
 
@@ -142,7 +142,7 @@ public class SportsmanController {
         if (name != null && !name.isEmpty()) {
             searchPattern.setName(name);
         }
-        Page<SportsTitle> resultPage = sportsTitleRepository1.findAll(searchPattern, pageable);
+        Page<SportsTitle> resultPage = sportsTitleRepository.findAll(searchPattern, pageable);
         return resultPage;
     }
 
@@ -157,7 +157,7 @@ public class SportsmanController {
         if (name != null && !name.isEmpty()) {
             searchPattern.setName(name);
         }
-        Page<SportsTitle> resultPage = sportsTitleRepository1.findAll(searchPattern, PageRequest.of(page, size));
+        Page<SportsTitle> resultPage = sportsTitleRepository.findAll(searchPattern, PageRequest.of(page, size));
         return resultPage.getContent();
     }
 

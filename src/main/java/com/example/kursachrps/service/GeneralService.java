@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,21 +23,19 @@ public class GeneralService {
     private final CategoryRepository categoryRepository;
     private final CompetitionTypeRepository competitionTypeRepository;
     private final SexRepository sexRepository;
-    private final ArticleRepository articleRepository;
     private final CompetitionMapper competitionMapper;
     private final CompetitionRepositoryImpl competitionRepositoryImpl;
 
     @Autowired
-    public GeneralService (CompetitionRepository competitionRepository,
-                           RegionRepository regionRepository,
-                           SportsTitleRepository sportsTitleRepository,
-                           BowTypeRepository bowTypeRepository,
-                           CategoryRepository categoryRepository,
-                           CompetitionTypeRepository competitionTypeRepository,
-                           SexRepository sexRepository,
-                           ArticleRepository articleRepository,
-                           CompetitionMapper competitionMapper,
-                           CompetitionRepositoryImpl competitionRepositoryImpl) {
+    public GeneralService(CompetitionRepository competitionRepository,
+                          RegionRepository regionRepository,
+                          SportsTitleRepository sportsTitleRepository,
+                          BowTypeRepository bowTypeRepository,
+                          CategoryRepository categoryRepository,
+                          CompetitionTypeRepository competitionTypeRepository,
+                          SexRepository sexRepository,
+                          CompetitionMapper competitionMapper,
+                          CompetitionRepositoryImpl competitionRepositoryImpl) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
@@ -47,16 +43,21 @@ public class GeneralService {
         this.categoryRepository = categoryRepository;
         this.competitionTypeRepository = competitionTypeRepository;
         this.sexRepository = sexRepository;
-        this.articleRepository = articleRepository;
         this.competitionMapper = competitionMapper;
         this.competitionRepositoryImpl = competitionRepositoryImpl;
     }
 
-    public List<Competition> showAllCompetitions() { return competitionRepository.findAll(Sort.by("date")); }
+    public List<Competition> showAllCompetitions() {
+        return competitionRepository.findAll(Sort.by("date"));
+    }
 
-    public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }
+    public List<Competition> showCompetitionByDate(Date date) {
+        return competitionRepository.findByDate(date);
+    }
 
-    public Competition showCompetitionByName(String name) { return competitionRepository.findByName(name); }
+    public Competition showCompetitionByName(String name) {
+        return competitionRepository.findByName(name);
+    }
 
     //Метод выборки соревнований по названию, дате, категории (пока не работает)
     public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
@@ -87,11 +88,13 @@ public class GeneralService {
         return competitionTypeRepository.findAll();
     }
 
-    public List<BowType> getAllBowTypeByCompetitionId(String competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
+    public List<BowType> getAllBowTypeByCompetitionId(String competitionId) {
+        return bowTypeRepository.findAllByCompetitionId(competitionId);
+    }
 
 
     public String getProtocolNameByCompetitionId(int competitionId) {
-        Competition competition  = competitionRepository.findById(competitionId).orElse(null);
+        Competition competition = competitionRepository.findById(competitionId).orElse(null);
         assert competition != null;
         return competition.getPdfFile();
     }
@@ -99,7 +102,7 @@ public class GeneralService {
     /**
      * Метод для вывода списка соревнований, где status = Past
      */
-    public List<Competition> getPresentCompetitions() {
+    public List<Competition> getPastCompetitions() {
         return competitionRepository.findAllPast();
     }
 
