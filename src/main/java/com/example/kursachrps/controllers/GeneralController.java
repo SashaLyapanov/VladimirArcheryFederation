@@ -1,24 +1,24 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.dto.*;
 import com.example.kursachrps.dto.AdditionalDTO.*;
-import com.example.kursachrps.dto.ApplicationDTO;
-import com.example.kursachrps.dto.ArticleDTO;
-import com.example.kursachrps.dto.CompetitionDTO;
-import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.GeneralMapper;
+import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
+import com.example.kursachrps.service.AboutFederationService;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.ArticleService;
 import com.example.kursachrps.service.GeneralService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,47 +39,18 @@ public class GeneralController {
     private final ApplicationMapper applicationMapper;
     private final GeneralMapper generalMapper;
     private final ArticleService articleService;
+    private final AboutFederationService aboutFederationService;
 
-    public GeneralController (CompetitionMapper competitionMapper, GeneralService generalService, ApplicationService applicationService,
-                              ApplicationMapper applicationMapper, GeneralMapper generalMapper, ArticleService articleService) {
+    public GeneralController(CompetitionMapper competitionMapper, GeneralService generalService, ApplicationService applicationService,
+                             ApplicationMapper applicationMapper, GeneralMapper generalMapper, ArticleService articleService,
+                             AboutFederationService aboutFederationService) {
         this.competitionMapper = competitionMapper;
         this.generalService = generalService;
         this.applicationService = applicationService;
         this.applicationMapper = applicationMapper;
         this.generalMapper = generalMapper;
         this.articleService = articleService;
-    }
-
-    /**
-     *Метод для вывода всех соревнований
-     */
-    @GetMapping("competitions")
-    public List<CompetitionDTO> getCompetitions() {
-        return competitionMapper.fromCompetition(generalService.showAllCompetitions());
-    }
-
-    /**
-     * Метод для вывода соревнования по дате
-     */
-    @GetMapping("competition")
-    public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
-        return competitionMapper.fromCompetition(generalService.showCompetitionByDate(date));
-    }
-
-    /**
-     * Метод для вывода соревнования по дате
-     */
-    @GetMapping("competitionByName")
-    public CompetitionDTO getCompetitionByName(@RequestParam String name) {
-        return competitionMapper.fromCompetition(generalService.showCompetitionByName(name));
-    }
-
-    /**
-     * Метод для поиска соревнований по названию, дате и категории спортсмена
-     */
-    @GetMapping("competitionNDC")
-    public List<CompetitionDTO> getCompetitions(@RequestParam (required = false) String name, @RequestParam (required = false) Date date, @RequestParam (required = false) String categoryName) {
-        return competitionMapper.fromCompetition(generalService.showCompetitionByNameDateCategory(name, date, categoryName));
+        this.aboutFederationService = aboutFederationService;
     }
 
     /**
@@ -87,9 +58,8 @@ public class GeneralController {
      */
     @GetMapping("/applicationsForCompetition")
     List<ApplicationDTO> getApplications(@RequestParam String competitionId) {
+        return applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
 
-        List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
-        return applicationDTOList;
     }
 
     /**
@@ -97,9 +67,7 @@ public class GeneralController {
      */
     @GetMapping("/declaredSportsmenForCompetition")
     List<SportsmanDTO> getDeclaredSportsmen(@RequestParam String competitionId) {
-        List<ApplicationDTO> applicationDTOList = getApplications(competitionId);
-        List<SportsmanDTO> sportsmanDTOList = applicationService.getSportsmenFromApplications(applicationDTOList);
-        return sportsmanDTOList;
+        return applicationService.getSportsmenFromApplications(getApplications(competitionId));
     }
 
     /**
@@ -111,7 +79,7 @@ public class GeneralController {
     }
 
     /**
-     * Запрос на получение всех регионов
+     * Запрос на получение всех спортивных титулов
      */
     @GetMapping("allSportsTitle")
     List<SportsTitleDTO> getAllSportsTitle() {
@@ -183,14 +151,6 @@ public class GeneralController {
                 .body(resource);
     }
 
-    /**
-     * Метод для вывода всех соревнований, у которых статус PAST
-     */
-    @GetMapping("/allPastCompetitions")
-    public List<CompetitionDTO> getAllPastCompetition() {
-        List<CompetitionDTO> competitionDTOList = competitionMapper.fromCompetition(generalService.getPresentCompetitions());
-        return competitionDTOList;
-    }
 
     /**
      * Метод для полечения всех новостей
@@ -199,7 +159,7 @@ public class GeneralController {
     public ResponseEntity<List<ArticleDTO>> getAllArticles() throws IOException {
         List<ArticleDTO> articleDTOList = new ArrayList<ArticleDTO>();
         List<Article> articleList = articleService.getAllArticles();
-        for (Article article: articleList) {
+        for (Article article : articleList) {
             ArticleDTO articleDTO = new ArticleDTO();
             articleDTO.setId(article.getId());
             articleDTO.setName(article.getName());
@@ -220,12 +180,100 @@ public class GeneralController {
     public ArticleDTO getArticle(@RequestParam String articleId) {
         return generalMapper.fromArticle(articleService.getArticleById(articleId));
     }
+
+
+    /**
+     * Метод для информации о федерации
+     */
+    @GetMapping("/getAboutFederation")
+    public ResponseEntity<List<AboutFederationDTO>> getAllAboutFederation() throws IOException {
+        List<AboutFederationDTO> aboutFederationDTOList = new ArrayList<AboutFederationDTO>();
+        List<AboutFederation> aboutFederationList = aboutFederationService.getAllAboutFederation();
+        for (AboutFederation aboutFederation : aboutFederationList) {
+            AboutFederationDTO aboutFederationDTO = new AboutFederationDTO();
+            aboutFederationDTO.setId(aboutFederation.getId());
+            aboutFederationDTO.setManagers(aboutFederation.getManagers());
+            aboutFederationDTO.setContacts(aboutFederation.getContacts());
+            ;
+            aboutFederationDTO.setLinkForRegulation(aboutFederation.getLinkForRegulation());
+            aboutFederationDTO.setLinkForHistory(aboutFederation.getLinkForHistory());
+            aboutFederationDTO.setFileRegulationName(aboutFederation.getRegulation().getOriginalFilename());
+            aboutFederationDTO.setFileHistoryName(aboutFederation.getHistory().getOriginalFilename());
+            aboutFederationDTO.setFileRegulationData(Arrays.toString(aboutFederation.getRegulation().getBytes()));
+            aboutFederationDTO.setFileHistoryData(Arrays.toString(aboutFederation.getHistory().getBytes()));
+            aboutFederationDTOList.add(aboutFederationDTO);
+        }
+        return ResponseEntity.ok(aboutFederationDTOList);
+    }
+
+
+    //////////////////////////////////////////
+
+    /**
+     * Метод для вывода всех соревнований, у которых статус PAST
+     */
+    @GetMapping("/allPastCompetitions")
+    public List<CompetitionDTO> getAllPastCompetition() {
+        return competitionMapper.fromCompetition(generalService.getPresentCompetitions());
+    }
+
+
+    /**
+     * Метод для вывода всех соревнований
+     */
+    @GetMapping("competitions")
+    public List<CompetitionDTO> getCompetitions() {
+        return competitionMapper.fromCompetition(generalService.showAllCompetitions());
+    }
+
+    /**
+     * Метод для вывода соревнования по дате
+     */
+    @GetMapping("competition")
+    public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
+        return competitionMapper.fromCompetition(generalService.showCompetitionByDate(date));
+    }
+
+    /**
+     * Метод для вывода соревнования по названию
+     */
+    @GetMapping("competitionByName")
+    public CompetitionDTO getCompetitionByName(@RequestParam String name) {
+        return competitionMapper.fromCompetition(generalService.showCompetitionByName(name));
+    }
+
+    /**
+     * Метод для поиска соревнований по названию, дате и категории спортсмена
+     */
+    @GetMapping("competitionNDC")
+    public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
+                                                @RequestParam(required = false) Date date,
+                                                @RequestParam(required = false) String categoryName) {
+        return competitionMapper.fromCompetition(generalService.showCompetitionByNameDateCategory(name, date, categoryName));
+    }
+
+    /**
+     * Метод для получения соревнований по расширенному списку параметров
+     */
+    @GetMapping("competitionsByParams")
+    public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
+                                                @RequestParam(required = false) String place,
+                                                @RequestParam(required = false) String type,
+                                                @RequestParam(required = false, defaultValue = "0") int page,
+                                                @RequestParam(required = false, defaultValue = "10") int size) {
+//        Competition searchPattern = new Competition();
+//        if (name != null && !name.isEmpty()) {
+//            searchPattern.setName(name);
+//        }
+//        if (place != null && !place.isEmpty()) {
+//            searchPattern.setPlace(place);
+//        }
+//        if (type != null && !type.isEmpty()) {
+//            searchPattern.getType().setName(type);
+//        }
+
+        List<CompetitionDTO> competitions = generalService.getCompetitionsBySearchParams(name, place, type, PageRequest.of(page, size));
+
+        return competitions;
+    }
 }
-
-
-
-
-
-
-
-

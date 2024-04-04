@@ -51,7 +51,6 @@ public class SportsmanService {
         application.setCompetition(competition);
         application.setSportsman(sportsman);
         applicationRepository.save(application);
-
     }
 
     @Transactional
@@ -84,7 +83,6 @@ public class SportsmanService {
     /**
      * Метод для получения всех спортсменов по Соревнованию и Типу лука
      */
-    @Transactional
     public List<SportsmanDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
         if (Objects.equals(bowTypeName, "all")) {
             return applicationService.getSportsmenFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));

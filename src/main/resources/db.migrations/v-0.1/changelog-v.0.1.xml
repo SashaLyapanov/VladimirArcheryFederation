@@ -11,4 +11,6 @@
     <include file="db.migrations/v-0.1/2024-12-16--adding_images_to_article.sql"/>
     <include file="db.migrations/v-0.1/2024-12-16-alter_table_images.sql"/>
     <include file="db.migrations/v-0.1/2024-12-17-alter_table_images.sql"/>
+    <include file="db.migrations/v-0.1/2024-12-19-add_table_about_federation.sql"/>
+    <include file="db.migrations/v-0.1/2024-12-19-alter_table_about_federation.sql"/>
 </databaseChangeLog>

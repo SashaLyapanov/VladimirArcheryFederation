@@ -153,7 +153,7 @@ public class JudgeService {
             Sportsman sportsman = sportsmanMapper.fromUser(participant);
             application.setSportsman(sportsman);
         }
-        application.setPayment(true);
+//        application.setPayment(true);
 
         applicationRepository.save(application);
     }

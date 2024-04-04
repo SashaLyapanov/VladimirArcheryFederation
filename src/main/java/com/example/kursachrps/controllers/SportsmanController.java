@@ -2,17 +2,22 @@ package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.models.Application;
+import com.example.kursachrps.models.SportsTitle;
 import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.SportsmanMainDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.SportsmanMapper;
+import com.example.kursachrps.repositories.SportsTitleRepository1;
 import com.example.kursachrps.service.ApplicationService;
-import com.example.kursachrps.service.CompetitionService;
 import com.example.kursachrps.service.SportsmanService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,18 +37,19 @@ public class SportsmanController {
     private final ApplicationService applicationService;
     private final SportsmanService sportsmanService;
     private final SportsmanMapper sportsmanMapper;
-    private final CompetitionService competitionService;
+    private final SportsTitleRepository1 sportsTitleRepository1;
 
     @Autowired
     public SportsmanController(ApplicationMapper applicationMapper,
                                ApplicationService applicationService,
                                SportsmanService sportsmanService,
-                               SportsmanMapper sportsmanMapper, CompetitionService competitionService) {
+                               SportsmanMapper sportsmanMapper,
+                               SportsTitleRepository1 sportsTitleRepository1) {
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
         this.sportsmanService = sportsmanService;
         this.sportsmanMapper = sportsmanMapper;
-        this.competitionService = competitionService;
+        this.sportsTitleRepository1 = sportsTitleRepository1;
     }
 
 
@@ -63,11 +69,10 @@ public class SportsmanController {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
             PayController payController = new PayController();
-            String link =  payController.getLinkToPay();
+            String link = payController.getLinkToPay();
             System.out.println(link);
             return link;
-        }
-        else
+        } else
             return "Вы уже зарегистрированы на данных соревнованиях";
 
     }
@@ -102,20 +107,19 @@ public class SportsmanController {
         Sportsman sportsman = sportsmanMapper.fromSportsmanMainDTO(sportsmanMainDTO);
         sportsmanService.editProfile(id, sportsman);
 
-         return sportsmanMainDTO;
+        return sportsmanMainDTO;
     }
 
     /**
      * Метод для подгрузки фотографии в личный кабинет
      */
     @PostMapping("/uploadImage")
-    public void uploadImage(@RequestParam("image")MultipartFile file) throws IOException {
+    public void uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
         StringBuilder fileNames = new StringBuilder();
         Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
         fileNames.append(file.getOriginalFilename());
         Files.write(fileNameAndPath, file.getBytes());
     }
-
 
 
     /**
@@ -129,7 +133,33 @@ public class SportsmanController {
     }
 
     /**
-     * Поиск для поиска всех заявок по id соревнования
+     * Получение всех спортивных титулов, у которых название содержит входной параметр name
      */
+    @GetMapping("/titles")
+    public Page<SportsTitle> getSportTitles(@PageableDefault(page = 0, size = 10) Pageable pageable,
+                                            @RequestParam String name) {
+        SportsTitle searchPattern = new SportsTitle();
+        if (name != null && !name.isEmpty()) {
+            searchPattern.setName(name);
+        }
+        Page<SportsTitle> resultPage = sportsTitleRepository1.findAll(searchPattern, pageable);
+        return resultPage;
+    }
+
+    /**
+     * Получение всех спортивных титулов, у которых название содержит входной параметр name с пагинацией!
+     */
+    @GetMapping("/titlesWithPagination")
+    public List<SportsTitle> getSportTitlesWithPagination(@RequestParam String name,
+                                                          @RequestParam(required = false, defaultValue = "0") int page,
+                                                          @RequestParam(required = false, defaultValue = "10") int size) {
+        SportsTitle searchPattern = new SportsTitle();
+        if (name != null && !name.isEmpty()) {
+            searchPattern.setName(name);
+        }
+        Page<SportsTitle> resultPage = sportsTitleRepository1.findAll(searchPattern, PageRequest.of(page, size));
+        return resultPage.getContent();
+    }
+
 
 }

@@ -10,7 +10,7 @@ public class ApplicationDTO {
 
     private String id;
 
-    private boolean payment;
+//    private boolean payment;
 
     private BowTypeDTO bowType;
 

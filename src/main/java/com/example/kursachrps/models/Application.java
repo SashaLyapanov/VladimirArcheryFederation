@@ -15,9 +15,9 @@ public class Application extends GenericEntity{
     @JoinColumn(name = "competition_id", referencedColumnName = "id")
     private Competition competition;
 
-    //В зависимости от данного поля у нас будет генерироваться протокол (Если оплата есть, то вносим в протокол). Нет, то сорян
-    @Column(name = "payment")
-    private boolean payment;
+//    //В зависимости от данного поля у нас будет генерироваться протокол (Если оплата есть, то вносим в протокол). Нет, то сорян
+//    @Column(name = "payment")
+//    private boolean payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bow_type_id", referencedColumnName = "id")

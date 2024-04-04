@@ -1,13 +1,17 @@
 package com.example.kursachrps.service;
 
+import com.example.kursachrps.dto.CompetitionDTO;
+import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.repositories.RegistrAndAuth.CompetitionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +26,8 @@ public class GeneralService {
     private final CompetitionTypeRepository competitionTypeRepository;
     private final SexRepository sexRepository;
     private final ArticleRepository articleRepository;
+    private final CompetitionMapper competitionMapper;
+    private final CompetitionRepositoryImpl competitionRepositoryImpl;
 
     @Autowired
     public GeneralService (CompetitionRepository competitionRepository,
@@ -31,7 +37,9 @@ public class GeneralService {
                            CategoryRepository categoryRepository,
                            CompetitionTypeRepository competitionTypeRepository,
                            SexRepository sexRepository,
-                           ArticleRepository articleRepository) {
+                           ArticleRepository articleRepository,
+                           CompetitionMapper competitionMapper,
+                           CompetitionRepositoryImpl competitionRepositoryImpl) {
         this.competitionRepository = competitionRepository;
         this.regionRepository = regionRepository;
         this.sportsTitleRepository = sportsTitleRepository;
@@ -40,57 +48,45 @@ public class GeneralService {
         this.competitionTypeRepository = competitionTypeRepository;
         this.sexRepository = sexRepository;
         this.articleRepository = articleRepository;
+        this.competitionMapper = competitionMapper;
+        this.competitionRepositoryImpl = competitionRepositoryImpl;
     }
 
-
-    @Transactional
     public List<Competition> showAllCompetitions() { return competitionRepository.findAll(Sort.by("date")); }
 
-    @Transactional
     public List<Competition> showCompetitionByDate(Date date) { return competitionRepository.findByDate(date); }
 
-    @Transactional
     public Competition showCompetitionByName(String name) { return competitionRepository.findByName(name); }
 
-
     //Метод выборки соревнований по названию, дате, категории (пока не работает)
-    @Transactional
     public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
         return competitionRepository.findCompetitionByNameAndDateAndCategories(name, date, categories);
     }
 
-
-    @Transactional
     public List<Region> getAllRegions() {
         return regionRepository.findAll();
     }
 
-    @Transactional
     public List<SportsTitle> getAllSportsTitle() {
         return sportsTitleRepository.findAll();
     }
 
-    @Transactional
     public List<BowType> getAllBowType() {
         return bowTypeRepository.findAll();
     }
 
-    @Transactional
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
     }
 
-    @Transactional
     public List<Sex> getAllSex() {
         return sexRepository.findAll();
     }
 
-    @Transactional
     public List<CompetitionType> getAllCompetitionTypes() {
         return competitionTypeRepository.findAll();
     }
 
-    @Transactional
     public List<BowType> getAllBowTypeByCompetitionId(String competitionId) { return bowTypeRepository.findAllByCompetitionId(competitionId); }
 
 
@@ -108,18 +104,15 @@ public class GeneralService {
     }
 
 
-//    public List<Competition> searchCompetitions(String competitionName, Integer bowType, Integer competitinoCategory) {
-//
-//        if (competitionName != null && bowType != null && competitinoCategory != null) {
-//            competitionRepository.findCompetitionByNameAndBowTypeAndCategories(competitionName, bowType, competitinoCategory);
-//        } else if (competitionName != null && bowType  == null && competitinoCategory == null) {
-//            competitionRepository.findCompetitionByName(competitionName);
-//        } else if (competitionName != null && bowType != null && competitinoCategory == null) {
-//            competitionRepository.findCompetitionByNameAndBowType(competitionName, bowType);
-//        } else if (competitionName != null && bowType != null && competitinoCategory != null) {
-//            return null;
-//        }
-//
-//        return null;
-//    }
+    /**
+     * Метод для поиска соревнований по расширенному списку параметров (name, place, type(3D / Target)
+     */
+    public List<CompetitionDTO> getCompetitionsBySearchParams(String name, String place, String type, Pageable pageable) {
+        CompetitionType competitionType = new CompetitionType();
+        if (type != null) {
+            competitionType = competitionTypeRepository.findById(type).orElse(null);
+        }
+        List<Competition> competitions = competitionRepositoryImpl.findCompetitionByParams(name, place, competitionType, pageable).getContent();
+        return competitionMapper.fromCompetition(competitions);
+    }
 }

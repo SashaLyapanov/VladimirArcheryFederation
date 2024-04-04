@@ -1,6 +1,5 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
@@ -8,11 +7,11 @@ import com.example.kursachrps.dto.ArticleDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
+import com.example.kursachrps.service.AboutFederationService;
 import com.example.kursachrps.service.AdminService;
 import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,16 +29,16 @@ public class AdminController {
     private final UserMapper userMapper;
     private final CompetitionMapper competitionMapper;
     private final ArticleService articleService;
-    private final GeneralMapper generalMapper;
+    private final AboutFederationService aboutFederationService;
 
     @Autowired
     public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
-                           ArticleService articleService, GeneralMapper generalMapper) {
+                           ArticleService articleService, AboutFederationService aboutFederationService) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
         this.articleService = articleService;
-        this.generalMapper = generalMapper;
+        this.aboutFederationService = aboutFederationService;
     }
 
 
@@ -181,6 +180,20 @@ public class AdminController {
      */
     @PutMapping("changeNew")
     public void changeNew(@RequestParam String newId, @RequestBody ArticleDTO articleDTO) {
+    }
 
+
+    /**
+     * Метод для изменения информации о федерации
+     */
+    @PutMapping("changeAboutFederation")
+    public void changeAboutFederation(@RequestParam String aboutFederationId, @RequestParam(name = "managers") String managers,
+                                      @RequestParam(name = "contacts") String contacts,
+                                      @RequestParam(name = "file1", required = false) MultipartFile file1,
+                                      @RequestParam(name = "file2", required = false) MultipartFile file2) throws IOException {
+        AboutFederation aboutFederation = new AboutFederation();
+        aboutFederation.setManagers(managers);
+        aboutFederation.setContacts(contacts);
+        aboutFederationService.editAboutFederation(aboutFederationId, aboutFederation, file1, file2);
     }
 }

@@ -51,22 +51,17 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDTO userDTO = userMapper.transform(userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null));
-//        User user = userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null);
         return userDTO;
-        //////
-        //вот в этом методе короче надо на фронт передавать json, в котором хранится весь пользователь (UserDTO), откуда мы узнаем и роль и т.д.
     }
 
 
     @PostMapping("/signup")
     public ResponseEntity<String> registrationUser(@RequestBody SignUpDTO signUpDTO) {
-
         // Проверка на условие, что такого пользователя еще нет в БД
         if (userMainRepository.existsByEmail(signUpDTO.getEmail())) {
             return new ResponseEntity<>("This email address is already registered in the system.", HttpStatus.BAD_REQUEST);
         }
         // Создаем спортсмена
-//        Sportsman sportsman = new Sportsman();
         Sportsman sportsman = sportsmanMapper.fromSignUpDTO(signUpDTO);
         sportsman.setRole(Role.SPORTSMAN);
         sportsman.setStatus(Status.ACTIVE);
