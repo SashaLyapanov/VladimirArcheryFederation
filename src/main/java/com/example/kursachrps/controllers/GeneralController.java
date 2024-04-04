@@ -7,10 +7,7 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
-import com.example.kursachrps.service.AboutFederationService;
-import com.example.kursachrps.service.ApplicationService;
-import com.example.kursachrps.service.ArticleService;
-import com.example.kursachrps.service.GeneralService;
+import com.example.kursachrps.service.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -40,10 +37,11 @@ public class GeneralController {
     private final GeneralMapper generalMapper;
     private final ArticleService articleService;
     private final AboutFederationService aboutFederationService;
+    private final RegionalTeamService regionalTeamService;
 
     public GeneralController(CompetitionMapper competitionMapper, GeneralService generalService, ApplicationService applicationService,
                              ApplicationMapper applicationMapper, GeneralMapper generalMapper, ArticleService articleService,
-                             AboutFederationService aboutFederationService) {
+                             AboutFederationService aboutFederationService, RegionalTeamService regionalTeamService) {
         this.competitionMapper = competitionMapper;
         this.generalService = generalService;
         this.applicationService = applicationService;
@@ -51,6 +49,7 @@ public class GeneralController {
         this.generalMapper = generalMapper;
         this.articleService = articleService;
         this.aboutFederationService = aboutFederationService;
+        this.regionalTeamService = regionalTeamService;
     }
 
     /**
@@ -208,7 +207,8 @@ public class GeneralController {
 
 
     //////////////////////////////////////////
-
+            //    СОРЕВНОВАНИЯ    //
+    //////////////////////////////////////////
     /**
      * Метод для вывода всех соревнований, у которых статус PAST
      */
@@ -276,4 +276,21 @@ public class GeneralController {
 
         return competitions;
     }
+
+
+
+    //////////////////////////////////////////
+        //      СБОРНАЯ КОМАНДА     //
+    //////////////////////////////////////////
+
+    /**
+     * Метод для получения спортсменов, входящих в состав сборной области
+     */
+    @GetMapping("regionalTeam")
+    public List<SportsmanDTO> getRegionalTeam() {
+        return regionalTeamService.getAllSportsman();
+    }
+
+
+
 }
