@@ -28,7 +28,6 @@ public class JudgeService {
 
     private ExcelGenerator2 excelGenerator2 = new ExcelGenerator2();
 
-
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
                         CompetitionRepository competitionRepository,
@@ -112,8 +111,6 @@ public class JudgeService {
         }
     }
 
-
-
     /**
      * Метод для преобразования xlsx в PDF
      */
@@ -129,15 +126,12 @@ public class JudgeService {
         return today + ".pdf";
     }
 
-
-
     /**
      * Метод для вывода списка соревнований, где status = Present
      */
     public List<Competition> getPresentCompetitions() {
         return competitionRepository.findAllPresent();
     }
-
 
     /**
      * Метод для регистрации спортсмена/тренера на соревнования

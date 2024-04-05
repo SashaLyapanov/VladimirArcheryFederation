@@ -190,7 +190,6 @@ public class GeneralController {
             aboutFederationDTO.setId(aboutFederation.getId());
             aboutFederationDTO.setManagers(aboutFederation.getManagers());
             aboutFederationDTO.setContacts(aboutFederation.getContacts());
-            ;
             aboutFederationDTO.setLinkForRegulation(aboutFederation.getLinkForRegulation());
             aboutFederationDTO.setLinkForHistory(aboutFederation.getLinkForHistory());
             aboutFederationDTO.setFileRegulationName(aboutFederation.getRegulation().getOriginalFilename());
@@ -286,6 +285,5 @@ public class GeneralController {
     public List<SportsmanDTO> getRegionalTeam() {
         return regionalTeamService.getAllSportsman();
     }
-
 
 }

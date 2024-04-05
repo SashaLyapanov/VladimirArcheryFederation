@@ -40,6 +40,15 @@ public class JudgeController {
         this.applicationService = applicationService;
     }
 
+    /**
+     * Получение соревнований, где status = Present
+     * Именно с этими соревнованиями может работать судья
+     * !Других соревнований он не видит
+     */
+    @GetMapping("/presentCompetitions")
+    public List<CompetitionDTO> getPresentCompetitions() {
+        return competitionMapper.fromCompetition(judgeService.getPresentCompetitions());
+    }
 
     /**
      * Метод для генерирования протокола и автоматического скачивания файла на локальный пк пользователя
@@ -73,17 +82,6 @@ public class JudgeController {
         judgeService.addPathFileInCompetition(competitionId, newFile);
     }
 
-
-    /**
-     * Запрос на выборку соревнований, где status = Present
-     */
-    @GetMapping("/presentCompetitions")
-    public List<CompetitionDTO> getPresentCompetitions() {
-        List<CompetitionDTO> competitionDTOList = competitionMapper.fromCompetition(judgeService.getPresentCompetitions());
-        return competitionDTOList;
-    }
-
-
     /**
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
@@ -93,11 +91,10 @@ public class JudgeController {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             judgeService.registrateParticipantToCompetition(email, competitionId, application);
             PayController payController = new PayController();
-            String link =  payController.getLinkToPay();
+            String link = payController.getLinkToPay();
             System.out.println(link);
             return link;
-        }
-        else
+        } else
             return "Участник уже зарегистрирован на данные соревнования";
     }
 
