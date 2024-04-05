@@ -13,6 +13,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SportsmanAdmDTO {
+    private String id;
 
     private String email;
 

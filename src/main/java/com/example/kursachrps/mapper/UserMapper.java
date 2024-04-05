@@ -8,7 +8,6 @@ import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 import java.util.List;
 import java.util.Set;
@@ -35,14 +34,8 @@ public interface UserMapper {
 
     Sportsman fromUserDTO(UserDTO userDTO);
 
-    @Mappings({
-            @Mapping(target = "sportsTitle", source = "sportsTitle")
-    })
     SportsmanAdmDTO fromSportsman(Sportsman sportsman);
 
-    @Mappings({
-            @Mapping(target = "sportsTitle", source = "sportsTitle")
-    })
     List<SportsmanAdmDTO> fromSportsmanList(List<Sportsman> sportsmen);
 
     Sportsman fromSportsmanAdmDTO(SportsmanAdmDTO sportsmanAdmDTO);

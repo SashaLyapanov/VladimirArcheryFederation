@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,33 +42,33 @@ public class AdminController {
 
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD спортсменов//////////////////////////////
+                    //      Реализация CRUD спортсменов     //
     /////////////////////////////////////////////////////////////////////////////////
 
-
     /**
-     * Метод для вывода всех Sportsman'ов споском
+     * Метод для вывода всех Sportsman'ов споском (сортируются по алфавиту по фамилии)
      */
     @GetMapping("sportsmen")
     public List<SportsmanAdmDTO> getAllSportsmen() {
-
-        List<Sportsman> sportsmen = new ArrayList<>();
-        sportsmen = adminService.showAllSportsmen();
-        List<SportsmanAdmDTO> dto = userMapper.fromSportsmanList(sportsmen);
-
-        return dto;
+        List<Sportsman> sportsmen = adminService.showAllSportsmen();
+        return userMapper.fromSportsmanList(sportsmen);
     }
 
     /**
-     * Метод для вывода спортсмена (Sportsman)
+     * Метод для вывода спортсмена по email(Sportsman)
      */
-    @GetMapping("sportsman")
-    public SportsmanAdmDTO getSportsman(@RequestParam String email) {
-        SportsmanAdmDTO sportsmanAdmDTO = userMapper.fromSportsman(adminService.getSportsmanByEmail(email));
-
-        return sportsmanAdmDTO;
+    @GetMapping("sportsmanByEmail")
+    public SportsmanAdmDTO getSportsmanByEmail(@RequestParam String email) {
+        return userMapper.fromSportsman(adminService.getSportsmanByEmail(email));
     }
 
+    /**
+     * Метод для вывода спортсмена по id
+     */
+    @GetMapping("sportsmanById")
+    public SportsmanAdmDTO getSportsmanById(@RequestParam String id) {
+        return userMapper.fromSportsman(adminService.getSportsmanById(id));
+    }
 
     /**
      * Метод для создания спортсмена в системе (регистрация от Админа)
@@ -77,56 +76,44 @@ public class AdminController {
      */
     @Transactional
     @PostMapping("createSportsman")
-//    @RequestMapping(value = "createSportsman", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Sportsman createSportsman(@RequestBody @Valid SportsmanDTO sportsmanDTO) {
-
         adminService.hashPassword(sportsmanDTO);
         Sportsman sportsman = userMapper.fromSportsmanDTO(sportsmanDTO);
         return adminService.saveSportsman(sportsman);
     }
 
-
     @PutMapping("editSportsman")
-    public SportsmanAdmDTO editSportsman(@RequestParam String email, @RequestBody @Valid SportsmanAdmDTO sportsmanAdmDTO) {
-
+    public SportsmanAdmDTO editSportsman(@RequestParam String id, @RequestBody @Valid SportsmanAdmDTO sportsmanAdmDTO) {
         Sportsman sportsman = userMapper.fromSportsmanAdmDTO(sportsmanAdmDTO);
-        adminService.editSportsman(email, sportsman);
-
+        adminService.editSportsman(id, sportsman);
         return sportsmanAdmDTO;
     }
 
-
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Универсальные методы для всех////////////////////////////
+                    //      Блокировка и разблокировка пользователей      //
     /////////////////////////////////////////////////////////////////////////////////
-
-
 
     @PutMapping("blockUser")
-    public void blockingSportsman(@RequestParam @Valid String email) {
-
-        User user = adminService.blockingUser(email);
+    public void blockingSportsman(@RequestParam @Valid String id) {
+        adminService.blockingUser(id);
     }
-    @PutMapping("unlockUser")
-    public void unblockingSportsman(@RequestParam @Valid String email) {
 
-        User user = adminService.unblockingUser(email);
+    @PutMapping("unlockUser")
+    public void unblockingSportsman(@RequestParam @Valid String id) {
+        adminService.unblockingUser(id);
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD соревнований/////////////////////////////
+                    //      Реалилзация CRUD соревнований      //
     /////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Метод для создания соревнований администратором
      */
     @PostMapping("createCompetition")
-    public CompetitionCreateDTO createCompetition(@RequestBody CompetitionCreateDTO competitionCreateDTO) {
-
+    public Competition createCompetition(@RequestBody CompetitionCreateDTO competitionCreateDTO) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(competitionCreateDTO);
-        adminService.createCompetition(competition);
-
-        return competitionCreateDTO;
+        return adminService.createCompetition(competition);
     }
 
     /**
@@ -134,31 +121,39 @@ public class AdminController {
      */
     @PutMapping("editCompetition")
     public Competition editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
-
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
-//        adminService.editCompetition(id, competition);
-//        return competition;
         return adminService.editCompetition(id, competition);
     }
-
 
     /**
      * Метод для смены статуса соревнованиям
      */
+    //TODO
+    // Сделать следующую логику
+    // В параметры метода добавить параметр для передачи статуса, на который будем менять
+    // и дальше в adminService.changeStatusOfCompetition(id) реализовать логику по смене статуса именно на указанынй в параметрах
     @PutMapping("changeStatusCompetition")
     public void changeStatusOfCompetition(@RequestParam String id) {
         adminService.changeStatusOfCompetition(id);
     }
 
+    /**
+     * Удаление неправильносозданных соревнований
+     */
+    @DeleteMapping("deleteCompetitionById")
+    public void deleteCompetitionById(@RequestParam String id) {
+        adminService.deleteCompetition(id);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD новостей/////////////////////////////////
+                      //      Реализация CRUD новостей        //
     /////////////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Метод для шаблонного создания новости
      */
+    //TODO
+    // Реализовать статический сервис для работы с файлами
     @PostMapping("createArticle")
     public void createArticle(@RequestParam(name = "name") String name,
                               @RequestParam(name = "body") String body,
@@ -169,23 +164,34 @@ public class AdminController {
         articleService.saveArticle(article, file1);
     }
 
+    /**
+     * Метод для удаления новости по id
+     */
     @PostMapping("deleteArticle")
-    public void deleteArticle(@RequestParam String articleId) {
+    public void deleteArticleById(@RequestParam String articleId) {
         articleService.deleteArticle(articleId);
     }
-
 
     /**
      * Метод для шаблонного редактирования новости
      */
+    //TODO
+    // Реализовать статический сервис для работы с файлами
+    // Реализовать логику сохранения данных в БД
     @PutMapping("changeNew")
-    public void changeNew(@RequestParam String newId, @RequestBody ArticleDTO articleDTO) {
+    public void editArticle(@RequestParam String id, @RequestBody ArticleDTO articleDTO) {
+
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+            //      Реализация CRUD информации О Федерации        //
+    /////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Метод для изменения информации о федерации
      */
+    //TODO
+    // Реализовать статический сервис для работы с файлами
     @PutMapping("changeAboutFederation")
     public void changeAboutFederation(@RequestParam String aboutFederationId, @RequestParam(name = "managers") String managers,
                                       @RequestParam(name = "contacts") String contacts,

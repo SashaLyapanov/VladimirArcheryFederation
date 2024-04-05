@@ -59,7 +59,7 @@ public class Sportsman extends User {
 
     public Sportsman(String email, String password, Role role, Status status, String name, String surname, String patronymic, Date birthDate,
                      SportsTitle sportsTitle, String club, String avatarImage) {
-        super(email, password, role, status, name, surname,patronymic,birthDate);
+        super(email, password, role, status, name, surname, patronymic, birthDate);
         this.sportsTitle = sportsTitle;
         this.club = club;
         this.avatarImage = avatarImage;

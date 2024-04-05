@@ -4,6 +4,7 @@ import com.example.kursachrps.dto.AdditionalDTO.RegionDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SexDTO;
 import com.example.kursachrps.dto.AdditionalDTO.SportsTitleDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +33,7 @@ public class SportsmanDTO {
 
     private SportsTitleDTO sportsTitle;
 
+    @NotNull
     private Boolean isRegionalTeamSportsman;
 
     private Date birthDate;

@@ -4,6 +4,7 @@ import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class AdminService {
 
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD спортсменов//////////////////////////////
+                    //      Реализация CRUD спортсменов        //
     /////////////////////////////////////////////////////////////////////////////////
 
 
@@ -50,27 +51,33 @@ public class AdminService {
     }
 
     //Метод для получения спортсмена (Sportsman) по email
-    @Transactional
     public Sportsman getSportsmanByEmail(String email) {
         return sportsmanMainRepository.findByEmail(email).orElse(null);
     }
 
-    //Метод для вывода всех спортсменов (Sportsman) из БД
-    @Transactional
-    public List<Sportsman> showAllSportsmen() { return sportsmanMainRepository.findAll(); }
+    //Метод для получения спортсмена (Sportsman) по email
+    public Sportsman getSportsmanById(String id) {
+        return sportsmanMainRepository.findById(id).orElse(null);
+    }
 
-    //Метод для блокировки user'a по email.
+    //Метод для вывода всех спортсменов (Sportsman) из БД
+    public List<Sportsman> showAllSportsmen() {
+        return sportsmanMainRepository.findAll(Sort.by("surname"));
+    }
+
+    //Метод для блокировки user'a по id.
     @Transactional
-    public User blockingUser(String email) {
-        User user = userMainRepository.findByEmail(email).orElse(null);
+    public User blockingUser(String id) {
+        User user = userMainRepository.findById(id).orElse(null);
         assert user != null;
         user.setStatus(Status.BANNED);
         return user;
     }
-    //Метод для разблокировки user'a по email.
+
+    //Метод для разблокировки user'a по id.
     @Transactional
-    public User unblockingUser(String email) {
-        User user = userMainRepository.findByEmail(email).orElse(null);
+    public User unblockingUser(String id) {
+        User user = userMainRepository.findById(id).orElse(null);
         assert user != null;
         user.setStatus(Status.ACTIVE);
         return user;
@@ -78,9 +85,9 @@ public class AdminService {
 
 
     @Transactional
-    public void editSportsman(String email, Sportsman updatedSportsman) {
+    public void editSportsman(String id, Sportsman updatedSportsman) {
 
-        Sportsman sportsman = sportsmanMainRepository.findByEmail(email).orElse(null);
+        Sportsman sportsman = sportsmanMainRepository.findById(id).orElse(null);
 
         assert sportsman != null;
         sportsman.setFirstName(updatedSportsman.getFirstName());
@@ -89,19 +96,19 @@ public class AdminService {
         sportsman.setBirthDate(updatedSportsman.getBirthDate());
         sportsman.setRegion(updatedSportsman.getRegion());
         sportsman.setSex(updatedSportsman.getSex());
-
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
+        sportsman.setIsRegionalTeamSportsman(updatedSportsman.getIsRegionalTeamSportsman());
     }
 
 
     /////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////Реализация CRUD соревнований/////////////////////////////
+                    //      Реализация CRUD соревнований        //
     /////////////////////////////////////////////////////////////////////////////////
 
     @Transactional
-    public void createCompetition(Competition competition) {
+    public Competition createCompetition(Competition competition) {
         competition.setStatus(StatusOfCompetition.FUTURE);
-        competitionRepository.save(competition);
+        return competitionRepository.save(competition);
     }
 
     @Transactional
@@ -123,7 +130,6 @@ public class AdminService {
         return competition;
     }
 
-
     @Transactional
     public void changeStatusOfCompetition(String id) {
         Competition competition = competitionRepository.findById(id).orElse(null);
@@ -131,35 +137,10 @@ public class AdminService {
         competition.setStatus(StatusOfCompetition.PRESENT);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Transactional
+    public void deleteCompetition(String id) {
+        Competition competition = competitionRepository.findById(id).orElse(null);
+        assert competition != null;
+        competitionRepository.delete(competition);
+    }
 }

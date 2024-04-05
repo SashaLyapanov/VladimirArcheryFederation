@@ -60,7 +60,7 @@ CREATE TABLE sportsmen (
                            id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                            club varchar(100),
                            avatar_image varchar(256),
-                           is_regional_team_sportsman bool default false not null,
+                           is_regional_team_sportsman bool default false,
                            sex_id varchar(36),
                            sports_title_id varchar(36),
                            region_id varchar(36),

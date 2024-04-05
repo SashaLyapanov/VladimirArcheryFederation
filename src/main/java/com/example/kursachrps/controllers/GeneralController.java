@@ -58,7 +58,6 @@ public class GeneralController {
     @GetMapping("/applicationsForCompetition")
     List<ApplicationDTO> getApplications(@RequestParam String competitionId) {
         return applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
-
     }
 
     /**
@@ -150,13 +149,12 @@ public class GeneralController {
                 .body(resource);
     }
 
-
     /**
      * Метод для полечения всех новостей
      */
     @GetMapping("/getArticles")
     public ResponseEntity<List<ArticleDTO>> getAllArticles() throws IOException {
-        List<ArticleDTO> articleDTOList = new ArrayList<ArticleDTO>();
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
         List<Article> articleList = articleService.getAllArticles();
         for (Article article : articleList) {
             ArticleDTO articleDTO = new ArticleDTO();
@@ -179,7 +177,6 @@ public class GeneralController {
     public ArticleDTO getArticle(@RequestParam String articleId) {
         return generalMapper.fromArticle(articleService.getArticleById(articleId));
     }
-
 
     /**
      * Метод для информации о федерации
@@ -207,8 +204,9 @@ public class GeneralController {
 
 
     //////////////////////////////////////////
-            //    СОРЕВНОВАНИЯ    //
+    //    СОРЕВНОВАНИЯ    //
     //////////////////////////////////////////
+
     /**
      * Метод для вывода всех соревнований, у которых статус PAST
      */
@@ -216,7 +214,6 @@ public class GeneralController {
     public List<CompetitionDTO> getAllPastCompetition() {
         return competitionMapper.fromCompetition(generalService.getPastCompetitions());
     }
-
 
     /**
      * Метод для вывода всех соревнований
@@ -278,9 +275,8 @@ public class GeneralController {
     }
 
 
-
     //////////////////////////////////////////
-        //      СБОРНАЯ КОМАНДА     //
+    //      СБОРНАЯ КОМАНДА     //
     //////////////////////////////////////////
 
     /**
@@ -290,7 +286,6 @@ public class GeneralController {
     public List<SportsmanDTO> getRegionalTeam() {
         return regionalTeamService.getAllSportsman();
     }
-
 
 
 }
