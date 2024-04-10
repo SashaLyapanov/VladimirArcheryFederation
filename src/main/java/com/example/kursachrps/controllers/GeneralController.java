@@ -163,8 +163,6 @@ public class GeneralController {
             articleDTO.setBody(article.getBody());
             articleDTO.setDateTime(article.getDateTime());
             articleDTO.setLink(article.getLink());
-            articleDTO.setFileName(article.getFile().getOriginalFilename());
-            articleDTO.setFileData(Arrays.toString(article.getFile().getBytes()));
             articleDTOList.add(articleDTO);
         }
         return ResponseEntity.ok(articleDTOList);

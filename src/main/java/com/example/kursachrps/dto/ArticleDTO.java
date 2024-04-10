@@ -14,7 +14,7 @@ public class ArticleDTO {
     private String body;
     private Date dateTime;
     private String link;
-    private String fileName;
-    private byte[] fileData1;
-    private String fileData;
+//    private String fileName;
+//    private byte[] fileData1;
+//    private String fileData;
 }

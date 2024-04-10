@@ -12,12 +12,9 @@ import java.util.List;
 public class AboutFederationService {
 
     AboutFederationRepository aboutFederationRepository;
-    FileService fileService;
 
-    AboutFederationService(AboutFederationRepository aboutFederationRepository,
-                           FileService fileService) {
+    AboutFederationService(AboutFederationRepository aboutFederationRepository) {
         this.aboutFederationRepository = aboutFederationRepository;
-        this.fileService = fileService;
     }
 
     public List<AboutFederation> getAllAboutFederation() {
@@ -34,7 +31,6 @@ public class AboutFederationService {
             aboutFederationFromDB.setHistory(file2);
         }
         if (aboutFederation != null && aboutFederationFromDB != null) {
-            fileService.saveFilesForAboutFederation(aboutFederationFromDB);
             aboutFederationFromDB.setManagers(aboutFederation.getManagers());
             aboutFederationFromDB.setContacts(aboutFederation.getContacts());
 

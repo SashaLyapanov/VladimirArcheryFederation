@@ -152,16 +152,14 @@ public class AdminController {
     /**
      * Метод для шаблонного создания новости
      */
-    //TODO
-    // Реализовать статический сервис для работы с файлами
     @PostMapping("createArticle")
-    public void createArticle(@RequestParam(name = "name") String name,
-                              @RequestParam(name = "body") String body,
-                              @RequestParam(name = "file1", required = false) MultipartFile file1) throws IOException {
+    public void createArticle(@RequestParam String name,
+                              @RequestParam String body,
+                              @RequestParam(required = false) MultipartFile file) throws IOException {
         Article article = new Article();
         article.setName(name);
         article.setBody(body);
-        articleService.saveArticle(article, file1);
+        articleService.saveArticle(article, file);
     }
 
     /**
