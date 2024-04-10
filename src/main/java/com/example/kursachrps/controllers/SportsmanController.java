@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class SportsmanController {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    ///////////////////Методы, связанные c регистрацией на соревновния/////////
+    //      Методы, связанные c регистрацией на соревновния     //
     ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -51,19 +53,14 @@ public class SportsmanController {
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
     @PostMapping("/regInCompetition")
-    public String regInCompetition(@RequestParam String sportsmanId, @RequestParam String competitionId, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
+    public ResponseEntity<?> regInCompetition(@RequestParam String sportsmanId, @RequestParam String competitionId, @RequestBody ApplicationDTO applicationDTO) {
         if (applicationService.checkRegistrationInCompetition(competitionId, sportsmanId)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             sportsmanService.registrateSportsman(sportsmanId, competitionId, application);
-            PayController payController = new PayController();
-            String link = payController.getLinkToPay();
-            System.out.println(link);
-            return link;
+            return ResponseEntity.status(HttpStatus.OK).body("Успешная регистрация");
         } else
-            return "Вы уже зарегистрированы на данных соревнованиях";
-
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Вы уже зарегистрированы на данное мероприятие");
     }
-
 
     /**
      * Просмотр всех собственных заявок на соревнования
@@ -74,6 +71,14 @@ public class SportsmanController {
         List<Application> applications = applicationService.getMyApplications(myId);
         List<ApplicationDTO> applicationDTOList = applicationMapper.fromApplication(applications);
         return applicationDTOList;
+    }
+
+    /**
+     * Отмена заявки
+     */
+    @PostMapping("deleteApplication")
+    public void deleteMyApplication(@RequestParam String sportsmanId, @RequestParam String competitionId) {
+        applicationService.deleteMyApplication(sportsmanId, competitionId);
     }
 
     /**

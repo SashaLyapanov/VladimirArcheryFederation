@@ -54,7 +54,6 @@ public class ApplicationService {
     /**
      * Выборка всех собственных заявок
      */
-    @Transactional
     public List<Application> getMyApplications(String myId) {
         List<Application> applicationsOfSportsman = applicationRepository.findApplicationBySportsmanId(myId);
         if (applicationsOfSportsman.isEmpty()) {
@@ -64,28 +63,26 @@ public class ApplicationService {
         }
     }
 
+    /**
+     * Получение заявки
+     */
+    public void deleteMyApplication(String sportsmanId, String competitionId) {
+        Application application = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, sportsmanId);
+        applicationRepository.delete(application);
+    }
+
 
     /**
      * Метод валидирующий подачу заявки спортсменом и тренером.
      */
     public boolean checkRegistrationInCompetition(String competitionId, String participantId) {
         Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantId);
-
-        if (sportsmanApplication == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return sportsmanApplication == null;
     }
 
     public boolean checkRegistrationInCompetitionByParticipantEmail(String competitionId, String participantEmail) {
         Application sportsmanApplication = applicationRepository.findApplicationBySportsmanEmailAndCompetition(competitionId, participantEmail);
-
-        if (sportsmanApplication == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return sportsmanApplication == null;
     }
 
 }

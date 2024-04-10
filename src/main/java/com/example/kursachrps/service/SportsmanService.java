@@ -40,7 +40,9 @@ public class SportsmanService {
      */
     @Transactional
     public void registrateSportsman(String sportsmanId, String competitionId, Application application) {
-
+        if (application.getBowType().getId() == null ) {
+            return;
+        }
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId).orElse(null);
 
