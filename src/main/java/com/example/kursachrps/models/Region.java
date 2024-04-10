@@ -14,4 +14,9 @@ public class Region extends GenericEntity{
 
     @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
     private List<Sportsman> sportsmen;
+
+    @Override
+    public String toString() {
+        return "name: " + name;
+    }
 }

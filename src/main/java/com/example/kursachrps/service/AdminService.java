@@ -14,17 +14,17 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private final SportsmanMainRepository sportsmanMainRepository;
+    private final SportsmanRepository sportsmanRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
     private final CompetitionRepository competitionRepository;
 
     @Autowired
-    public AdminService(SportsmanMainRepository sportsmanMainRepository,
+    public AdminService(SportsmanRepository sportsmanRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
                         CompetitionRepository competitionRepository) {
-        this.sportsmanMainRepository = sportsmanMainRepository;
+        this.sportsmanRepository = sportsmanRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
         this.competitionRepository = competitionRepository;
@@ -41,7 +41,7 @@ public class AdminService {
         sportsman.setRole(Role.SPORTSMAN);
         sportsman.setStatus(Status.ACTIVE);
 
-        return sportsmanMainRepository.save(sportsman);
+        return sportsmanRepository.save(sportsman);
     }
 
     //Метод, позволяющий захешировать пароль при создании спортсмена Администратором
@@ -52,17 +52,17 @@ public class AdminService {
 
     //Метод для получения спортсмена (Sportsman) по email
     public Sportsman getSportsmanByEmail(String email) {
-        return sportsmanMainRepository.findByEmail(email).orElse(null);
+        return sportsmanRepository.findByEmail(email).orElse(null);
     }
 
     //Метод для получения спортсмена (Sportsman) по email
     public Sportsman getSportsmanById(String id) {
-        return sportsmanMainRepository.findById(id).orElse(null);
+        return sportsmanRepository.findById(id).orElse(null);
     }
 
     //Метод для вывода всех спортсменов (Sportsman) из БД
     public List<Sportsman> showAllSportsmen() {
-        return sportsmanMainRepository.findAll(Sort.by("surname"));
+        return sportsmanRepository.findAll(Sort.by("surname"));
     }
 
     //Метод для блокировки user'a по id.
@@ -87,7 +87,7 @@ public class AdminService {
     @Transactional
     public void editSportsman(String id, Sportsman updatedSportsman) {
 
-        Sportsman sportsman = sportsmanMainRepository.findById(id).orElse(null);
+        Sportsman sportsman = sportsmanRepository.findById(id).orElse(null);
 
         assert sportsman != null;
         sportsman.setFirstName(updatedSportsman.getFirstName());

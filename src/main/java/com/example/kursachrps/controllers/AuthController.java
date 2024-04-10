@@ -8,7 +8,7 @@ import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
 import com.example.kursachrps.dto.UserDTO;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.mapper.UserMapper;
-import com.example.kursachrps.repositories.SportsmanMainRepository;
+import com.example.kursachrps.repositories.SportsmanRepository;
 import com.example.kursachrps.repositories.UserMainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class AuthController {
     private SportsmanMapper sportsmanMapper;
 
     @Autowired
-    private SportsmanMainRepository sportsmanMainRepository;
+    private SportsmanRepository sportsmanRepository;
 
 
 
@@ -67,7 +67,7 @@ public class AuthController {
         sportsman.setStatus(Status.ACTIVE);
         sportsman.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
 
-        sportsmanMainRepository.save(sportsman);
+        sportsmanRepository.save(sportsman);
 
         return new ResponseEntity<>("Sportsman registered successfully", HttpStatus.OK);
 

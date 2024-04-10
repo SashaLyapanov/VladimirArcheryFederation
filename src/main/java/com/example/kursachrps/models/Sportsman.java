@@ -18,6 +18,9 @@ public class Sportsman extends User {
     @Column(name = "club")
     private String club;
 
+    /**
+     * Поле, которое содержит название файла, т.е. картинки, которая хранится в API FileManagerFSLVO.
+     */
     @Column(name = "avatar_image")
     private String avatarImage;
 

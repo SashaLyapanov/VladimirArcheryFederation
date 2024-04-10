@@ -6,10 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
 @Primary
-public interface SportsmanRepository extends UserRepository {
+public interface SportsmanAuthRepository extends UserRepository {
 
     Optional<User> findByEmail(String email);
 

@@ -4,7 +4,6 @@ import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.models.User;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
-import com.example.kursachrps.dto.SportsmanMainDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -12,13 +11,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface SportsmanMapper {
 
-    SportsmanMainDTO fromSportsman(Sportsman sportsman);
+    SportsmanDTO fromSportsman(Sportsman sportsman);
 
-    List<SportsmanMainDTO> fromSportsman(List<Sportsman> sportsmen);
+    List<SportsmanDTO> fromSportsman(List<Sportsman> sportsmen);
 
-    Sportsman fromSportsmanMainDTO(SportsmanMainDTO sportsmanMainDTO);
+    Sportsman fromSportsmanDTO(SportsmanDTO sportsmanDTO);
 
-    List<Sportsman> fromSportsmanMainDTO(List<SportsmanMainDTO> sportsmanMainDTOList);
+    List<Sportsman> fromSportsmanDTO(List<SportsmanDTO> sportsmanDTOList);
 
     Sportsman fromSignUpDTO(SignUpDTO signUpDTO);
 

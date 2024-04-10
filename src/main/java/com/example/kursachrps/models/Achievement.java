@@ -18,4 +18,9 @@ public class Achievement extends GenericEntity{
 
     @NotEmpty
     private int place;
+
+    @Override
+    public String toString() {
+        return "competition: " + competition.getName() + " , place: " + place;
+    }
 }
