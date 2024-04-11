@@ -3,7 +3,6 @@ package com.example.kursachrps.controllers;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
-import com.example.kursachrps.dto.ArticleDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.UserMapper;
@@ -42,7 +41,7 @@ public class AdminController {
 
 
     /////////////////////////////////////////////////////////////////////////////////
-                    //      Реализация CRUD спортсменов     //
+    //      Реализация CRUD спортсменов     //
     /////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -90,7 +89,7 @@ public class AdminController {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-                    //      Блокировка и разблокировка пользователей      //
+    //      Блокировка и разблокировка пользователей      //
     /////////////////////////////////////////////////////////////////////////////////
 
     @PutMapping("blockUser")
@@ -104,7 +103,7 @@ public class AdminController {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-                    //      Реалилзация CRUD соревнований      //
+    //      Реалилзация CRUD соревнований      //
     /////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -146,7 +145,7 @@ public class AdminController {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-                      //      Реализация CRUD новостей        //
+    //      Реализация CRUD новостей        //
     /////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -173,16 +172,18 @@ public class AdminController {
     /**
      * Метод для шаблонного редактирования новости
      */
-    //TODO
-    // Реализовать статический сервис для работы с файлами
-    // Реализовать логику сохранения данных в БД
-    @PutMapping("changeNew")
-    public void editArticle(@RequestParam String id, @RequestBody ArticleDTO articleDTO) {
-
+    @PutMapping("changeArticle")
+    public void editArticle(@RequestParam String articleId,
+                            @RequestParam String name,
+                            @RequestParam String body,
+                            @RequestParam(required = false) MultipartFile file) throws IOException {
+        if (articleId != null) {
+            articleService.editArticle(articleId, name, body, file);
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-            //      Реализация CRUD информации О Федерации        //
+    //      Реализация CRUD информации О Федерации        //
     /////////////////////////////////////////////////////////////////////////////////
 
     /**

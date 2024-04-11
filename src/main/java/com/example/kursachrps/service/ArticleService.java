@@ -63,6 +63,30 @@ public class ArticleService {
         }
     }
 
+    public void editArticle(String articleId, String name, String body, MultipartFile file) {
+        Article article = articleRepository.findById(articleId).orElse(null);
+        if (article != null) {
+            article.setName(name);
+            article.setBody(body);
+            String fileName = article.getId() + "_" + file.getOriginalFilename();
+            String oldFileName = article.getLink();
+            article.setLink(fileName);
+            articleRepository.save(article);
+
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+            requestBody.add("fileName", fileName);
+            requestBody.add("oldFileName", oldFileName);
+            requestBody.add("file", new FileSystemResource(Objects.requireNonNull(convertMultipartFileToFile(file))));
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
+        }
+    }
+
     public Article getArticleById(String articleId) {
         return articleRepository.findById(articleId).orElse(null);
     }
@@ -85,5 +109,4 @@ public class ArticleService {
             return null;
         }
     }
-
 }
