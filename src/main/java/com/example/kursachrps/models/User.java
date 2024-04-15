@@ -17,6 +17,8 @@ public class User extends GenericEntity{
     @Column(name = "email")
     private String email;
 
+    private String activationCode;
+
     @NotEmpty(message = "Password should not be empty")
     @Column(name = "password")
     private String password;
@@ -47,8 +49,11 @@ public class User extends GenericEntity{
     public User() {
     }
 
-    public User(String email, String password, Role role, Status status, String firstName, String surname, String patronymic, Date birthDate) {
+    public User(String email,
+//                String activationCode,
+                String password, Role role, Status status, String firstName, String surname, String patronymic, Date birthDate) {
         this.email = email;
+//        this.activationCode = activationCode;
         this.password = password;
         this.role = role;
         this.status = status;

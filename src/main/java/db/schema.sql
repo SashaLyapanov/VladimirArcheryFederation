@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
                        id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                        email varchar(250) NOT NULL UNIQUE,
+                       activation_code varchar(100),
                        password varchar(1000) NOT NULL,
                        role varchar(25),
                        status varchar(25),
