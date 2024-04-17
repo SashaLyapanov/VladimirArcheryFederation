@@ -93,7 +93,7 @@ public class GeneralService {
     }
 
 
-    public String getProtocolNameByCompetitionId(int competitionId) {
+    public String getProtocolNameByCompetitionId(String competitionId) {
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         assert competition != null;
         return competition.getPdfFile();

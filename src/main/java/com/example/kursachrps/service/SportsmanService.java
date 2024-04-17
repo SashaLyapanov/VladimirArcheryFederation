@@ -56,12 +56,20 @@ public class SportsmanService {
      */
     public List<SportsmanDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
         if (Objects.equals(bowTypeName, "all")) {
-            return applicationService.getSportsmenFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));
+            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));
         } else {
-            return applicationService.getSportsmenFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName)));
+            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName)));
         }
     }
 
+    public List<Sportsman> getAllSportsmanByCompetition(String competitionId) {
+        if (competitionId == null || competitionId.equals("")) {
+            return null;
+        } else {
+            List<Sportsman> sportsmanList = applicationService.getSportsmenFromApplications(applicationService.getApplicationsForCompetition(competitionId));
+            return sportsmanList;
+        }
+    }
 
 }
 

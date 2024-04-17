@@ -17,4 +17,9 @@ public class BowType extends GenericEntity {
 
     @ManyToMany(mappedBy = "bowTypeList")
     private List<Competition> competitionList;
+
+    @Override
+    public String toString() {
+        return "BowType with id: " + getId();
+    }
 }

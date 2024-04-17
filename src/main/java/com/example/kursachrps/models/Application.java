@@ -7,7 +7,7 @@ import lombok.Data;
 @Entity
 @Table(name = "applications")
 public class Application extends GenericEntity{
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
 
@@ -15,11 +15,12 @@ public class Application extends GenericEntity{
     @JoinColumn(name = "competition_id", referencedColumnName = "id")
     private Competition competition;
 
-//    //В зависимости от данного поля у нас будет генерироваться протокол (Если оплата есть, то вносим в протокол). Нет, то сорян
-//    @Column(name = "payment")
-//    private boolean payment;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bow_type_id", referencedColumnName = "id")
     private BowType bowType;
+
+    @Override
+    public String toString() {
+        return "Application with id: " + getId();
+    }
 }

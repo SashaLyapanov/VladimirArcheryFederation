@@ -65,7 +65,7 @@ public class GeneralController {
      */
     @GetMapping("/declaredSportsmenForCompetition")
     List<SportsmanDTO> getDeclaredSportsmen(@RequestParam String competitionId) {
-        return applicationService.getSportsmenFromApplications(getApplications(competitionId));
+        return applicationService.getSportsmenDTOFromApplications(getApplications(competitionId));
     }
 
     /**
@@ -128,7 +128,7 @@ public class GeneralController {
      * Метод для скачивания pdf протокола
      */
     @GetMapping("/savePDFProtocol")
-    public ResponseEntity<Resource> savePDFProtocol(@RequestParam int competitionId) throws IOException {
+    public ResponseEntity<Resource> savePDFProtocol(@RequestParam String competitionId) throws IOException {
         String fileName = generalService.getProtocolNameByCompetitionId(competitionId);
         File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filePDF\\" + fileName);
         //Реализация скачивания файла

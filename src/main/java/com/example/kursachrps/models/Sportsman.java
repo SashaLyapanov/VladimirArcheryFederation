@@ -28,11 +28,11 @@ public class Sportsman extends User {
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     private Region region;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sex_id", referencedColumnName = "id")
     private Sex sex;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
     private SportsTitle sportsTitle;
@@ -66,6 +66,11 @@ public class Sportsman extends User {
         this.sportsTitle = sportsTitle;
         this.club = club;
         this.avatarImage = avatarImage;
+    }
+
+    @Override
+    public String toString() {
+        return "Sportsman with id: " + getId() + " and surname: " + getSurname();
     }
 
 }

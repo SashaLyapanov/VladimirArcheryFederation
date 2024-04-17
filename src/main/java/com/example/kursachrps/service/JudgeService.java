@@ -2,7 +2,7 @@ package com.example.kursachrps.service;
 
 import com.aspose.cells.PdfSaveOptions;
 import com.aspose.cells.Workbook;
-import com.example.kursachrps.ExcelGenerator2;
+import com.example.kursachrps.ExcelGenerator;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;
@@ -25,68 +25,118 @@ public class JudgeService {
     private CompetitionRepository competitionRepository;
     private UserMainRepository userMainRepository;
     private SportsmanMapper sportsmanMapper;
+    private SportsmanService sportsmanService;
 
-    private ExcelGenerator2 excelGenerator2 = new ExcelGenerator2();
+    private ExcelGenerator excelGenerator = new ExcelGenerator();
 
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
                         CompetitionRepository competitionRepository,
                         UserMainRepository userMainRepository,
-                        SportsmanMapper sportsmanMapper) {
+                        SportsmanMapper sportsmanMapper,
+                        SportsmanService sportsmanService) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
         this.sportsmanMapper = sportsmanMapper;
+        this.sportsmanService = sportsmanService;
     }
+
+//    /**
+//     * Метод для генерации EXCEL протокола 3D соревнований.
+//     */
+//    @Transactional
+//    public File generateProtocol(String competitionId) throws IOException {
+//        //Это наш шаблон, чтобы скопировать его в новый файл
+////        File file = new File("C:\\Users\\-\\IdeaProjects\\VladimirArcheryFederation\\src\\filesExcel\\Pattern.xlsx");
+//        File file = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
+//        //Создадим новый файл
+//        LocalDate today = LocalDate.now();
+//        File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
+//        try {
+//            boolean created = protocol.createNewFile();
+//            if (created) {
+//                System.out.println("Ес, исходный файл для работы создался");
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Вероятнее всего файл с таким именем уже существует");
+//            System.out.println(e.getMessage());
+//        }
+//
+//        if (protocol.exists()) {
+//            InputStream is = null;
+//            OutputStream os = null;
+//            try {
+//                is = new FileInputStream(file);
+//                os = new FileOutputStream(protocol);
+//                byte[] buffer = new byte[1024];
+//                int length;
+//                while ((length = is.read(buffer)) > 0) {
+//                    os.write(buffer, 0, length);
+//                }
+//            } finally {
+//                assert is != null;
+//                is.close();
+//                assert os != null;
+//                os.close();
+//            }
+//
+//            List<Application> applications = applicationRepository.findApplicationByCompetitionId(competitionId);
+//
+//            try {
+//                excelGenerator2.appendRows(applications, protocol);
+//            } catch (IOException | InvalidFormatException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("Протокол успешно создан");
+//        }
+//
+//        return protocol;
+//    }
+
 
     /**
      * Метод для генерации EXCEL протокола 3D соревнований.
      */
     @Transactional
-    public File generateProtocol(String competitionId) throws IOException {
-        //Это наш шаблон, чтобы скопировать его в новый файл
-        File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filesExcel\\TestPattern.xlsx");
-        //Создадим новый файл
-        LocalDate today = LocalDate.now();
-        File protocol = new File("C:/Users/-/IdeaProjects/KursachRPS/src/filesExcel/" + today + ".xlsx");
-        try {
-            boolean created = protocol.createNewFile();
-            if (created) {
-                System.out.println("Ес, файл создался");
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        if (protocol.exists()) {
-            InputStream is = null;
-            OutputStream os = null;
+    public File generateProtocol(String competitionId) {
+        if (competitionId == null || competitionId.equals("")) {
+            return null;
+        } else {
+            LocalDate today = LocalDate.now();
+            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
             try {
-                is = new FileInputStream(file);
-                os = new FileOutputStream(protocol);
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
+                boolean created = protocol.createNewFile();
+                if (created) {
+                    System.out.println("Ес, исходный файл для работы создался");
                 }
-            } finally {
-                assert is != null;
-                is.close();
-                assert os != null;
-                os.close();
+            } catch (IOException e) {
+                System.out.println("Вероятнее всего файл с таким именем уже существует");
+                System.out.println(e.getMessage());
             }
 
+            try (InputStream inputStream = new FileInputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
+                 OutputStream outputStream = new FileOutputStream(protocol)) {
+                inputStream.transferTo(outputStream);
+            } catch (IOException e) {
+                System.out.println("Произошла ошибка при копировании файла.");
+                e.printStackTrace();
+            }
+
+            //Получение спортсменов, зарегистрированных на данные соревнования
             List<Application> applications = applicationRepository.findApplicationByCompetitionId(competitionId);
 
             try {
-                excelGenerator2.appendRows(applications, protocol);
+                excelGenerator.appendRowsForQualification(applications, protocol);
             } catch (IOException | InvalidFormatException e) {
+                System.out.println("Провалилось заполнение протокола");
                 e.printStackTrace();
             }
             System.out.println("Протокол успешно создан");
-        }
 
-        return protocol;
+
+            return protocol;
+        }
     }
 
     /**
@@ -153,7 +203,7 @@ public class JudgeService {
     }
 
     @Transactional
-    public void addPathFileInCompetition(int competitionId, String name) {
+    public void addPathFileInCompetition(String competitionId, String name) {
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         assert competition != null;
         competition.setPdfFile(name);
@@ -161,7 +211,7 @@ public class JudgeService {
 
 
     @Transactional
-    public void changeStatusOfCompetition(int competitionId) {
+    public void changeStatusOfCompetition(String competitionId) {
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PAST);

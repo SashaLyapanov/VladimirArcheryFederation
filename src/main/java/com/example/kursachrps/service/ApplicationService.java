@@ -3,10 +3,10 @@ package com.example.kursachrps.service;
 import com.example.kursachrps.models.Application;
 import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
+import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.repositories.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,6 @@ public class ApplicationService {
     /**
      * Метод для выборки всех заявок для определенных соревнований
      */
-    @Transactional
     public List<Application> getApplicationsForCompetition(String competitionId) {
         return applicationRepository.findApplicationByCompetitionId(competitionId);
     }
@@ -33,22 +32,30 @@ public class ApplicationService {
     /**
      * Метод для выборки всех заявок для опредедленных соревнований и типа лука
      */
-    @Transactional
     public List<Application> getApplicationsForCompetitionAndBowType(String competitionId, String bowTypeName) {
-        return applicationRepository.findApplicationByCompetition_IdAndAndBowType_BowTypeName(competitionId, bowTypeName);
+        return applicationRepository.findApplicationByCompetitionIdAndBowTypeBowTypeName(competitionId, bowTypeName);
     }
 
     /**
      * Метод для выборки всех спортсменов из списка заявок
      */
-    @Transactional
-    public List<SportsmanDTO> getSportsmenFromApplications(List<ApplicationDTO> applicationDTOList) {
+    public List<SportsmanDTO> getSportsmenDTOFromApplications(List<ApplicationDTO> applicationDTOList) {
         List<SportsmanDTO> sportsmanDTOList = new ArrayList<>();
 
         for(ApplicationDTO applicationDTO: applicationDTOList) {
             sportsmanDTOList.add(applicationDTO.getSportsman());
         }
         return sportsmanDTOList;
+    }
+
+
+    public List<Sportsman> getSportsmenFromApplications(List<Application> applicationList) {
+        List<Sportsman> sportsmanList = new ArrayList<>();
+
+        for(Application application: applicationList) {
+            sportsmanList.add(application.getSportsman());
+        }
+        return sportsmanList;
     }
 
     /**
@@ -67,7 +74,7 @@ public class ApplicationService {
      * Получение заявки
      */
     public void deleteMyApplication(String sportsmanId, String competitionId) {
-        Application application = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, sportsmanId);
+        Application application = applicationRepository.findApplicationBySportsmanIdAndCompetitionId(sportsmanId, competitionId);
         applicationRepository.delete(application);
     }
 
@@ -76,12 +83,12 @@ public class ApplicationService {
      * Метод валидирующий подачу заявки спортсменом и тренером.
      */
     public boolean checkRegistrationInCompetition(String competitionId, String participantId) {
-        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanAndCompetition(competitionId, participantId);
+        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanIdAndCompetitionId(participantId, competitionId);
         return sportsmanApplication == null;
     }
 
     public boolean checkRegistrationInCompetitionByParticipantEmail(String competitionId, String participantEmail) {
-        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanEmailAndCompetition(competitionId, participantEmail);
+        Application sportsmanApplication = applicationRepository.findApplicationBySportsmanEmailAndCompetitionId(participantEmail, competitionId);
         return sportsmanApplication == null;
     }
 

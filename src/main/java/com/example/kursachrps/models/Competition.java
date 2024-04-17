@@ -7,7 +7,6 @@ import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -80,4 +79,9 @@ public class Competition extends GenericEntity{
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private List<BowType> bowTypeList;
+
+    @Override
+    public String toString() {
+        return "Competition with id: " + getId();
+    }
 }

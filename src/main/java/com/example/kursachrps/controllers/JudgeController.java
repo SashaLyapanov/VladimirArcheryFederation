@@ -75,7 +75,7 @@ public class JudgeController {
      * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
      */
     @PostMapping("/uploadFile")
-    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam int competitionId) throws Exception {
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws Exception {
         String path = judgeService.uploadFile(file);
         String newFile = judgeService.convertXLSXToPDF(path);
         judgeService.changeStatusOfCompetition(competitionId);
