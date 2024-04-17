@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
+public interface SportsmanRepository extends JpaRepository<Sportsman, String> {
 
     Optional<Sportsman> findById(String id);
 

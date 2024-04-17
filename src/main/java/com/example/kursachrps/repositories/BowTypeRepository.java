@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BowTypeRepository extends JpaRepository<BowType, Integer> {
+public interface BowTypeRepository extends JpaRepository<BowType, String> {
 
 
     @Query("SELECT bt FROM BowType bt JOIN bt.competitionList btc where btc.id = :competitionId")
