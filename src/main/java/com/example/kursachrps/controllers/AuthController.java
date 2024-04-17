@@ -57,7 +57,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<UserDTO> authenticateUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -68,7 +68,7 @@ public class AuthController {
 
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Please, check your email and activate account.", HttpStatus.BAD_REQUEST);
         }
     }
 
