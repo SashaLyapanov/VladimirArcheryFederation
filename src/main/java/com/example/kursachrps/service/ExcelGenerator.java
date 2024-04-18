@@ -1,4 +1,4 @@
-package com.example.kursachrps;
+package com.example.kursachrps.service;
 
 import com.example.kursachrps.models.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -6,18 +6,24 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
+@Service
 public class ExcelGenerator {
+    private ParserExcelData parserExcelData;
+
+    @Autowired
+    public ExcelGenerator(ParserExcelData parserExcelData) {
+        this.parserExcelData = parserExcelData;
+    }
 
     private static Map<Integer, Object[]> prepareData(int rowNum, List<Application> applications) {
         Map<Integer, Object[]> data = new HashMap<>();
-        for (Application application: applications) {
+        for (Application application : applications) {
             rowNum++;
             if (application.getSportsman() != null) {
                 Sportsman sportsman = application.getSportsman();
@@ -65,14 +71,14 @@ public class ExcelGenerator {
 
         Integer indexForCountSportsman = 1;
 
-        for(Integer key: keySet) {
+        for (Integer key : keySet) {
             XSSFRow row = sheet.createRow(rowNum++);
             Object[] objArr = data.get(key);
             int cellNum = 0;
             Cell firstCellForNum = row.createCell(cellNum);
             firstCellForNum.setCellValue(indexForCountSportsman.toString());
             firstCellForNum.setCellStyle(style);
-            for(Object obj: objArr) {
+            for (Object obj : objArr) {
                 Cell cell = row.createCell(++cellNum);
                 if (obj instanceof String) {
                     cell.setCellValue((String) obj);
@@ -105,5 +111,67 @@ public class ExcelGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<QualificationRound> readQualificationToDB(File protocol, String competitionId) throws IOException {
+        List<QualificationRound> qualificationRoundList = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
+        XSSFSheet sheet = workbook.getSheetAt(0);
+
+        //Значение 4 четко под формат Pattern.xlsx
+        int rowNum = 4;
+
+        while (true) {
+            Row row = sheet.getRow(rowNum);
+            if (row != null) {
+                Cell cell = row.getCell(0);
+
+                if (cell != null) {
+                    QualificationRound qualificationRound = new QualificationRound();
+                    qualificationRound.setCompetition(parserExcelData.findCompetitionById(competitionId));
+                    for (int i = 1; i <= 11; i++) {
+                        Cell qualificationData = row.getCell(i);
+                        if (i == 1) {
+                            //Спортсмен
+                            Cell birthDate = row.getCell(3);
+                            Sportsman sportsman = parserExcelData.findSportsmanByFioAndBirthDate(qualificationData, birthDate);
+                            qualificationRound.setSportsman(sportsman);
+                        } else if (i == 6) {
+                            //Класс лука
+                            BowType bowType = parserExcelData.findBowTypeByBowTypeName(qualificationData.toString());
+                            qualificationRound.setBowType(bowType);
+                        } else if (i == 7) {
+                            //dist1
+                            double cellValue = qualificationData.getNumericCellValue();
+                            qualificationRound.setDist1((int) cellValue);
+                        } else if (i == 8) {
+                            //dist2
+                            double cellValue = qualificationData.getNumericCellValue();
+                            qualificationRound.setDist2((int) cellValue);
+                        } else if (i == 9) {
+                            qualificationRound.setSum(qualificationRound.getDist1() + qualificationRound.getDist2());
+                        } else if (i == 10) {
+                            //количество 11 за два круга
+                            double cellValue = qualificationData.getNumericCellValue();
+                            qualificationRound.setQuantity11((int) cellValue);
+                        } else if (i == 11) {
+                            //количество 10 за два круга
+                            double cellValue = qualificationData.getNumericCellValue();
+                            qualificationRound.setQuantity10((int) cellValue);
+                        }
+                    }
+                    qualificationRoundList.add(qualificationRound);
+                    rowNum++;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+
+        }
+
+        return qualificationRoundList;
+
     }
 }

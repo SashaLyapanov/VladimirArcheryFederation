@@ -56,6 +56,8 @@ public class Sportsman extends User {
             inverseJoinColumns = @JoinColumn(name = "competition_id"))
     private List<Competition> competitionList;
 
+    @OneToMany(mappedBy = "sportsman")
+    private List<QualificationRound> qualificationRoundList;
 
     public Sportsman() {
     }

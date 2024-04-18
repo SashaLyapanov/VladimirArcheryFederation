@@ -71,15 +71,23 @@ public class JudgeController {
                 .body(resource);
     }
 
-    /**
+//    /**
+//     * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
+//     */
+//    @PostMapping("/uploadFile")
+//    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws Exception {
+//        String path = judgeService.uploadFile(file);
+//        String newFile = judgeService.convertXLSXToPDF(path);
+//        judgeService.changeStatusOfCompetition(competitionId);
+//        judgeService.addPathFileInCompetition(competitionId, newFile);
+//    }
+
+     /**
      * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
      */
     @PostMapping("/uploadFile")
-    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws Exception {
-        String path = judgeService.uploadFile(file);
-        String newFile = judgeService.convertXLSXToPDF(path);
-        judgeService.changeStatusOfCompetition(competitionId);
-        judgeService.addPathFileInCompetition(competitionId, newFile);
+    public void uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
+        judgeService.uploadQualificationProtocol(file, competitionId);
     }
 
     /**

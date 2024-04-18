@@ -15,6 +15,9 @@ public class BowType extends GenericEntity {
     @OneToMany(mappedBy = "bowType")
     private List<Application> applicationList;
 
+    @OneToMany(mappedBy = "bowType")
+    private List<QualificationRound> qualificationRoundList;
+
     @ManyToMany(mappedBy = "bowTypeList")
     private List<Competition> competitionList;
 

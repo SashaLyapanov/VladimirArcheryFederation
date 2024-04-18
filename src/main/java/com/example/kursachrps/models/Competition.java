@@ -80,6 +80,9 @@ public class Competition extends GenericEntity{
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private List<BowType> bowTypeList;
 
+    @OneToMany(mappedBy = "competition")
+    private List<QualificationRound> qualificationRoundList;
+
     @Override
     public String toString() {
         return "Competition with id: " + getId();

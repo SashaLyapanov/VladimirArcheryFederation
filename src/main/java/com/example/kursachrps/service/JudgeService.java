@@ -2,11 +2,11 @@ package com.example.kursachrps.service;
 
 import com.aspose.cells.PdfSaveOptions;
 import com.aspose.cells.Workbook;
-import com.example.kursachrps.ExcelGenerator;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;
 import com.example.kursachrps.repositories.CompetitionRepository;
+import com.example.kursachrps.repositories.QualificationRoundRepository;
 import com.example.kursachrps.repositories.UserMainRepository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,75 +25,26 @@ public class JudgeService {
     private CompetitionRepository competitionRepository;
     private UserMainRepository userMainRepository;
     private SportsmanMapper sportsmanMapper;
-    private SportsmanService sportsmanService;
-
-    private ExcelGenerator excelGenerator = new ExcelGenerator();
+    private QualificationRoundRepository qualificationRoundRepository;
+    private FileUtils fileUtils;
+    private ExcelGenerator excelGenerator;
 
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
                         CompetitionRepository competitionRepository,
                         UserMainRepository userMainRepository,
                         SportsmanMapper sportsmanMapper,
-                        SportsmanService sportsmanService) {
+                        QualificationRoundRepository qualificationRoundRepository,
+                        FileUtils fileUtils,
+                        ExcelGenerator excelGenerator) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
         this.sportsmanMapper = sportsmanMapper;
-        this.sportsmanService = sportsmanService;
+        this.qualificationRoundRepository = qualificationRoundRepository;
+        this.fileUtils = fileUtils;
+        this.excelGenerator = excelGenerator;
     }
-
-//    /**
-//     * Метод для генерации EXCEL протокола 3D соревнований.
-//     */
-//    @Transactional
-//    public File generateProtocol(String competitionId) throws IOException {
-//        //Это наш шаблон, чтобы скопировать его в новый файл
-////        File file = new File("C:\\Users\\-\\IdeaProjects\\VladimirArcheryFederation\\src\\filesExcel\\Pattern.xlsx");
-//        File file = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
-//        //Создадим новый файл
-//        LocalDate today = LocalDate.now();
-//        File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
-//        try {
-//            boolean created = protocol.createNewFile();
-//            if (created) {
-//                System.out.println("Ес, исходный файл для работы создался");
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Вероятнее всего файл с таким именем уже существует");
-//            System.out.println(e.getMessage());
-//        }
-//
-//        if (protocol.exists()) {
-//            InputStream is = null;
-//            OutputStream os = null;
-//            try {
-//                is = new FileInputStream(file);
-//                os = new FileOutputStream(protocol);
-//                byte[] buffer = new byte[1024];
-//                int length;
-//                while ((length = is.read(buffer)) > 0) {
-//                    os.write(buffer, 0, length);
-//                }
-//            } finally {
-//                assert is != null;
-//                is.close();
-//                assert os != null;
-//                os.close();
-//            }
-//
-//            List<Application> applications = applicationRepository.findApplicationByCompetitionId(competitionId);
-//
-//            try {
-//                excelGenerator2.appendRows(applications, protocol);
-//            } catch (IOException | InvalidFormatException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("Протокол успешно создан");
-//        }
-//
-//        return protocol;
-//    }
-
 
     /**
      * Метод для генерации EXCEL протокола 3D соревнований.
@@ -126,6 +77,8 @@ public class JudgeService {
             //Получение спортсменов, зарегистрированных на данные соревнования
             List<Application> applications = applicationRepository.findApplicationByCompetitionId(competitionId);
 
+            sortApplicationsForQualifications(applications);
+
             try {
                 excelGenerator.appendRowsForQualification(applications, protocol);
             } catch (IOException | InvalidFormatException e) {
@@ -139,16 +92,51 @@ public class JudgeService {
         }
     }
 
+    private List<Application> sortApplicationsForQualifications(List<Application> applications) {
+        //TODO
+        // Реализовать метод разбиения на группы спортсменов по классу лука
+        // Можно разбивать по следующему принципу:
+        // Смотрим сколько заявлено человек, ЕСЛИ деление с остатком на
+
+        return applications;
+    }
+
+    /**
+     * Метод для загрузки квалификационного протокола, после внесения в него результатов прохождения двух кругов
+     */
+    @Transactional
+    public void uploadQualificationProtocol(MultipartFile file, String competitionId) {
+        try (InputStream inputStream = new FileInputStream(fileUtils.convertMultipartFileToFile(file));
+             OutputStream outputStream = new FileOutputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename())) {
+            inputStream.transferTo(outputStream);
+            System.out.println("Файл успешно скопирован в исходник:" + file.getOriginalFilename());
+            //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
+            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+            List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(protocol, competitionId);
+            if (qualificationRoundList != null) {
+                for (QualificationRound qualificationRound: qualificationRoundList) {
+                    qualificationRoundRepository.save(qualificationRound);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка при копировании файла.");
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Метод для загрузки файла на сервер (заменяет существующий, сгенерированный ранее протокол)
      */
+    //TODO
+    // Если оставлю этот метод, то нужно переделать не через today, а через название файла, который приходит на вход,
+    // т.к. протокол может быть загружен на следующие сутки по каким-либо причинам!!!
     @Transactional
     public String uploadFile(MultipartFile file) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
                 LocalDate today = LocalDate.now();
-                File oldFile = new File("C:/Users/-/IdeaProjects/KursachRPS/src/filesExcel/" + today + ".xlsx");
+                File oldFile = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(oldFile));
                 stream.write(bytes);
                 stream.close();
@@ -216,4 +204,6 @@ public class JudgeService {
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PAST);
     }
+
+
 }

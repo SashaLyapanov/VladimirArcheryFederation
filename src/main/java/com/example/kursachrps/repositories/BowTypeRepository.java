@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BowTypeRepository extends JpaRepository<BowType, String> {
@@ -14,5 +15,7 @@ public interface BowTypeRepository extends JpaRepository<BowType, String> {
 
     @Query("SELECT bt FROM BowType bt JOIN bt.competitionList btc where btc.id = :competitionId")
     List<BowType> findAllByCompetitionId(@Param("competitionId") String competitionId);
+
+    Optional<BowType> findBowTypeByBowTypeName(String bowTypeName);
 
 }
