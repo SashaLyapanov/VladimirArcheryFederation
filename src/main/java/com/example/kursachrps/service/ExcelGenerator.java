@@ -40,15 +40,7 @@ public class ExcelGenerator {
         return data;
     }
 
-    //Функция для записи строк в excel
-    public void appendRowsForQualification(List<Application> applications, File file) throws IOException, InvalidFormatException {
-        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
-        XSSFSheet sheet = workbook.getSheetAt(0);
-
-        //////////////////
-        CellStyle style = workbook.createCellStyle();
-        //Стиль для шрифта
-        Font font = workbook.createFont();
+    public void makeFontAndStyle(XSSFWorkbook workbook, CellStyle style, Font font) {
         font.setFontHeightInPoints((short) 14);
         font.setFontName("Times New Roman");
         style.setFont(font);
@@ -60,7 +52,16 @@ public class ExcelGenerator {
         style.setBorderTop(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
-        //////////////////
+    }
+    //Функция для записи строк в excel
+    public void appendRowsForQualification(List<Application> applications, File file) throws IOException, InvalidFormatException {
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
+        XSSFSheet sheet = workbook.getSheetAt(0);
+
+        CellStyle style = workbook.createCellStyle();
+        //Стиль для шрифта
+        Font font = workbook.createFont();
+        makeFontAndStyle(workbook, style, font);
 
         //Значение 4 четко под формат Pattern.xlsx
         int rowNum = 4;
