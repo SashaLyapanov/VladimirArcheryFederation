@@ -151,6 +151,8 @@ public class ExcelGenerator {
                             qualificationRound.setDist2((int) cellValue);
                         } else if (i == 9) {
                             qualificationRound.setSum(qualificationRound.getDist1() + qualificationRound.getDist2());
+                            Sex sex = parserExcelData.findSexByName(row.getCell(2));
+                            qualificationRound.setSportsTitle(parserExcelData.findSportsTitleBySumInQualification(sex, qualificationRound.getBowType(), qualificationRound.getSum()));
                         } else if (i == 10) {
                             //количество 11 за два круга
                             double cellValue = qualificationData.getNumericCellValue();

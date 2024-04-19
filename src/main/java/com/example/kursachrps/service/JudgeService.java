@@ -2,6 +2,7 @@ package com.example.kursachrps.service;
 
 import com.aspose.cells.PdfSaveOptions;
 import com.aspose.cells.Workbook;
+import com.example.kursachrps.comparators.ApplicationComparator;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.ApplicationRepository;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -93,10 +95,7 @@ public class JudgeService {
     }
 
     private List<Application> sortApplicationsForQualifications(List<Application> applications) {
-        //TODO
-        // Реализовать метод разбиения на группы спортсменов по классу лука
-        // Можно разбивать по следующему принципу:
-        // Смотрим сколько заявлено человек, ЕСЛИ деление с остатком на
+        Collections.sort(applications, new ApplicationComparator());
 
         return applications;
     }
@@ -114,9 +113,7 @@ public class JudgeService {
             File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
             List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(protocol, competitionId);
             if (qualificationRoundList != null) {
-                for (QualificationRound qualificationRound: qualificationRoundList) {
-                    qualificationRoundRepository.save(qualificationRound);
-                }
+                qualificationRoundRepository.saveAll(qualificationRoundList);
             }
         } catch (IOException e) {
             System.out.println("Произошла ошибка при копировании файла.");

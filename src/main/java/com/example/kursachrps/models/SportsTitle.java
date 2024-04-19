@@ -14,8 +14,12 @@ public class SportsTitle extends GenericEntity{
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "sportsTitle", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "sportsTitle")
     private List<Sportsman> sportsmanList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sportsTitle")
+    private List<QualificationRound> qualificationRoundList;
 
     @Override
     public String toString() {

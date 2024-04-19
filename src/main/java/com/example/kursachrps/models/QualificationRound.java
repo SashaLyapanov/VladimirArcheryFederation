@@ -39,6 +39,10 @@ public class QualificationRound extends GenericEntity{
     @Column(name = "quantity10")
     private int quantity10;
 
+    @ManyToOne
+    @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
+    private SportsTitle sportsTitle;
+
     @Override
     public String toString() {
         return "id: " + getId() + ", sportsmanId: " + sportsman.getId() + ", competitionId:" + competition.getId();
