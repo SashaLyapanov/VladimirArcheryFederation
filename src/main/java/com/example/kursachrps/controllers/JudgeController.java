@@ -83,11 +83,15 @@ public class JudgeController {
 //    }
 
      /**
-     * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
+     * Метод для загрузки отредактированного файла с результатами квалификации на сервер.
+     * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
      */
     @PostMapping("/uploadFile")
     public void uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
-        judgeService.uploadQualificationProtocol(file, competitionId);
+        File protocol = judgeService.uploadQualificationProtocol(file, competitionId);
+        if (protocol != null) {
+            judgeService.generateNextStageOfCompetition(protocol, competitionId);
+        }
     }
 
     /**

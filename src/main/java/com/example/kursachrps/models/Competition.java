@@ -16,7 +16,6 @@ public class Competition extends GenericEntity{
     @NotEmpty(message = "Название соревнованй не может быть пустым")
     private String name;
 
-
     @Column(name = "place")
     @NotEmpty(message = "Место должно быть!")
     private String place;
@@ -79,6 +78,9 @@ public class Competition extends GenericEntity{
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "bow_type_id"))
     private List<BowType> bowTypeList;
+
+    @OneToOne(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Protocol protocol;
 
     @OneToMany(mappedBy = "competition")
     private List<QualificationRound> qualificationRoundList;

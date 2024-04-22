@@ -5,10 +5,7 @@ import com.aspose.cells.Workbook;
 import com.example.kursachrps.comparators.ApplicationComparator;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.SportsmanMapper;
-import com.example.kursachrps.repositories.ApplicationRepository;
-import com.example.kursachrps.repositories.CompetitionRepository;
-import com.example.kursachrps.repositories.QualificationRoundRepository;
-import com.example.kursachrps.repositories.UserMainRepository;
+import com.example.kursachrps.repositories.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,8 +26,11 @@ public class JudgeService {
     private UserMainRepository userMainRepository;
     private SportsmanMapper sportsmanMapper;
     private QualificationRoundRepository qualificationRoundRepository;
+    private QualificationRoundService qualificationRoundService;
     private FileUtils fileUtils;
     private ExcelGenerator excelGenerator;
+    private ProtocolRepository protocolRepository;
+    private ProtocolService protocolService;
 
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
@@ -37,15 +38,19 @@ public class JudgeService {
                         UserMainRepository userMainRepository,
                         SportsmanMapper sportsmanMapper,
                         QualificationRoundRepository qualificationRoundRepository,
+                        QualificationRoundService qualificationRoundService,
                         FileUtils fileUtils,
-                        ExcelGenerator excelGenerator) {
+                        ExcelGenerator excelGenerator,
+                        ProtocolRepository protocolRepository) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
         this.sportsmanMapper = sportsmanMapper;
         this.qualificationRoundRepository = qualificationRoundRepository;
+        this.qualificationRoundService = qualificationRoundService;
         this.fileUtils = fileUtils;
         this.excelGenerator = excelGenerator;
+        this.protocolRepository = protocolRepository;
     }
 
     /**
@@ -104,7 +109,7 @@ public class JudgeService {
      * Метод для загрузки квалификационного протокола, после внесения в него результатов прохождения двух кругов
      */
     @Transactional
-    public void uploadQualificationProtocol(MultipartFile file, String competitionId) {
+    public File uploadQualificationProtocol(MultipartFile file, String competitionId) {
         try (InputStream inputStream = new FileInputStream(fileUtils.convertMultipartFileToFile(file));
              OutputStream outputStream = new FileOutputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename())) {
             inputStream.transferTo(outputStream);
@@ -114,9 +119,82 @@ public class JudgeService {
             List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(protocol, competitionId);
             if (qualificationRoundList != null) {
                 qualificationRoundRepository.saveAll(qualificationRoundList);
+                return protocol;
+            } else {
+                return null;
             }
         } catch (IOException e) {
             System.out.println("Произошла ошибка при копировании файла.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Метод для генерации последующей стадии соревнований
+     */
+    @Transactional
+    public void generateNextStageOfCompetition(File file, String competitionId) {
+        /**
+         * Обращаемся к файлу протокола, который сохранился на сервере в папке filesExcel
+         * Далее создаем список List<BowType> bowTypeList, который получаем из таблицы qualificationRound по competitionId
+         * Далее для каждого из bowTypeList через цикл foreach прописываем условия для генерации 1/8 / 1/4 / 1/2
+         * Нужно создать пока что 2 таблицы в БД: (1/8 и 1/4), в которых будем хранить результаты данных стадий
+         */
+
+        try (InputStream inputStream = new FileInputStream(file)) {
+            Competition competition = competitionRepository.findById(competitionId).orElse(null);
+            if (competition != null) {
+                List<BowType> bowTypeList = new ArrayList<>();
+                bowTypeList.addAll(competition.getBowTypeList());
+                for (BowType bowType: bowTypeList) {
+                    List<QualificationRound> sportsmanListInBowType = qualificationRoundRepository.findQualificationRoundByCompetitionIdAndBowTypeId(competitionId, bowType.getId());
+                    Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+                    //Условие на протоколы мужчин для каждой стадии
+                    List<QualificationRound> sportsmanMANListInBowType = qualificationRoundService.getSportsmanMANListInBowType(sportsmanListInBowType);
+                    if (sportsmanMANListInBowType.size() > 16) {
+                        //Генерируем 1/8 финала для данного класса лука
+                        excelGenerator.generate8StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
+                    } else if (sportsmanMANListInBowType.size() > 8) {
+                        //Генерируем 1/4 финала для данного класса лука
+                        excelGenerator.generate4StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
+                    } else if (sportsmanMANListInBowType.size() > 4) {
+                        //Генерируем 1/2 финала для данного класса лука
+                        excelGenerator.generate2StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
+                    } else {
+                        //Генерируем финал для данного класса лука
+//                        excelGenerator.generateFinal(inputStream, bowType, sportsmanMANListInBowType);
+                    }
+
+                    //Условие на протоколы женщин для каждой стадии
+                    List<QualificationRound> sportsmanWOMANListInBowType = qualificationRoundService.getSportsmanWOMANListInBowType(sportsmanListInBowType);
+                    if (sportsmanWOMANListInBowType.size() > 16) {
+                        //Генерируем 1/8 финала для данного класса лука
+                        excelGenerator.generate8StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
+                    } else if (sportsmanWOMANListInBowType.size() > 8) {
+                        //Генерируем 1/4 финала для данного класса лука
+                        excelGenerator.generate4StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
+                    } else if (sportsmanWOMANListInBowType.size() > 4) {
+                        //Генерируем 1/2 финала для данного класса лука
+                        excelGenerator.generate2StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
+                    } else {
+                        //Генерируем финал для данного класса лука
+//                        excelGenerator.generateFinal(inputStream, bowType, sportsmanWOMANListInBowType);
+                    }
+
+
+                }
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка при работе с файлом");
             e.printStackTrace();
         }
     }
@@ -201,6 +279,5 @@ public class JudgeService {
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PAST);
     }
-
 
 }

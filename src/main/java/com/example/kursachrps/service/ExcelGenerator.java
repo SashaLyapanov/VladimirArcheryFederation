@@ -177,4 +177,47 @@ public class ExcelGenerator {
         return qualificationRoundList;
 
     }
+
+    /**
+     * Метод для генерации 1/8 финала у мужчин
+     */
+    public void generate8StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
+    /**
+     * Метод для генерации 1/4 финала у мужчин
+     */
+    public void generate4StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
+    /**
+     * Метод для генерации 1/2 финала у мужчин
+     */
+    public void generate2StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
+    /**
+     * Метод для генерации 1/8 финала у женщин
+     */
+    public void generate8StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
+    /**
+     * Метод для генерации 1/4 финала у женщин
+     */
+    public void generate4StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
+    /**
+     * Метод для генерации 1/2 финала у мужчин
+     */
+    public void generate2StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+
+    }
+
 }

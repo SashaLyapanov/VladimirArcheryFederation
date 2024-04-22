@@ -112,7 +112,9 @@ public class AdminController {
     @PostMapping("createCompetition")
     public Competition createCompetition(@RequestBody CompetitionCreateDTO competitionCreateDTO) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(competitionCreateDTO);
-        return adminService.createCompetition(competition);
+        Competition savedCompetition = adminService.createCompetition(competition);
+        adminService.createProtocolForCompetition(savedCompetition);
+        return savedCompetition;
     }
 
     /**

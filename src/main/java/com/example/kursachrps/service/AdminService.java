@@ -18,16 +18,19 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
     private final CompetitionRepository competitionRepository;
+    private final ProtocolRepository protocolRepository;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
-                        CompetitionRepository competitionRepository) {
+                        CompetitionRepository competitionRepository,
+                        ProtocolRepository protocolRepository) {
         this.sportsmanRepository = sportsmanRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
         this.competitionRepository = competitionRepository;
+        this.protocolRepository = protocolRepository;
     }
 
 
@@ -142,5 +145,12 @@ public class AdminService {
         Competition competition = competitionRepository.findById(id).orElse(null);
         assert competition != null;
         competitionRepository.delete(competition);
+    }
+
+    @Transactional
+    public void createProtocolForCompetition(Competition savedCompetition) {
+        Protocol protocol = new Protocol();
+        protocol.setCompetition(savedCompetition);
+        protocolRepository.save(protocol);
     }
 }
