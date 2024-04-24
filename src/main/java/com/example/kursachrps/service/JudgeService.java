@@ -41,7 +41,8 @@ public class JudgeService {
                         QualificationRoundService qualificationRoundService,
                         FileUtils fileUtils,
                         ExcelGenerator excelGenerator,
-                        ProtocolRepository protocolRepository) {
+                        ProtocolRepository protocolRepository,
+                        ProtocolService protocolService) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
@@ -51,6 +52,7 @@ public class JudgeService {
         this.fileUtils = fileUtils;
         this.excelGenerator = excelGenerator;
         this.protocolRepository = protocolRepository;
+        this.protocolService = protocolService;
     }
 
     /**
@@ -117,6 +119,7 @@ public class JudgeService {
             //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
             File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
             List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(protocol, competitionId);
+            qualificationRoundList = qualificationRoundService.calculateSportsmanPlaceInQualification(qualificationRoundList, competitionId);
             if (qualificationRoundList != null) {
                 qualificationRoundRepository.saveAll(qualificationRoundList);
                 return protocol;
@@ -152,6 +155,8 @@ public class JudgeService {
                     Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
                     //Условие на протоколы мужчин для каждой стадии
                     List<QualificationRound> sportsmanMANListInBowType = qualificationRoundService.getSportsmanMANListInBowType(sportsmanListInBowType);
+                    //Сортировка списка спортсменов по
+                    Collections.sort(sportsmanMANListInBowType);
                     if (sportsmanMANListInBowType.size() > 16) {
                         //Генерируем 1/8 финала для данного класса лука
                         excelGenerator.generate8StageMAN(inputStream, bowType, sportsmanMANListInBowType);
@@ -160,12 +165,15 @@ public class JudgeService {
                         //Генерируем 1/4 финала для данного класса лука
                         excelGenerator.generate4StageMAN(inputStream, bowType, sportsmanMANListInBowType);
                         protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
-                    } else if (sportsmanMANListInBowType.size() > 4) {
+                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
+                    } else if (sportsmanMANListInBowType.size() > 5) {
                         //Генерируем 1/2 финала для данного класса лука
                         excelGenerator.generate2StageMAN(inputStream, bowType, sportsmanMANListInBowType);
                         protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
+                        protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
+                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
                     } else {
-                        //Генерируем финал для данного класса лука
+                        //Генерируем итоговый результат по квалификационным результатам
 //                        excelGenerator.generateFinal(inputStream, bowType, sportsmanMANListInBowType);
                     }
 
@@ -179,12 +187,15 @@ public class JudgeService {
                         //Генерируем 1/4 финала для данного класса лука
                         excelGenerator.generate4StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
                         protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
-                    } else if (sportsmanWOMANListInBowType.size() > 4) {
+                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
+                    } else if (sportsmanWOMANListInBowType.size() > 5) {
                         //Генерируем 1/2 финала для данного класса лука
                         excelGenerator.generate2StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
                         protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
+                        protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
+                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
                     } else {
-                        //Генерируем финал для данного класса лука
+                        //Генерируем итоговый результат по квалификационным результатам
 //                        excelGenerator.generateFinal(inputStream, bowType, sportsmanWOMANListInBowType);
                     }
 

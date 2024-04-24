@@ -14,6 +14,15 @@ import java.util.*;
 
 @Service
 public class ExcelGenerator {
+    private static final String LongBow_3D = "af44dbd5-21bb-41f1-b732-af5706b8153d";
+    private static final String CompositeBow_3D = "62cb799b-0ff8-4843-82c0-61a215d4af97";
+    private static final String CL_3D = "351c3a7e-64b4-4749-b8c8-bb1ecb2f3ef2";
+    private static final String BL_3D = "ac6a3094-b354-4ebd-8bb1-19111742c764";
+    private static final String Sporting = "62cb799b-0ff8-4843-b732-af5706b8153d";
+    private static final String HistoryBow = "26454f95-0e38-45d4-a85e-dd37f4a04944";
+    private static final String Olympic = "36671015-5c37-4e5c-8eed-9a353e927f32";
+    private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
+
     private ParserExcelData parserExcelData;
 
     @Autowired
@@ -182,7 +191,40 @@ public class ExcelGenerator {
      * Метод для генерации 1/8 финала у мужчин
      */
     public void generate8StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+        /**
+         * итак, у нас есть файл протокола, тип лука, сортированный список спортсменов для заноса на данный лист
+         * таким образом, мы должны обрубить выборку sportsmanMANListInBowType до 16 человек
+         * дальше создать лист в файле inputStream с названием 1/8 финала + bowType.getName() + мужчины
+         * в него заносим шапку листа
+         * далее заносим спортсменов
+         */
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 16));
+        int excelIndexList = 0;
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelIndexList = 1;
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelIndexList = 3;
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelIndexList = 5;
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelIndexList = 7;
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelIndexList = 8;
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelIndexList = 9;
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelIndexList = 10;
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelIndexList =11;
+        }
 
+        /**
+         * Дальше логика такая:
+         * -прописываю фукнцию, которая вносит список List<QualificationRound> lidersSportsmanList в нужный нам лист Excel, индекс которого мы определили выше
+         * -юзаю эту функцию. ПАРАМЕТРЫ в данной фукнции (List<QualificationRound> lidersSportsmanList, InputStream inputStream, int excelIndexList)
+         * -данная фукнция должна подходить ко всем стадиям генерации протокола
+         * -это значит, что шаблон нужно сделать единый для всех стадий от 1/8 до 1/2
+         */
     }
 
     /**

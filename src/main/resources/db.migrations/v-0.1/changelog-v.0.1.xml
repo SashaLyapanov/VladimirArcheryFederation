@@ -16,4 +16,6 @@
     <include file="db.migrations/v-0.1/2024-04-18--add_table_qualifications.sql"/>
     <include file="db.migrations/v-0.1/2024-04-19--alter_table_qualifications.sql"/>
     <include file="db.migrations/v-0.1/2024-04-22--add_table_protocols.sql"/>
+    <include file="db.migrations/v-0.1/2024-04-23--alter_table_qualifications.sql"/>
+    <include file="db.migrations/v-0.1/2024-04-24--alter_table_protocol.sql"/>
 </databaseChangeLog>

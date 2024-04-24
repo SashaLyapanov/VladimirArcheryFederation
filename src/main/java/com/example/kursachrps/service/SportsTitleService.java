@@ -14,7 +14,6 @@ public class SportsTitleService {
     private static final String KMS = "6ac053fd-8568-4a36-ae7c-741980d72684";
     private static final String MS = "36be5498-fd85-4525-b9b6-57abd91c3666";
     private static final String MSMK = "049adae2-b4a7-4f65-aa54-9c3cae532c6a";
-    private static final String ZMS = "dd015fc-da4f-4e6e-a7f8-9052584d7fab";
 
 
     SportsTitleRepository sportsTitleRepository;
@@ -26,7 +25,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForLongBow_3D_MAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 450) {
+        if (sum <= 449) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 509) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -41,17 +40,16 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
+
 
         return sportsTitle;
     }
 
     public SportsTitle initializeSportTitleForLongBow_3D_WOMAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 350) {
+        if (sum <= 349) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 409) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -66,9 +64,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -76,7 +72,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForCompoundBow_3D_MAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 520) {
+        if (sum <= 519) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 589) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -91,9 +87,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -101,7 +95,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForCompoundBow_3D_WOMAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 420) {
+        if (sum <= 419) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 489) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -116,9 +110,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -126,7 +118,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForCL_3D_MAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 560) {
+        if (sum <= 559) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 629) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -141,9 +133,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -151,7 +141,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForCL_3D_WOMAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 520) {
+        if (sum <= 519) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 589) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -166,9 +156,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -176,7 +164,7 @@ public class SportsTitleService {
 
     public SportsTitle initializeSportTitleForBL_3D_MAN(int sum) {
         SportsTitle sportsTitle;
-        if (sum <= 720) {
+        if (sum <= 719) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         } else if (sum <= 779) {
             sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
@@ -191,9 +179,7 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
+            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
         }
 
         return sportsTitle;
@@ -216,62 +202,13 @@ public class SportsTitleService {
         } else if (sum <= 1056) {
             sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
         } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
-        }
-
-        return sportsTitle;
-    }
-
-    public SportsTitle initializeSportTitleForSporting_3D_MAN(int sum) {
-        SportsTitle sportsTitle;
-        if (sum <= 720) {
             sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
-        } else if (sum <= 779) {
-            sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
-        } else if (sum <= 839) {
-            sportsTitle = sportsTitleRepository.findById(R2).orElse(null);
-        } else if (sum <= 899) {
-            sportsTitle = sportsTitleRepository.findById(R1).orElse(null);
-        } else if (sum <= 949) {
-            sportsTitle = sportsTitleRepository.findById(KMS).orElse(null);
-        } else if (sum <= 979) {
-            sportsTitle = sportsTitleRepository.findById(MS).orElse(null);
-        } else if (sum <= 1056) {
-            sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
-        } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
         }
 
         return sportsTitle;
     }
 
-    public SportsTitle initializeSportTitleForSporting_3D_WOMAN(int sum) {
-        SportsTitle sportsTitle;
-        if (sum <= 610) {
-            sportsTitle = sportsTitleRepository.findById(BR).orElse(null);
-        } else if (sum <= 679) {
-            sportsTitle = sportsTitleRepository.findById(R3).orElse(null);
-        } else if (sum <= 749) {
-            sportsTitle = sportsTitleRepository.findById(R2).orElse(null);
-        } else if (sum <= 819) {
-            sportsTitle = sportsTitleRepository.findById(R1).orElse(null);
-        } else if (sum <= 879) {
-            sportsTitle = sportsTitleRepository.findById(KMS).orElse(null);
-        } else if (sum <= 919) {
-            sportsTitle = sportsTitleRepository.findById(MS).orElse(null);
-        } else if (sum <= 1056) {
-            sportsTitle = sportsTitleRepository.findById(MSMK).orElse(null);
-        } else {
-            //TODO
-            // Уточнить условия присвоения ZMS
-            sportsTitle = sportsTitleRepository.findById(ZMS).orElse(null);
-        }
-
-        return sportsTitle;
+    public SportsTitle initializeSportTitleBR() {
+        return  sportsTitleRepository.findById(BR).orElse(null);
     }
-
 }

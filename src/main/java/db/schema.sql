@@ -179,13 +179,21 @@ insert into sports_titles (id, sports_title_name) values ('dd015fc-da4f-4e6e-a7f
 
 -- Создание типов лука
 insert into bow_types (id, bow_type_name)
-values ('af44dbd5-21bb-41f1-b732-af5706b8153d', 'Длинный лук');
+values ('ac6a3094-b354-4ebd-8bb1-19111742c764', '3Д-БЛ');
 insert into bow_types (id, bow_type_name)
-values ('62cb799b-0ff8-4843-82c0-61a215d4af97', 'Блочный лук');
+values ('351c3a7e-64b4-4749-b8c8-bb1ecb2f3ef2', '3Д-КЛ');
 insert into bow_types (id, bow_type_name)
-values ('ac6a3094-b354-4ebd-8bb1-19111742c764', 'Монгольский лук');
+values ('af44dbd5-21bb-41f1-b732-af5706b8153d', '3Д-длинный лук');
 insert into bow_types (id, bow_type_name)
-values ('351c3a7e-64b4-4749-b8c8-bb1ecb2f3ef2', 'Составной лук');
+values ('62cb799b-0ff8-4843-82c0-61a215d4af97', '3Д-составной лук');
+insert into bow_types (id, bow_type_name)
+values ('62cb799b-0ff8-4843-b732-af5706b8153d', 'Спортинг');
+insert into bow_types (id, bow_type_name)
+values ('26454f95-0e38-45d4-a85e-dd37f4a04944', 'Исторический лук');
+insert into bow_types (id, bow_type_name)
+values ('36671015-5c37-4e5c-8eed-9a353e927f32', 'Олимпик');
+insert into bow_types (id, bow_type_name)
+values ('e6dc3841-98a3-4357-a139-61e48ac393e2', 'Арбалет');
 
 -- Создание категорий (возрастные+пол) для соревнований
 insert into categories (id,name)

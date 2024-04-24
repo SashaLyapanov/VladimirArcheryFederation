@@ -207,6 +207,125 @@ public class Protocol extends GenericEntity{
     @Column(name = "sporting_3d_woman2")
     private boolean sporting3DWoman2;
 
+    //////////////////////////////////////
+    //3Д-historyBow
+    //////////////////////////////////////
+    /**
+     * 1/8 финала мужчины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_man8")
+    private boolean historyBow3DMan8;
+
+    /**
+     * 1/8 финала женщины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_woman8")
+    private boolean historyBow3DWoman8;
+
+    /**
+     * 1/4 финала мужчины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_man4")
+    private boolean historyBow3DMan4;
+
+    /**
+     * 1/4 финала женщины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_woman4")
+    private boolean historyBow3DWoman4;
+
+    /**
+     * 1/2 финала мужчины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_man2")
+    private boolean historyBow3DMan2;
+
+    /**
+     * 1/2 финала женщины 3Д-sporting
+     */
+    @Column(name = "history_bow_3d_woman2")
+    private boolean historyBow3DWoman2;
+
+    //////////////////////////////////////
+    //3Д-Olympic
+    //////////////////////////////////////
+    /**
+     * 1/8 финала мужчины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_man8")
+    private boolean olympic3DMan8;
+
+    /**
+     * 1/8 финала женщины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_woman8")
+    private boolean olympic3DWoman8;
+
+    /**
+     * 1/4 финала мужчины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_man4")
+    private boolean olympic3DMan4;
+
+    /**
+     * 1/4 финала женщины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_woman4")
+    private boolean olympic3DWoman4;
+
+    /**
+     * 1/2 финала мужчины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_man2")
+    private boolean olympic3DMan2;
+
+    /**
+     * 1/2 финала женщины 3Д-sporting
+     */
+    @Column(name = "olympic_3d_woman2")
+    private boolean olympic3DWoman2;
+
+    //////////////////////////////////////
+    //3Д-arbalet
+    //////////////////////////////////////
+    /**
+     * 1/8 финала мужчины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_man8")
+    private boolean arbalet3DMan8;
+
+    /**
+     * 1/8 финала женщины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_woman8")
+    private boolean arbalet3DWoman8;
+
+    /**
+     * 1/4 финала мужчины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_man4")
+    private boolean arbalet3DMan4;
+
+    /**
+     * 1/4 финала женщины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_woman4")
+    private boolean arbalet3DWoman4;
+
+    /**
+     * 1/2 финала мужчины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_man2")
+    private boolean arbalet3DMan2;
+
+    /**
+     * 1/2 финала женщины 3Д-sporting
+     */
+    @Column(name = "arbalet_3d_woman2")
+    private boolean arbalet3DWoman2;
+
+
+    ////////////////////////////////////
     /**
      * Флаг, который указывает все ли вышеперечисленные поля являются true
      */

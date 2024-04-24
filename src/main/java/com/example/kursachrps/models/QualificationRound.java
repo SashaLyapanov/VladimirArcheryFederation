@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "qualifications")
-public class QualificationRound extends GenericEntity{
+public class QualificationRound extends GenericEntity implements Comparable<QualificationRound>{
     @ManyToOne
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
@@ -39,6 +39,10 @@ public class QualificationRound extends GenericEntity{
     @Column(name = "quantity10")
     private int quantity10;
 
+    //Место, которое занял спортсмен в квалификации
+    @Column(name = "place")
+    private int place;
+
     @ManyToOne
     @JoinColumn(name = "sports_title_id", referencedColumnName = "id")
     private SportsTitle sportsTitle;
@@ -48,5 +52,20 @@ public class QualificationRound extends GenericEntity{
         return "id: " + getId() + ", sportsmanId: " + sportsman.getId() + ", competitionId:" + competition.getId();
     }
 
+    @Override
+    public int compareTo(QualificationRound o) {
+        if (Integer.compare(this.sum, o.getSum()) != 0) {
+            return -Integer.compare(this.sum, o.getSum());
+        } else {
+            if (Integer.compare(this.quantity11, o.getQuantity11()) != 0) {
+                return -Integer.compare(this.quantity11, o.getQuantity11());
+            } else {
+                return -Integer.compare(this.quantity10, o.getQuantity10());
+            }
+        }
+    }
 
+    public int compareByPlace(QualificationRound o) {
+        return Integer.compare(this.place, o.getPlace());
+    }
 }

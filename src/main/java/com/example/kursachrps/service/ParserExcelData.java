@@ -20,6 +20,9 @@ public class ParserExcelData {
     private static final String CL_3D = "351c3a7e-64b4-4749-b8c8-bb1ecb2f3ef2";
     private static final String BL_3D = "ac6a3094-b354-4ebd-8bb1-19111742c764";
     private static final String Sporting = "62cb799b-0ff8-4843-b732-af5706b8153d";
+    private static final String HistoryBow = "26454f95-0e38-45d4-a85e-dd37f4a04944";
+    private static final String Olympic = "36671015-5c37-4e5c-8eed-9a353e927f32";
+    private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
 
     private static final String MAN = "c99ccd51-5731-42a3-9cfc-31cc4011e035";
     private static final String WOMAN = "848f4054-a9c1-4525-9e10-2ab07e3e9b4c";
@@ -98,11 +101,13 @@ public class ParserExcelData {
                 sportsTitle = sportsTitleService.initializeSportTitleForBL_3D_WOMAN(sum);
             }
         } else if (Objects.equals(bowType.getId(), Sporting)) {
-            if (Objects.equals(sex.getId(), MAN)) {
-                sportsTitle = sportsTitleService.initializeSportTitleForSporting_3D_MAN(sum);
-            } else {
-                sportsTitle = sportsTitleService.initializeSportTitleForSporting_3D_WOMAN(sum);
-            }
+            sportsTitle = sportsTitleService.initializeSportTitleBR();
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            sportsTitle = sportsTitleService.initializeSportTitleBR();
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            sportsTitle = sportsTitleService.initializeSportTitleBR();
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            sportsTitle = sportsTitleService.initializeSportTitleBR();
         }
 
         return sportsTitle;
