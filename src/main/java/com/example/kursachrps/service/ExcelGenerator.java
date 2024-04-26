@@ -403,7 +403,7 @@ public class ExcelGenerator {
                         cell.setCellValue((Date) obj);
                         cell.setCellStyle(style);
                     } else {
-                        cell.setCellValue((String) obj);
+                        cell.setCellValue(obj.toString());
                         cell.setCellStyle(style);
                     }
                 }
@@ -447,7 +447,6 @@ public class ExcelGenerator {
             for (int i = 0; i < 2; i++) {
                 XSSFRow row = sheet.createRow(i);
                 Cell cellA = row.createCell(0);
-                Cell cellB = row.createCell(1);
                 cellA.setCellValue(patternItemList.get(i));
                 cellA.setCellStyle(style);
             }
