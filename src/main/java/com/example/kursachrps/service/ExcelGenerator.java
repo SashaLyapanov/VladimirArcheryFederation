@@ -3,6 +3,7 @@ package com.example.kursachrps.service;
 import com.example.kursachrps.models.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -373,6 +374,12 @@ public class ExcelGenerator {
             Font font = workbook.createFont();
             makeFontAndStyle(workbook, style, font);
 
+            //Если листа с таким названием в файле нет, то создадим данный лист
+            if (sheet == null) {
+                sheet = workbook.createSheet(excelNameList);
+                insertTemplate(style, sheet, workbook, file);
+            }
+
             Set<Integer> keySet = data.keySet();
 
             Integer indexForCountSportsman = 1;
@@ -411,6 +418,50 @@ public class ExcelGenerator {
             sheet.autoSizeColumn(5);
             sheet.autoSizeColumn(6);
             sheet.autoSizeColumn(7);
+            sheet.autoSizeColumn(8);
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                workbook.write(out);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void insertTemplate(CellStyle style, XSSFSheet sheet, XSSFWorkbook workbook, File file) {
+        if (sheet != null) {
+            List<String> patternItemList = new ArrayList<>();
+            patternItemList.add("Название турнира:");
+            patternItemList.add("Кол-во участников:");
+            patternItemList.add("№");
+            patternItemList.add("Спортсмен");
+            patternItemList.add("Пол");
+            patternItemList.add("Год рождения");
+            patternItemList.add("Разряд");
+            patternItemList.add("Регион");
+            patternItemList.add("Класс лука");
+            patternItemList.add("Квал");
+            patternItemList.add("Итог данного раунда");
+
+            for (int i = 0; i < 2; i++) {
+                XSSFRow row = sheet.createRow(i);
+                Cell cellA = row.createCell(0);
+                Cell cellB = row.createCell(1);
+                cellA.setCellValue(patternItemList.get(i));
+                cellA.setCellStyle(style);
+            }
+
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 1));
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 1));
+
+            XSSFRow row = sheet.createRow(3);
+            for (int i = 2; i < patternItemList.size(); i++) {
+                Cell cell = row.createCell(i-2);
+                cell.setCellValue(patternItemList.get(i));
+                cell.setCellStyle(style);
+            }
+
             try {
                 FileOutputStream out = new FileOutputStream(file);
                 workbook.write(out);
