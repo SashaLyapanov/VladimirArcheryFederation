@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,22 +72,12 @@ public class JudgeController {
                 .body(resource);
     }
 
-//    /**
-//     * Метод для загрузки отредактированного файла на сервер. И также сразу конвертирование в pdf.
-//     */
-//    @PostMapping("/uploadFile")
-//    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws Exception {
-//        String path = judgeService.uploadFile(file);
-//        String newFile = judgeService.convertXLSXToPDF(path);
-//        judgeService.changeStatusOfCompetition(competitionId);
-//        judgeService.addPathFileInCompetition(competitionId, newFile);
-//    }
-
      /**
      * Метод для загрузки отредактированного файла с результатами квалификации на сервер.
      * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
      */
     @PostMapping("/uploadFile")
+    @Transactional
     public void uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
         File protocol = judgeService.uploadQualificationProtocol(file, competitionId);
         if (protocol != null) {

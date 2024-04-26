@@ -138,12 +138,9 @@ public class JudgeService {
      */
     @Transactional
     public void generateNextStageOfCompetition(File file, String competitionId) {
-        /**
-         * Обращаемся к файлу протокола, который сохранился на сервере в папке filesExcel
-         * Далее создаем список List<BowType> bowTypeList, который получаем из таблицы qualificationRound по competitionId
-         * Далее для каждого из bowTypeList через цикл foreach прописываем условия для генерации 1/8 / 1/4 / 1/2
-         * Нужно создать пока что 2 таблицы в БД: (1/8 и 1/4), в которых будем хранить результаты данных стадий
-         */
+        //TODO
+        // Короче надо добавить проверку грамотную на:
+        // if (protocol.getIsAllFlagsTrue()) {не выполнять данный метод}
 
         try (InputStream inputStream = new FileInputStream(file)) {
             Competition competition = competitionRepository.findById(competitionId).orElse(null);
@@ -159,16 +156,16 @@ public class JudgeService {
                     Collections.sort(sportsmanMANListInBowType);
                     if (sportsmanMANListInBowType.size() > 16) {
                         //Генерируем 1/8 финала для данного класса лука
-                        excelGenerator.generate8StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        excelGenerator.generate8StageMAN(file, bowType, sportsmanMANListInBowType);
                         protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
                     } else if (sportsmanMANListInBowType.size() > 8) {
                         //Генерируем 1/4 финала для данного класса лука
-                        excelGenerator.generate4StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        excelGenerator.generate4StageMAN(file, bowType, sportsmanMANListInBowType);
                         protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
                         protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
                     } else if (sportsmanMANListInBowType.size() > 5) {
                         //Генерируем 1/2 финала для данного класса лука
-                        excelGenerator.generate2StageMAN(inputStream, bowType, sportsmanMANListInBowType);
+                        excelGenerator.generate2StageMAN(file, bowType, sportsmanMANListInBowType);
                         protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
                         protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
                         protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
@@ -181,16 +178,16 @@ public class JudgeService {
                     List<QualificationRound> sportsmanWOMANListInBowType = qualificationRoundService.getSportsmanWOMANListInBowType(sportsmanListInBowType);
                     if (sportsmanWOMANListInBowType.size() > 16) {
                         //Генерируем 1/8 финала для данного класса лука
-                        excelGenerator.generate8StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        excelGenerator.generate8StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
                         protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
                     } else if (sportsmanWOMANListInBowType.size() > 8) {
                         //Генерируем 1/4 финала для данного класса лука
-                        excelGenerator.generate4StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        excelGenerator.generate4StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
                         protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
                         protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
                     } else if (sportsmanWOMANListInBowType.size() > 5) {
                         //Генерируем 1/2 финала для данного класса лука
-                        excelGenerator.generate2StageWOMAN(inputStream, bowType, sportsmanWOMANListInBowType);
+                        excelGenerator.generate2StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
                         protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
                         protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
                         protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);

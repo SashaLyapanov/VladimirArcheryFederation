@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.*;
@@ -30,24 +31,51 @@ public class ExcelGenerator {
         this.parserExcelData = parserExcelData;
     }
 
-    private static Map<Integer, Object[]> prepareData(int rowNum, List<Application> applications) {
+    /**
+     * Метод, который отвечает за подготовку данных из входящего списка сущностей в мэпу для вставки в Excel файл
+     */
+    private static Map<Integer, Object[]> prepareData(int rowNum, List<?> recordList) {
         Map<Integer, Object[]> data = new HashMap<>();
-        for (Application application : applications) {
-            rowNum++;
-            if (application.getSportsman() != null) {
-                Sportsman sportsman = application.getSportsman();
-                Sex sexName = sportsman.getSex();
-                SportsTitle sportsTitle = sportsman.getSportsTitle();
-                Region region = sportsman.getRegion();
-                BowType bowType = application.getBowType();
-                if (sexName != null && sportsTitle != null && region != null) {
-                    data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
-                            sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName()});
+        if (recordList != null && recordList.size() > 0) {
+            Object firstElement = recordList.get(0);
+            if (firstElement instanceof Application) {
+                List<Application> applications = (List<Application>) recordList;
+                for (Application application : applications) {
+                    rowNum++;
+                    if (application.getSportsman() != null) {
+                        Sportsman sportsman = application.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = application.getBowType();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName()});
+                        }
+                    }
+                }
+            } else if (firstElement instanceof QualificationRound) {
+                List<QualificationRound> qualificationRoundList = (List<QualificationRound>) recordList;
+                for (QualificationRound qualificationRound : qualificationRoundList) {
+                    rowNum++;
+                    if (qualificationRound.getSportsman() != null) {
+                        Sportsman sportsman = qualificationRound.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = qualificationRound.getBowType();
+                        int pointInQualification = qualificationRound.getSum();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    }
                 }
             }
         }
         return data;
     }
+
 
     public void makeFontAndStyle(XSSFWorkbook workbook, CellStyle style, Font font) {
         font.setFontHeightInPoints((short) 14);
@@ -62,67 +90,18 @@ public class ExcelGenerator {
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderLeft(BorderStyle.THIN);
     }
+
     //Функция для записи строк в excel
     public void appendRowsForQualification(List<Application> applications, File file) throws IOException, InvalidFormatException {
-        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
-        XSSFSheet sheet = workbook.getSheetAt(0);
-
-        CellStyle style = workbook.createCellStyle();
-        //Стиль для шрифта
-        Font font = workbook.createFont();
-        makeFontAndStyle(workbook, style, font);
-
-        //Значение 4 четко под формат Pattern.xlsx
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
         int rowNum = 4;
 
         Map<Integer, Object[]> data = prepareData(rowNum, applications);
 
-        Set<Integer> keySet = data.keySet();
-
-        Integer indexForCountSportsman = 1;
-
-        for (Integer key : keySet) {
-            XSSFRow row = sheet.createRow(rowNum++);
-            Object[] objArr = data.get(key);
-            int cellNum = 0;
-            Cell firstCellForNum = row.createCell(cellNum);
-            firstCellForNum.setCellValue(indexForCountSportsman.toString());
-            firstCellForNum.setCellStyle(style);
-            for (Object obj : objArr) {
-                Cell cell = row.createCell(++cellNum);
-                if (obj instanceof String) {
-                    cell.setCellValue((String) obj);
-                    cell.setCellStyle(style);
-                } else if (obj instanceof Integer) {
-                    cell.setCellValue((Integer) obj);
-                    cell.setCellStyle(style);
-                } else if (obj instanceof Date) {
-                    cell.setCellValue((Date) obj);
-                    cell.setCellStyle(style);
-                } else {
-                    cell.setCellValue((String) obj);
-                    cell.setCellStyle(style);
-                }
-            }
-            indexForCountSportsman++;
-        }
-
-        sheet.autoSizeColumn(0);
-        sheet.autoSizeColumn(1);
-        sheet.autoSizeColumn(2);
-        sheet.autoSizeColumn(3);
-        sheet.autoSizeColumn(4);
-        sheet.autoSizeColumn(5);
-        sheet.autoSizeColumn(6);
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            workbook.write(out);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        writeDataToExcel("Квалификация", rowNum, data, file);
     }
 
+    @Transactional
     public List<QualificationRound> readQualificationToDB(File protocol, String competitionId) throws IOException {
         List<QualificationRound> qualificationRoundList = new ArrayList<>();
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
@@ -190,76 +169,255 @@ public class ExcelGenerator {
     /**
      * Метод для генерации 1/8 финала у мужчин
      */
-    public void generate8StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
-        /**
-         * итак, у нас есть файл протокола, тип лука, сортированный список спортсменов для заноса на данный лист
-         * таким образом, мы должны обрубить выборку sportsmanMANListInBowType до 16 человек
-         * дальше создать лист в файле inputStream с названием 1/8 финала + bowType.getName() + мужчины
-         * в него заносим шапку листа
-         * далее заносим спортсменов
-         */
+    public void generate8StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
         List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 16));
-        int excelIndexList = 0;
+        String excelNameList = "";
         if (Objects.equals(bowType.getId(), BL_3D)) {
-            excelIndexList = 1;
+            excelNameList = "1,8финала 3Д_БЛ_Муж";
         } else if (Objects.equals(bowType.getId(), CL_3D)) {
-            excelIndexList = 3;
+            excelNameList = "1,8финала 3Д_КЛ_Муж";
         } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
-            excelIndexList = 5;
+            excelNameList = "1,8финала 3Д-Long_Муж";
         } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
-            excelIndexList = 7;
+            excelNameList = "1,8финала 3Д-Составной_Муж";
         } else if (Objects.equals(bowType.getId(), Sporting)) {
-            excelIndexList = 8;
+            excelNameList = "1,8финала 3Д-Sporting_Муж";
         } else if (Objects.equals(bowType.getId(), HistoryBow)) {
-            excelIndexList = 9;
+            excelNameList = "1,8финала 3Д-Исторический_Муж";
         } else if (Objects.equals(bowType.getId(), Olympic)) {
-            excelIndexList = 10;
+            excelNameList = "1,8финала 3Д-Олимпик_Муж";
         } else if (Objects.equals(bowType.getId(), Arbalet)) {
-            excelIndexList =11;
+            excelNameList = "1,8финала 3Д-Арбалет_Муж";
         }
 
-        /**
-         * Дальше логика такая:
-         * -прописываю фукнцию, которая вносит список List<QualificationRound> lidersSportsmanList в нужный нам лист Excel, индекс которого мы определили выше
-         * -юзаю эту функцию. ПАРАМЕТРЫ в данной фукнции (List<QualificationRound> lidersSportsmanList, InputStream inputStream, int excelIndexList)
-         * -данная фукнция должна подходить ко всем стадиям генерации протокола
-         * -это значит, что шаблон нужно сделать единый для всех стадий от 1/8 до 1/2
-         */
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
     /**
      * Метод для генерации 1/4 финала у мужчин
      */
-    public void generate4StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+    public void generate4StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 8));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "1,4финала 3Д_БЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "1,4финала 3Д_КЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "1,4финала 3Д-Long_Муж";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "1,4финала 3Д-Составной_Муж";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "1,4финала 3Д-Sporting_Муж";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "1,4финала 3Д-Исторический_Муж";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "1,4финала 3Д-Олимпик_Муж";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "1,4финала 3Д-Арбалет_Муж";
+        }
 
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
     /**
      * Метод для генерации 1/2 финала у мужчин
      */
-    public void generate2StageMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+    public void generate2StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 4));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "1,2финала 3Д_БЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "1,2финала 3Д_КЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "1,2финала 3Д-Long_Муж";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "1,2финала 3Д-Составной_Муж";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "1,2финала 3Д-Sporting_Муж";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "1,2финала 3Д-Исторический_Муж";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "1,2финала 3Д-Олимпик_Муж";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "1,2финала 3Д-Арбалет_Муж";
+        }
 
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
     /**
      * Метод для генерации 1/8 финала у женщин
      */
-    public void generate8StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+    public void generate8StageWOMAN(File file, BowType bowType, List<QualificationRound> sportsmanWOMANListInBowType) throws IOException {
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 16));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "1,8финала 3Д_БЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "1,8финала 3Д_КЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "1,8финала 3Д-Long_Жен";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "1,8финала 3Д-Составной_Жен";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "1,8финала 3Д-Sporting_Жен";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "1,8финала 3Д-Исторический_Жен";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "1,8финала 3Д-Олимпик_Жен";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "1,8финала 3Д-Арбалет_Жен";
+        }
 
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
     /**
      * Метод для генерации 1/4 финала у женщин
      */
-    public void generate4StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+    public void generate4StageWOMAN(File file, BowType bowType, List<QualificationRound> sportsmanWOMANListInBowType) throws IOException {
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 8));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "1,4финала 3Д_БЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "1,4финала 3Д_КЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "1,4финала 3Д-Long_Жен";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "1,4финала 3Д-Составной_Жен";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "1,4финала 3Д-Sporting_Жен";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "1,4финала 3Д-Исторический_Жен";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "1,4финала 3Д-Олимпик_Жен";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "1,4финала 3Д-Арбалет_Жен";
+        }
 
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
     /**
      * Метод для генерации 1/2 финала у мужчин
      */
-    public void generate2StageWOMAN(InputStream inputStream, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) {
+    public void generate2StageWOMAN(File file, BowType bowType, List<QualificationRound> sportsmanWOMANListInBowType) throws IOException {
+        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 8));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "1,2финала 3Д_БЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "1,2финала 3Д_КЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "1,2финала 3Д-Long_Жен";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "1,2финала 3Д-Составной_Жен";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "1,2финала 3Д-Sporting_Жен";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "1,2финала 3Д-Исторический_Жен";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "1,2финала 3Д-Олимпик_Жен";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "1,2финала 3Д-Арбалет_Жен";
+        }
 
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
+
+    /**
+     * Метод для вставки данных (data) в определенный лист (excelNameList) Excel файла (file)
+     * Вставка данных начинается со строки rowNum + 1
+     */
+    private void writeDataToExcel(String excelNameList, int rowNum, Map<Integer, Object[]> data, File file) throws IOException {
+        if (!data.isEmpty() && file != null) {
+
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
+            XSSFSheet sheet = workbook.getSheet(excelNameList);
+
+            CellStyle style = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            makeFontAndStyle(workbook, style, font);
+
+            Set<Integer> keySet = data.keySet();
+
+            Integer indexForCountSportsman = 1;
+
+            for (Integer key : keySet) {
+                XSSFRow row = sheet.createRow(rowNum++);
+                Object[] objArr = data.get(key);
+                int cellNum = 0;
+                Cell firstCellForNum = row.createCell(cellNum);
+                firstCellForNum.setCellValue(indexForCountSportsman.toString());
+                firstCellForNum.setCellStyle(style);
+                for (Object obj : objArr) {
+                    Cell cell = row.createCell(++cellNum);
+                    if (obj instanceof String) {
+                        cell.setCellValue((String) obj);
+                        cell.setCellStyle(style);
+                    } else if (obj instanceof Integer) {
+                        cell.setCellValue(obj.toString());
+                        cell.setCellStyle(style);
+                    } else if (obj instanceof Date) {
+                        cell.setCellValue((Date) obj);
+                        cell.setCellStyle(style);
+                    } else {
+                        cell.setCellValue((String) obj);
+                        cell.setCellStyle(style);
+                    }
+                }
+                indexForCountSportsman++;
+            }
+
+            sheet.autoSizeColumn(0);
+            sheet.autoSizeColumn(1);
+            sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(3);
+            sheet.autoSizeColumn(4);
+            sheet.autoSizeColumn(5);
+            sheet.autoSizeColumn(6);
+            sheet.autoSizeColumn(7);
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                workbook.write(out);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
