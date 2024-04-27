@@ -3,14 +3,20 @@ package com.example.kursachrps.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "protocols")
-@Data
 public class Protocol extends GenericEntity {
 
     @OneToOne
     @JoinColumn(name = "competition_id")
     private Competition competition;
+
+    /**
+     * проведена ли квалификация
+     */
+    @Column(name = "qualification")
+    private boolean qualification;
 
     //////////////////////////////////////
     //3Д-БЛ

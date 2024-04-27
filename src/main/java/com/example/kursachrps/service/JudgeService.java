@@ -8,6 +8,7 @@ import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -137,73 +138,72 @@ public class JudgeService {
      * Метод для генерации последующей стадии соревнований
      */
     @Transactional
-    public void generateNextStageOfCompetition(File file, String competitionId) {
-        //TODO
-        // Короче надо добавить проверку грамотную на:
-        // if (protocol.getIsAllFlagsTrue()) {не выполнять данный метод}
-
-        try (InputStream inputStream = new FileInputStream(file)) {
-            Competition competition = competitionRepository.findById(competitionId).orElse(null);
-            if (competition != null) {
-                List<BowType> bowTypeList = new ArrayList<>();
-                bowTypeList.addAll(competition.getBowTypeList());
-                for (BowType bowType: bowTypeList) {
-                    List<QualificationRound> sportsmanListInBowType = qualificationRoundRepository.findQualificationRoundByCompetitionIdAndBowTypeId(competitionId, bowType.getId());
-                    Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
-                    //Условие на протоколы мужчин для каждой стадии
-                    List<QualificationRound> sportsmanMANListInBowType = qualificationRoundService.getSportsmanMANListInBowType(sportsmanListInBowType);
-                    //Сортировка списка спортсменов по
-                    Collections.sort(sportsmanMANListInBowType);
-                    if (sportsmanMANListInBowType.size() > 16) {
-                        //Генерируем 1/8 финала для данного класса лука
-                        excelGenerator.generate8StageMAN(file, bowType, sportsmanMANListInBowType);
-                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
-                    } else if (sportsmanMANListInBowType.size() > 8) {
-                        //Генерируем 1/4 финала для данного класса лука
-                        excelGenerator.generate4StageMAN(file, bowType, sportsmanMANListInBowType);
-                        protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
-                    } else if (sportsmanMANListInBowType.size() > 5) {
-                        //Генерируем 1/2 финала для данного класса лука
-                        excelGenerator.generate2StageMAN(file, bowType, sportsmanMANListInBowType);
-                        protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
-                    } else {
-                        //Генерируем итоговый результат по квалификационным результатам
+    public boolean generateNextStageOfCompetition(File file, String competitionId) {
+        Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+        if (!protocol.updateIsAllFlagsTrue()) {
+            try (InputStream inputStream = new FileInputStream(file)) {
+                Competition competition = competitionRepository.findById(competitionId).orElse(null);
+                if (competition != null) {
+                    List<BowType> bowTypeList = new ArrayList<>();
+                    bowTypeList.addAll(competition.getBowTypeList());
+                    for (BowType bowType: bowTypeList) {
+                        List<QualificationRound> sportsmanListInBowType = qualificationRoundRepository.findQualificationRoundByCompetitionIdAndBowTypeId(competitionId, bowType.getId());
+                        //Условие на протоколы мужчин для каждой стадии
+                        List<QualificationRound> sportsmanMANListInBowType = qualificationRoundService.getSportsmanMANListInBowType(sportsmanListInBowType);
+                        //Сортировка списка спортсменов по
+                        Collections.sort(sportsmanMANListInBowType);
+                        if (sportsmanMANListInBowType.size() > 16) {
+                            //Генерируем 1/8 финала для данного класса лука
+                            excelGenerator.generate8StageMAN(file, bowType, sportsmanMANListInBowType);
+                            protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
+                        } else if (sportsmanMANListInBowType.size() > 8) {
+                            //Генерируем 1/4 финала для данного класса лука
+                            excelGenerator.generate4StageMAN(file, bowType, sportsmanMANListInBowType);
+                            protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
+                        } else if (sportsmanMANListInBowType.size() > 5) {
+                            //Генерируем 1/2 финала для данного класса лука
+                            excelGenerator.generate2StageMAN(file, bowType, sportsmanMANListInBowType);
+                            protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
+                        } else {
+                            //Генерируем итоговый результат по квалификационным результатам
 //                        excelGenerator.generateFinal(inputStream, bowType, sportsmanMANListInBowType);
-                    }
+                        }
 
-                    //Условие на протоколы женщин для каждой стадии
-                    List<QualificationRound> sportsmanWOMANListInBowType = qualificationRoundService.getSportsmanWOMANListInBowType(sportsmanListInBowType);
-                    if (sportsmanWOMANListInBowType.size() > 16) {
-                        //Генерируем 1/8 финала для данного класса лука
-                        excelGenerator.generate8StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
-                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
-                    } else if (sportsmanWOMANListInBowType.size() > 8) {
-                        //Генерируем 1/4 финала для данного класса лука
-                        excelGenerator.generate4StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
-                        protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
-                    } else if (sportsmanWOMANListInBowType.size() > 5) {
-                        //Генерируем 1/2 финала для данного класса лука
-                        excelGenerator.generate2StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
-                        protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
-                        protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
-                    } else {
-                        //Генерируем итоговый результат по квалификационным результатам
+                        //Условие на протоколы женщин для каждой стадии
+                        List<QualificationRound> sportsmanWOMANListInBowType = qualificationRoundService.getSportsmanWOMANListInBowType(sportsmanListInBowType);
+                        if (sportsmanWOMANListInBowType.size() > 16) {
+                            //Генерируем 1/8 финала для данного класса лука
+                            excelGenerator.generate8StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
+                            protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
+                        } else if (sportsmanWOMANListInBowType.size() > 8) {
+                            //Генерируем 1/4 финала для данного класса лука
+                            excelGenerator.generate4StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
+                            protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
+                        } else if (sportsmanWOMANListInBowType.size() > 5) {
+                            //Генерируем 1/2 финала для данного класса лука
+                            excelGenerator.generate2StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
+                            protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
+                            protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
+                        } else {
+                            //Генерируем итоговый результат по квалификационным результатам
 //                        excelGenerator.generateFinal(inputStream, bowType, sportsmanWOMANListInBowType);
+                        }
                     }
-
-
                 }
+                return true;
+
+            } catch (IOException e) {
+                ResponseEntity.badRequest();
+                e.printStackTrace();
+                return false;
             }
-
-
-        } catch (IOException e) {
-            System.out.println("Произошла ошибка при работе с файлом");
-            e.printStackTrace();
+        } else {
+            return false;
         }
     }
 
