@@ -20,4 +20,5 @@
     <include file="db.migrations/v-0.1/2024-04-24--alter_table_protocol.sql"/>
     <include file="db.migrations/v-0.1/2024-04-26--add_final_in__protocol.sql"/>
     <include file="db.migrations/v-0.1/2024-04-27--add_qualification_in_protocol.sql"/>
+    <include file="db.migrations/v-0.1/2024-04-27--add_tables_for_protocol_stages.sql"/>
 </databaseChangeLog>

@@ -85,6 +85,18 @@ public class Competition extends GenericEntity{
     @OneToMany(mappedBy = "competition")
     private List<QualificationRound> qualificationRoundList;
 
+    @OneToMany(mappedBy = "competition")
+    private List<ProtocolStage2> protocolStage2List;
+
+    @OneToMany(mappedBy = "competition")
+    private List<ProtocolStage4> protocolStage4List;
+
+    @OneToMany(mappedBy = "competition")
+    private List<ProtocolStage8> protocolStage8List;
+
+    @OneToMany(mappedBy = "competition")
+    private List<ProtocolFinal> protocolFinalList;
+
     @Override
     public String toString() {
         return "Competition with id: " + getId();

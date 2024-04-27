@@ -1,4 +1,4 @@
-package com.example.kursachrps.service;
+package com.example.kursachrps.utils;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

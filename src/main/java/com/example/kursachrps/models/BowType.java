@@ -15,11 +15,23 @@ public class BowType extends GenericEntity implements Comparable<BowType> {
     @OneToMany(mappedBy = "bowType")
     private List<Application> applicationList;
 
+    @ManyToMany(mappedBy = "bowTypeList")
+    private List<Competition> competitionList;
+
     @OneToMany(mappedBy = "bowType")
     private List<QualificationRound> qualificationRoundList;
 
-    @ManyToMany(mappedBy = "bowTypeList")
-    private List<Competition> competitionList;
+    @OneToMany(mappedBy = "bowType")
+    private List<ProtocolStage2> protocolStage2List;
+
+    @OneToMany(mappedBy = "bowType")
+    private List<ProtocolStage4> protocolStage4List;
+
+    @OneToMany(mappedBy = "bowType")
+    private List<ProtocolStage8> protocolStage8List;
+
+    @OneToMany(mappedBy = "bowType")
+    private List<ProtocolFinal> protocolFinalList;
 
     @Override
     public String toString() {

@@ -59,6 +59,18 @@ public class Sportsman extends User {
     @OneToMany(mappedBy = "sportsman")
     private List<QualificationRound> qualificationRoundList;
 
+    @OneToMany(mappedBy = "sportsman")
+    private List<ProtocolStage2> protocolStage2List;
+
+    @OneToMany(mappedBy = "sportsman")
+    private List<ProtocolStage4> protocolStage4List;
+
+    @OneToMany(mappedBy = "sportsman")
+    private List<ProtocolStage8> protocolStage8List;
+
+    @OneToMany(mappedBy = "sportsman")
+    private List<ProtocolFinal> protocolFinalList;
+
     public Sportsman() {
     }
 
