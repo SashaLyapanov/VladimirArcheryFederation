@@ -6,6 +6,7 @@ import com.example.kursachrps.comparators.ApplicationComparator;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.repositories.*;
+import com.example.kursachrps.utils.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +23,24 @@ import java.util.List;
 @Service
 public class JudgeService {
 
-    private ApplicationRepository applicationRepository;
-    private CompetitionRepository competitionRepository;
-    private UserMainRepository userMainRepository;
-    private SportsmanMapper sportsmanMapper;
-    private QualificationRoundRepository qualificationRoundRepository;
-    private QualificationRoundService qualificationRoundService;
-    private FileUtils fileUtils;
-    private ExcelGenerator excelGenerator;
-    private ProtocolRepository protocolRepository;
-    private ProtocolService protocolService;
+    private final ApplicationRepository applicationRepository;
+    private final CompetitionRepository competitionRepository;
+    private final UserMainRepository userMainRepository;
+    private final SportsmanMapper sportsmanMapper;
+    private final QualificationRoundRepository qualificationRoundRepository;
+    private final QualificationRoundService qualificationRoundService;
+    private final FileUtils fileUtils;
+    private final ExcelGenerator excelGenerator;
+    private final ProtocolRepository protocolRepository;
+    private final ProtocolService protocolService;
+    private final ProtocolStage2Service protocolStage2Service;
+    private final ProtocolStage4Service protocolStage4Service;
+    private final ProtocolStage8Service protocolStage8Service;
+    private final ProtocolFinalService protocolFinalService;
+    private final ProtocolStage2Repository protocolStage2Repository;
+    private final ProtocolStage4Repository protocolStage4Repository;
+    private final ProtocolStage8Repository protocolStage8Repository;
+    private final ProtocolFinalRepository protocolFinalRepository;
 
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
@@ -43,7 +52,15 @@ public class JudgeService {
                         FileUtils fileUtils,
                         ExcelGenerator excelGenerator,
                         ProtocolRepository protocolRepository,
-                        ProtocolService protocolService) {
+                        ProtocolService protocolService,
+                        ProtocolStage2Service protocolStage2Service,
+                        ProtocolStage4Service protocolStage4Service,
+                        ProtocolStage8Service protocolStage8Service,
+                        ProtocolFinalService protocolFinalService,
+                        ProtocolStage2Repository protocolStage2Repository,
+                        ProtocolStage4Repository protocolStage4Repository,
+                        ProtocolStage8Repository protocolStage8Repository,
+                        ProtocolFinalRepository protocolFinalRepository) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
@@ -54,6 +71,14 @@ public class JudgeService {
         this.excelGenerator = excelGenerator;
         this.protocolRepository = protocolRepository;
         this.protocolService = protocolService;
+        this.protocolStage2Service = protocolStage2Service;
+        this.protocolStage4Service = protocolStage4Service;
+        this.protocolStage8Service = protocolStage8Service;
+        this.protocolFinalService = protocolFinalService;
+        this.protocolStage2Repository = protocolStage2Repository;
+        this.protocolStage4Repository = protocolStage4Repository;
+        this.protocolStage8Repository = protocolStage8Repository;
+        this.protocolFinalRepository = protocolFinalRepository;
     }
 
     /**
@@ -118,13 +143,59 @@ public class JudgeService {
             inputStream.transferTo(outputStream);
             System.out.println("Файл успешно скопирован в исходник:" + file.getOriginalFilename());
             //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
-            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
-            List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(protocol, competitionId);
+            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+            List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(fileProtocol, competitionId);
             qualificationRoundList = qualificationRoundService.calculateSportsmanPlaceInQualification(qualificationRoundList, competitionId);
             if (qualificationRoundList != null) {
                 qualificationRoundRepository.saveAll(qualificationRoundList);
-                return protocol;
+                Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+                protocol.setQualification(true);
+                protocolRepository.save(protocol);
+                return fileProtocol;
             } else {
+                return null;
+            }
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка при копировании файла.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public File uploadProtocolWithSomeStage(MultipartFile file, String competitionId) {
+        try (InputStream inputStream = new FileInputStream(fileUtils.convertMultipartFileToFile(file));
+             OutputStream outputStream = new FileOutputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename())) {
+            inputStream.transferTo(outputStream);
+            System.out.println("Файл успешно скопирован в исходник:" + file.getOriginalFilename());
+            //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
+            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+            Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+            List<ProtocolStage2> protocolStage2List = excelGenerator.readStage2ToDB(fileProtocol, competitionId, protocol);
+            List<ProtocolStage4> protocolStage4List = excelGenerator.readStage4ToDB(fileProtocol, competitionId, protocol);
+            List<ProtocolStage8> protocolStage8List = excelGenerator.readStage8ToDB(fileProtocol, competitionId, protocol);
+            List<ProtocolFinal> protocolFinalList = excelGenerator.readFinalToDB(fileProtocol, competitionId, protocol);
+            protocolStage2List = protocolStage2Service.calculateSportsmanPlaceInStage2(protocolStage2List, competitionId);
+            protocolStage4List = protocolStage4Service.calculateSportsmanPlaceInStage4(protocolStage4List, competitionId);
+            protocolStage8List = protocolStage8Service.calculateSportsmanPlaceInStage8(protocolStage8List, competitionId);
+            protocolFinalList = protocolFinalService.calculateSportsmanPlaceInFinal(protocolFinalList, competitionId);
+            excelGenerator.deleteThisStage(fileProtocol);
+            if (protocolStage2List != null) {
+                protocolStage2Repository.saveAll(protocolStage2List);
+            }
+            if (protocolStage4List != null) {
+                protocolStage4Repository.saveAll(protocolStage4List);
+            }
+            if (protocolStage8List != null) {
+                protocolStage8Repository.saveAll(protocolStage8List);
+            }
+            if (protocolFinalList != null) {
+                protocolFinalRepository.saveAll(protocolFinalList);
+            }
+            if (fileProtocol.exists()) {
+                return fileProtocol;
+            }
+            else {
                 return null;
             }
         } catch (IOException e) {
@@ -138,7 +209,7 @@ public class JudgeService {
      * Метод для генерации последующей стадии соревнований
      */
     @Transactional
-    public boolean generateNextStageOfCompetition(File file, String competitionId) {
+    public boolean generateNextStageOfCompetitionAfterQualification(File file, String competitionId) {
         Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
         if (!protocol.updateIsAllFlagsTrue()) {
             try (InputStream inputStream = new FileInputStream(file)) {
@@ -146,7 +217,7 @@ public class JudgeService {
                 if (competition != null) {
                     List<BowType> bowTypeList = new ArrayList<>();
                     bowTypeList.addAll(competition.getBowTypeList());
-                    for (BowType bowType: bowTypeList) {
+                    for (BowType bowType : bowTypeList) {
                         List<QualificationRound> sportsmanListInBowType = qualificationRoundRepository.findQualificationRoundByCompetitionIdAndBowTypeId(competitionId, bowType.getId());
                         //Условие на протоколы мужчин для каждой стадии
                         List<QualificationRound> sportsmanMANListInBowType = qualificationRoundService.getSportsmanMANListInBowType(sportsmanListInBowType);
@@ -287,5 +358,4 @@ public class JudgeService {
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PAST);
     }
-
 }

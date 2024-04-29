@@ -20,6 +20,13 @@ public class ProtocolService {
     private static final String Olympic = "36671015-5c37-4e5c-8eed-9a353e927f32";
     private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
 
+    private final ProtocolRepository protocolRepository;
+
+    @Autowired
+    public ProtocolService(ProtocolRepository protocolRepository) {
+        this.protocolRepository = protocolRepository;
+    }
+
     @Transactional
     public void setProtocolFieldTrueForMAN8(BowType bowType, Protocol protocol) {
         if (bowType != null) {
@@ -156,6 +163,15 @@ public class ProtocolService {
                 protocol.setArbalet3DWoman2(true);
             }
         }
+    }
+
+    /**
+     * Проверка заполнена ли квалификация для определенных соревнований
+     * Т.е. если protocol.qualification == true, возвращаем true, иначе false
+     */
+    public boolean checkQualificationIsCompleted(String competitionId) {
+        Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+        return protocol.isQualification();
     }
 
 }

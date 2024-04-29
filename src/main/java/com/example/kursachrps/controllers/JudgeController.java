@@ -7,6 +7,8 @@ import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.JudgeService;
+import com.example.kursachrps.service.ProtocolService;
+import com.example.kursachrps.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.core.io.InputStreamResource;
@@ -25,20 +27,26 @@ import java.util.List;
 @RequestMapping("/api/v1/judge")
 public class JudgeController {
 
-    private JudgeService judgeService;
-    private CompetitionMapper competitionMapper;
-    private ApplicationMapper applicationMapper;
-    private ApplicationService applicationService;
+    private final JudgeService judgeService;
+    private final CompetitionMapper competitionMapper;
+    private final ApplicationMapper applicationMapper;
+    private final ApplicationService applicationService;
+    private final ProtocolService protocolService;
+    private final FileUtils fileUtils;
 
     @Autowired
     public JudgeController(JudgeService judgeService,
                            CompetitionMapper competitionMapper,
                            ApplicationMapper applicationMapper,
-                           ApplicationService applicationService) {
+                           ApplicationService applicationService,
+                           ProtocolService protocolService,
+                           FileUtils fileUtils) {
         this.judgeService = judgeService;
         this.competitionMapper = competitionMapper;
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
+        this.protocolService = protocolService;
+        this.fileUtils = fileUtils;
     }
 
     /**
@@ -49,6 +57,22 @@ public class JudgeController {
     @GetMapping("/presentCompetitions")
     public List<CompetitionDTO> getPresentCompetitions() {
         return competitionMapper.fromCompetition(judgeService.getPresentCompetitions());
+    }
+
+    /**
+     * Метод для регистрации спортсменов или тренеров на соревнования
+     */
+    @PostMapping("/regParticipantToCompetition")
+    public String regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
+        if (applicationService.checkRegistrationInCompetitionByParticipantEmail(competitionId, email)) {
+            Application application = applicationMapper.fromApplicationDTO(applicationDTO);
+            judgeService.registrateParticipantToCompetition(email, competitionId, application);
+            PayController payController = new PayController();
+            String link = payController.getLinkToPay();
+            System.out.println(link);
+            return link;
+        } else
+            return "Участник уже зарегистрирован на данные соревнования";
     }
 
     /**
@@ -72,56 +96,56 @@ public class JudgeController {
                 .body(resource);
     }
 
-     /**
+    /**
      * Метод для загрузки отредактированного файла с результатами квалификации на сервер.
      * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
      */
     @PostMapping("/uploadFile")
     @Transactional
-    public void uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
-        File protocol = judgeService.uploadQualificationProtocol(file, competitionId);
-        if (protocol != null) {
-            judgeService.generateNextStageOfCompetition(protocol, competitionId);
+    public ResponseEntity<?> uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
+        if (!protocolService.checkQualificationIsCompleted(competitionId)) {
+            File protocol = judgeService.uploadQualificationProtocol(file, competitionId);
+            if (protocol != null) {
+                boolean resultOfGenerating = judgeService.generateNextStageOfCompetitionAfterQualification(protocol, competitionId);
+                if (resultOfGenerating) {
+                    //TODO
+                    // Реализовать скачивание протокола в загрузки компьютера
+                    return ResponseEntity.ok("Все хорошо, так держать!");
+                } else {
+                    return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+                }
+            }
+            return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+        } else {
+            File protocol = judgeService.uploadProtocolWithSomeStage(file, competitionId);
+            return null;
+//            boolean resultOfGenerating = judgeService.generateNextStageOfCompetition(protocol, competitionId);
+//            if (resultOfGenerating) {
+//                return ResponseEntity.ok("Все хорошо, так держать!");
+//            } else {
+//                return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+//            }
         }
     }
 
-    /**
-     * Метод для регистрации спортсменов или тренеров на соревнования
-     */
-    @PostMapping("/regParticipantToCompetition")
-    public String regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
-        if (applicationService.checkRegistrationInCompetitionByParticipantEmail(competitionId, email)) {
-            Application application = applicationMapper.fromApplicationDTO(applicationDTO);
-            judgeService.registrateParticipantToCompetition(email, competitionId, application);
-            PayController payController = new PayController();
-            String link = payController.getLinkToPay();
-            System.out.println(link);
-            return link;
-        } else
-            return "Участник уже зарегистрирован на данные соревнования";
-    }
+
+//    /**
+//     * Метод для загрузки отредактированного файла с результатами квалификации на сервер.
+//     * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
+//     */
+//    @PostMapping("/uploadFile")
+//    @Transactional
+//    public ResponseEntity<?> uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
+//        File protocol = judgeService.uploadQualificationProtocol(file, competitionId);
+//        if (protocol != null) {
+//            boolean resultOfGenerating = judgeService.generateNextStageOfCompetition(protocol, competitionId);
+//            if (resultOfGenerating) {
+//                return ResponseEntity.ok("Все хорошо, так держать!");
+//            } else {
+//                return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+//            }
+//        }
+//        return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+//    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

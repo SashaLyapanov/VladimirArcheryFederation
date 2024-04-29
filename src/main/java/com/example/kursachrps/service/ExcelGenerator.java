@@ -16,6 +16,9 @@ import java.util.*;
 
 @Service
 public class ExcelGenerator {
+    private static final String MAN_ID = "c99ccd51-5731-42a3-9cfc-31cc4011e035";
+    private static final String WOMAN_ID = "848f4054-a9c1-4525-9e10-2ab07e3e9b4c";
+
     private static final String LongBow_3D = "af44dbd5-21bb-41f1-b732-af5706b8153d";
     private static final String CompositeBow_3D = "62cb799b-0ff8-4843-82c0-61a215d4af97";
     private static final String CL_3D = "351c3a7e-64b4-4749-b8c8-bb1ecb2f3ef2";
@@ -25,11 +28,13 @@ public class ExcelGenerator {
     private static final String Olympic = "36671015-5c37-4e5c-8eed-9a353e927f32";
     private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
 
-    private ParserExcelData parserExcelData;
+    private final ParserExcelData parserExcelData;
+    private final ProtocolService protocolService;
 
     @Autowired
-    public ExcelGenerator(ParserExcelData parserExcelData) {
+    public ExcelGenerator(ParserExcelData parserExcelData, ProtocolService protocolService) {
         this.parserExcelData = parserExcelData;
+        this.protocolService = protocolService;
     }
 
     /**
@@ -165,6 +170,221 @@ public class ExcelGenerator {
 
         return qualificationRoundList;
 
+    }
+
+
+    @Transactional
+    public List<ProtocolStage2> readStage2ToDB(File protocol, String competitionId, Protocol protocolInDB) throws IOException {
+        List<ProtocolStage2> protocolStage2List = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
+        List<Integer> listNumbers = new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            if (workbook.getSheetAt(i).getSheetName().contains("2")) {
+                listNumbers.add(i);
+            }
+        }
+        for (Integer i : listNumbers) {
+            XSSFSheet sheet = workbook.getSheetAt(i);
+            //Значение 4 четко под формат Pattern.xlsx
+            int rowNum = 4;
+
+            while (true) {
+                Row row = sheet.getRow(rowNum);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+
+                    if (cell != null) {
+                        ProtocolStage2 protocolStage2 = new ProtocolStage2();
+                        protocolStage2.setCompetition(parserExcelData.findCompetitionById(competitionId));
+                        for (int j = 1; j <= 8; j++) {
+                            Cell stage2Data = row.getCell(j);
+                            if (j == 1) {
+                                //Спортсмен
+                                Cell birthDate = row.getCell(3);
+                                Sportsman sportsman = parserExcelData.findSportsmanByFioAndBirthDate(stage2Data, birthDate);
+                                protocolStage2.setSportsman(sportsman);
+                            } else if (j == 6) {
+                                //Класс лука
+                                BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
+                                protocolStage2.setBowType(bowType);
+                                if (row.getCell(2).toString() == MAN_ID) {
+                                    protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
+                                } else if (row.getCell(2).toString() == WOMAN_ID) {
+                                    protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                }
+                            } else if (j == 7) {
+                                //квал
+                                String cellValue = stage2Data.toString();
+                                if (cellValue != null) {
+                                    protocolStage2.setQualificationResult(Integer.parseInt(cellValue));
+                                } else {
+                                    protocolStage2.setQualificationResult(0);
+                                }
+                            } else if (j == 8 && stage2Data != null) {
+                                //Итог данного раунда
+                                double cellValue = stage2Data.getNumericCellValue();
+                                    protocolStage2.setResultOfThisStage((int) cellValue);
+                            } else if (j == 8) {
+                                protocolStage2.setResultOfThisStage(0);
+                            }
+                        }
+                        protocolStage2List.add(protocolStage2);
+                        rowNum++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+            }
+        }
+        return protocolStage2List;
+    }
+
+    @Transactional
+    public List<ProtocolStage4> readStage4ToDB(File protocol, String competitionId, Protocol protocolInDB) throws IOException {
+        List<ProtocolStage4> protocolStage4List = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
+        List<Integer> listNumbers = new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            if (workbook.getSheetAt(i).getSheetName().contains("4")) {
+                listNumbers.add(i);
+            }
+        }
+        for (Integer i : listNumbers) {
+            XSSFSheet sheet = workbook.getSheetAt(i);
+
+            //Значение 4 четко под формат Pattern.xlsx
+            int rowNum = 4;
+
+            while (true) {
+                Row row = sheet.getRow(rowNum);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+
+                    if (cell != null) {
+                        ProtocolStage4 protocolStage4 = new ProtocolStage4();
+                        protocolStage4.setCompetition(parserExcelData.findCompetitionById(competitionId));
+                        for (int j = 1; j <= 8; j++) {
+                            Cell stage2Data = row.getCell(j);
+                            if (j == 1) {
+                                //Спортсмен
+                                Cell birthDate = row.getCell(3);
+                                Sportsman sportsman = parserExcelData.findSportsmanByFioAndBirthDate(stage2Data, birthDate);
+                                protocolStage4.setSportsman(sportsman);
+                            } else if (j == 6) {
+                                //Класс лука
+                                BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
+                                protocolStage4.setBowType(bowType);
+                                if (row.getCell(2).toString() == MAN_ID) {
+                                    protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
+                                } else if (row.getCell(2).toString() == WOMAN_ID) {
+                                    protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                }
+                            } else if (j == 7) {
+                                //квал
+                                String cellValue = stage2Data.toString();
+                                if (cellValue != null) {
+                                    protocolStage4.setQualificationResult(Integer.parseInt(cellValue));
+                                } else {
+                                    protocolStage4.setQualificationResult(0);
+                                }
+                            } else if (j == 8 && stage2Data != null) {
+                                //Итог данного раунда
+                                double cellValue = stage2Data.getNumericCellValue();
+                                protocolStage4.setResultOfThisStage((int) cellValue);
+                            } else if (j == 8) {
+                                protocolStage4.setResultOfThisStage(0);
+                            }
+                        }
+                        protocolStage4List.add(protocolStage4);
+                        rowNum++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+            }
+        }
+        return protocolStage4List;
+    }
+
+    @Transactional
+    public List<ProtocolStage8> readStage8ToDB(File protocol, String competitionId, Protocol protocolInDB) throws IOException {
+        List<ProtocolStage8> protocolStage8List = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
+        List<Integer> listNumbers = new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            if (workbook.getSheetAt(i).getSheetName().contains("8")) {
+                listNumbers.add(i);
+            }
+        }
+        for (Integer i : listNumbers) {
+            XSSFSheet sheet = workbook.getSheetAt(i);
+
+            //Значение 4 четко под формат Pattern.xlsx
+            int rowNum = 4;
+
+            while (true) {
+                Row row = sheet.getRow(rowNum);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+
+                    if (cell != null) {
+                        ProtocolStage8 protocolStage8 = new ProtocolStage8();
+                        protocolStage8.setCompetition(parserExcelData.findCompetitionById(competitionId));
+                        for (int j = 1; j <= 8; j++) {
+                            Cell stage2Data = row.getCell(j);
+                            if (j == 1) {
+                                //Спортсмен
+                                Cell birthDate = row.getCell(3);
+                                Sportsman sportsman = parserExcelData.findSportsmanByFioAndBirthDate(stage2Data, birthDate);
+                                protocolStage8.setSportsman(sportsman);
+                            } else if (j == 6) {
+                                //Класс лука
+                                BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
+                                protocolStage8.setBowType(bowType);
+                                if (row.getCell(2).toString() == MAN_ID) {
+                                    protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
+                                } else if (row.getCell(2).toString() == WOMAN_ID) {
+                                    protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                }
+                            } else if (j == 7) {
+                                //квал
+                                String cellValue = stage2Data.toString();
+                                if (cellValue != null) {
+                                    protocolStage8.setQualificationResult(Integer.parseInt(cellValue));
+                                } else {
+                                    protocolStage8.setQualificationResult(0);
+                                }
+                            } else if (j == 8 && stage2Data != null) {
+                                //Итог данного раунда
+                                double cellValue = stage2Data.getNumericCellValue();
+                                protocolStage8.setResultOfThisStage((int) cellValue);
+                            } else if (j == 8) {
+                                protocolStage8.setResultOfThisStage(0);
+                            }
+                        }
+                        protocolStage8List.add(protocolStage8);
+                        rowNum++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+            }
+        }
+        return protocolStage8List;
+    }
+
+    @Transactional
+    public List<ProtocolFinal> readFinalToDB(File protocol, String competitionId, Protocol protocolInDB) throws IOException {
+        return null;
     }
 
     /**
@@ -456,13 +676,32 @@ public class ExcelGenerator {
 
             XSSFRow row = sheet.createRow(3);
             for (int i = 2; i < patternItemList.size(); i++) {
-                Cell cell = row.createCell(i-2);
+                Cell cell = row.createCell(i - 2);
                 cell.setCellValue(patternItemList.get(i));
                 cell.setCellStyle(style);
             }
 
             try {
                 FileOutputStream out = new FileOutputStream(file);
+                workbook.write(out);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Удаление всех листов в файле протокола, кроме листа Квалификация
+     */
+    public void deleteThisStage(File fileProtocol) throws IOException {
+        if (fileProtocol.exists()) {
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(fileProtocol));
+            for (int i = workbook.getNumberOfSheets() - 1; i > 0; i--) {
+                workbook.removeSheetAt(i);
+            }
+            try {
+                FileOutputStream out = new FileOutputStream(fileProtocol);
                 workbook.write(out);
                 out.close();
             } catch (Exception e) {

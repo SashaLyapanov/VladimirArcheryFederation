@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "protocol_stage8")
-public class ProtocolStage8 extends GenericEntity {
+public class ProtocolStage8 extends GenericEntity implements Comparable<ProtocolStage8> {
     @ManyToOne
     @JoinColumn(name = "sportsman_id", referencedColumnName = "id")
     private Sportsman sportsman;
@@ -34,5 +34,10 @@ public class ProtocolStage8 extends GenericEntity {
     @Override
     public String toString() {
         return "id: " + getId() + ", sportsmanId: " + sportsman.getId() + ", competitionId:" + competition.getId();
+    }
+
+    @Override
+    public int compareTo(ProtocolStage8 o) {
+        return -Integer.compare(this.resultOfThisStage, o.getResultOfThisStage());
     }
 }
