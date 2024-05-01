@@ -16,12 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JudgeService {
+    private static final String MAN_ID = "c99ccd51-5731-42a3-9cfc-31cc4011e035";
+    private static final String WOMAN_ID = "848f4054-a9c1-4525-9e10-2ab07e3e9b4c";
 
     private final ApplicationRepository applicationRepository;
     private final CompetitionRepository competitionRepository;
@@ -41,6 +41,7 @@ public class JudgeService {
     private final ProtocolStage4Repository protocolStage4Repository;
     private final ProtocolStage8Repository protocolStage8Repository;
     private final ProtocolFinalRepository protocolFinalRepository;
+    private final SexRepository sexRepository;
 
     @Autowired
     public JudgeService(ApplicationRepository applicationRepository,
@@ -60,7 +61,8 @@ public class JudgeService {
                         ProtocolStage2Repository protocolStage2Repository,
                         ProtocolStage4Repository protocolStage4Repository,
                         ProtocolStage8Repository protocolStage8Repository,
-                        ProtocolFinalRepository protocolFinalRepository) {
+                        ProtocolFinalRepository protocolFinalRepository,
+                        SexRepository sexRepository) {
         this.applicationRepository = applicationRepository;
         this.competitionRepository = competitionRepository;
         this.userMainRepository = userMainRepository;
@@ -79,6 +81,7 @@ public class JudgeService {
         this.protocolStage4Repository = protocolStage4Repository;
         this.protocolStage8Repository = protocolStage8Repository;
         this.protocolFinalRepository = protocolFinalRepository;
+        this.sexRepository = sexRepository;
     }
 
     /**
@@ -234,13 +237,22 @@ public class JudgeService {
                             protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
                         } else if (sportsmanMANListInBowType.size() > 5) {
                             //Генерируем 1/2 финала для данного класса лука
+                            //TODO
+                            // переделать генерацию 1/2 финала под структуру 1-4 2-3
                             excelGenerator.generate2StageMAN(file, bowType, sportsmanMANListInBowType);
                             protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
                             protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
                             protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
-                        } else {
-                            //Генерируем итоговый результат по квалификационным результатам
-//                        excelGenerator.generateFinal(inputStream, bowType, sportsmanMANListInBowType);
+                        } else if (sportsmanMANListInBowType.size() > 0){
+                            // Нужно считывать данные в финальную таблицу соревнований!
+                            // Т.е. сразу же заполняем этими 5 людьми таблицу результата
+                            AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(bowType, sexRepository.findById(MAN_ID).orElse(null));
+                            Application application = new Application();
+                            HashMap<AbstractMap.SimpleEntry<BowType, Sex>, Application> entry = new HashMap<>();
+                            entry.put(key, application);
+                            protocolService.markExtraStagesAfterQualification(protocol, entry);
+                            System.out.println(entry);
+
                         }
 
                         //Условие на протоколы женщин для каждой стадии
@@ -256,13 +268,21 @@ public class JudgeService {
                             protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
                         } else if (sportsmanWOMANListInBowType.size() > 5) {
                             //Генерируем 1/2 финала для данного класса лука
+                            //TODO
+                            // переделать генерацию 1/2 финала под структуру 1-4 2-3
                             excelGenerator.generate2StageWOMAN(file, bowType, sportsmanWOMANListInBowType);
                             protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
                             protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
                             protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
-                        } else {
-                            //Генерируем итоговый результат по квалификационным результатам
-//                        excelGenerator.generateFinal(inputStream, bowType, sportsmanWOMANListInBowType);
+                        } else if (sportsmanWOMANListInBowType.size() > 0){
+                            // Нужно считывать данные в финальную таблицу соревнований!
+                            // Т.е. сразу же заполняем этими 5 людьми таблицу результата
+                            AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(bowType, sexRepository.findById(WOMAN_ID).orElse(null));
+                            Application application = new Application();
+                            HashMap<AbstractMap.SimpleEntry<BowType, Sex>, Application> entry = new HashMap<>();
+                            entry.put(key, application);
+                            protocolService.markExtraStagesAfterQualification(protocol, entry);
+                            System.out.println("entry " + entry);
                         }
                     }
                 }
@@ -277,6 +297,25 @@ public class JudgeService {
             return false;
         }
     }
+
+    /**
+     * Метод для генерации последующей стадии соревнований
+     */
+    @Transactional
+    public boolean generateNextStageOfCompetition(File protocol, String competitionId) throws IOException {
+        List<String> listsNamesForGenerating  = protocolService.getStageForGenerating(competitionId);
+        System.out.println("listsNamesForGenerating=");
+        System.out.println(listsNamesForGenerating);
+
+        if (listsNamesForGenerating != null) {
+            for (String listName: listsNamesForGenerating) {
+                excelGenerator.generateNextStageOfCompetition(listName, protocol, competitionId);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Метод для загрузки файла на сервер (заменяет существующий, сгенерированный ранее протокол)
@@ -358,4 +397,17 @@ public class JudgeService {
         assert competition != null;
         competition.setStatus(StatusOfCompetition.PAST);
     }
+
+    public void markExtraStages(String competitionId) {
+        Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
+        List<Application> applicationList = applicationRepository.findApplicationByCompetitionId(competitionId);
+        HashMap<AbstractMap.SimpleEntry<BowType, Sex>, Application> uniqueApplicationsSet = new HashMap<>();
+
+        for (Application application: applicationList) {
+            AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(application.getBowType(), application.getSportsman().getSex());
+            uniqueApplicationsSet.put(key, application);
+        }
+        protocolService.markExtraStages(protocol, uniqueApplicationsSet);
+    }
+
 }

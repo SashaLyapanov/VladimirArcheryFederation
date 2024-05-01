@@ -1,6 +1,9 @@
 package com.example.kursachrps.service;
 
 import com.example.kursachrps.models.*;
+import com.example.kursachrps.repositories.BowTypeRepository;
+import com.example.kursachrps.repositories.ProtocolRepository;
+import com.example.kursachrps.repositories.SexRepository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -30,11 +33,30 @@ public class ExcelGenerator {
 
     private final ParserExcelData parserExcelData;
     private final ProtocolService protocolService;
+    private final BowTypeRepository bowTypeRepository;
+    private final SexRepository sexRepository;
+    private final ProtocolStage8Service protocolStage8Service;
+    private final ProtocolStage4Service protocolStage4Service;
+    private final ProtocolStage2Service protocolStage2Service;
+    private final ProtocolRepository protocolRepository;
 
     @Autowired
-    public ExcelGenerator(ParserExcelData parserExcelData, ProtocolService protocolService) {
+    public ExcelGenerator(ParserExcelData parserExcelData,
+                          ProtocolService protocolService,
+                          BowTypeRepository bowTypeRepository,
+                          SexRepository sexRepository,
+                          ProtocolStage8Service protocolStage8Service,
+                          ProtocolStage4Service protocolStage4Service,
+                          ProtocolStage2Service protocolStage2Service,
+                          ProtocolRepository protocolRepository) {
         this.parserExcelData = parserExcelData;
         this.protocolService = protocolService;
+        this.bowTypeRepository = bowTypeRepository;
+        this.sexRepository = sexRepository;
+        this.protocolStage8Service = protocolStage8Service;
+        this.protocolStage4Service = protocolStage4Service;
+        this.protocolStage2Service = protocolStage2Service;
+        this.protocolRepository = protocolRepository;
     }
 
     /**
@@ -71,6 +93,94 @@ public class ExcelGenerator {
                         Region region = sportsman.getRegion();
                         BowType bowType = qualificationRound.getBowType();
                         int pointInQualification = qualificationRound.getSum();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    }
+                }
+            } else if (firstElement instanceof ProtocolStage8) {
+                List<ProtocolStage8> protocolStage8List = (List<ProtocolStage8>) recordList;
+                for (ProtocolStage8 protocolStage8 : protocolStage8List) {
+                    rowNum++;
+                    if (protocolStage8.getSportsman() != null) {
+                        Sportsman sportsman = protocolStage8.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage8.getBowType();
+                        int pointInQualification = protocolStage8.getQualificationResult();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    }
+                }
+            } else if (firstElement instanceof ProtocolStage4) {
+                List<ProtocolStage4> protocolStage4List = (List<ProtocolStage4>) recordList;
+                for (ProtocolStage4 protocolStage4 : protocolStage4List) {
+                    rowNum++;
+                    if (protocolStage4.getSportsman() != null) {
+                        Sportsman sportsman = protocolStage4.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage4.getBowType();
+                        int pointInQualification = protocolStage4.getQualificationResult();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    }
+                }
+            } else if (firstElement instanceof ProtocolStage2) {
+                List<ProtocolStage2> protocolStage2List = (List<ProtocolStage2>) recordList;
+                for (ProtocolStage2 protocolStage2 : protocolStage2List) {
+                    rowNum++;
+                    if (rowNum == 5 && protocolStage2.getSportsman() != null) {
+                        data.put(rowNum, new Object[]{"Золотой финал"});
+                        rowNum++;
+                        Sportsman sportsman = protocolStage2.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage2.getBowType();
+                        int pointInQualification = protocolStage2.getQualificationResult();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    } else if (rowNum == 7 && protocolStage2.getSportsman() != null) {
+                        Sportsman sportsman = protocolStage2.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage2.getBowType();
+                        int pointInQualification = protocolStage2.getQualificationResult();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    } else if (rowNum == 8 && protocolStage2.getSportsman() != null) {
+                        data.put(rowNum, new Object[]{"Бронзовый финал"});
+                        rowNum++;
+                        Sportsman sportsman = protocolStage2.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage2.getBowType();
+                        int pointInQualification = protocolStage2.getQualificationResult();
+                        if (sexName != null && sportsTitle != null && region != null) {
+                            data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
+                                    sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
+                        }
+                    } else if (rowNum == 10 && protocolStage2.getSportsman() != null) {
+                        Sportsman sportsman = protocolStage2.getSportsman();
+                        Sex sexName = sportsman.getSex();
+                        SportsTitle sportsTitle = sportsman.getSportsTitle();
+                        Region region = sportsman.getRegion();
+                        BowType bowType = protocolStage2.getBowType();
+                        int pointInQualification = protocolStage2.getQualificationResult();
                         if (sexName != null && sportsTitle != null && region != null) {
                             data.put(rowNum, new Object[]{sportsman.getSurname() + " " + sportsman.getFirstName() + " " + sportsman.getPatronymic(),
                                     sexName.getName(), sportsman.getBirthDate(), sportsTitle.getName(), region.getName(), bowType.getBowTypeName(), pointInQualification});
@@ -207,10 +317,12 @@ public class ExcelGenerator {
                                 //Класс лука
                                 BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
                                 protocolStage2.setBowType(bowType);
-                                if (row.getCell(2).toString() == MAN_ID) {
+                                if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), MAN_ID)) {
                                     protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
-                                } else if (row.getCell(2).toString() == WOMAN_ID) {
+                                    protocolRepository.save(protocolInDB);
+                                } else if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), WOMAN_ID)) {
                                     protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
                                 }
                             } else if (j == 7) {
                                 //квал
@@ -223,7 +335,7 @@ public class ExcelGenerator {
                             } else if (j == 8 && stage2Data != null) {
                                 //Итог данного раунда
                                 double cellValue = stage2Data.getNumericCellValue();
-                                    protocolStage2.setResultOfThisStage((int) cellValue);
+                                protocolStage2.setResultOfThisStage((int) cellValue);
                             } else if (j == 8) {
                                 protocolStage2.setResultOfThisStage(0);
                             }
@@ -277,10 +389,12 @@ public class ExcelGenerator {
                                 //Класс лука
                                 BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
                                 protocolStage4.setBowType(bowType);
-                                if (row.getCell(2).toString() == MAN_ID) {
-                                    protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
-                                } else if (row.getCell(2).toString() == WOMAN_ID) {
-                                    protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), MAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForMAN4(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
+                                } else if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), WOMAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
                                 }
                             } else if (j == 7) {
                                 //квал
@@ -347,10 +461,12 @@ public class ExcelGenerator {
                                 //Класс лука
                                 BowType bowType = parserExcelData.findBowTypeByBowTypeName(stage2Data.toString());
                                 protocolStage8.setBowType(bowType);
-                                if (row.getCell(2).toString() == MAN_ID) {
-                                    protocolService.setProtocolFieldTrueForMAN2(bowType, protocolInDB);
-                                } else if (row.getCell(2).toString() == WOMAN_ID) {
-                                    protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocolInDB);
+                                if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), MAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForMAN8(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
+                                } else if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), WOMAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
                                 }
                             } else if (j == 7) {
                                 //квал
@@ -384,7 +500,79 @@ public class ExcelGenerator {
 
     @Transactional
     public List<ProtocolFinal> readFinalToDB(File protocol, String competitionId, Protocol protocolInDB) throws IOException {
-        return null;
+        System.out.println("Считывание финалов");
+        List<ProtocolFinal> protocolFinalList = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(protocol));
+        List<Integer> listNumbers = new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            if (workbook.getSheetAt(i).getSheetName().contains("Финал")) {
+                listNumbers.add(i);
+            }
+        }
+        for (Integer i : listNumbers) {
+            XSSFSheet sheet = workbook.getSheetAt(i);
+
+            //Значение 4 четко под формат Pattern.xlsx
+            int rowNum = 4;
+
+            while (true) {
+                Row row = sheet.getRow(rowNum);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+
+                    if (cell != null) {
+                        if (rowNum == 4 || rowNum == 7) {
+                            rowNum++;
+                            continue;
+                        }
+                        ProtocolFinal protocolFinal = new ProtocolFinal();
+                        protocolFinal.setCompetition(parserExcelData.findCompetitionById(competitionId));
+                        for (int j = 1; j <= 8; j++) {
+                            Cell finalData = row.getCell(j);
+                            if (j == 1) {
+                                //Спортсмен
+                                Cell birthDate = row.getCell(3);
+                                Sportsman sportsman = parserExcelData.findSportsmanByFioAndBirthDate(finalData, birthDate);
+                                protocolFinal.setSportsman(sportsman);
+                            } else if (j == 6) {
+                                //Класс лука
+                                BowType bowType = parserExcelData.findBowTypeByBowTypeName(finalData.toString());
+                                protocolFinal.setBowType(bowType);
+                                if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), MAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForMANFinal(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
+                                } else if (Objects.equals(Objects.requireNonNull(sexRepository.findSexByName(row.getCell(2).toString())).getId(), WOMAN_ID)) {
+                                    protocolService.setProtocolFieldTrueForWOMANFinal(bowType, protocolInDB);
+                                    protocolRepository.save(protocolInDB);
+                                }
+                            } else if (j == 7) {
+                                //квал
+                                String cellValue = finalData.toString();
+                                if (cellValue != null) {
+                                    protocolFinal.setQualificationResult(Integer.parseInt(cellValue));
+                                } else {
+                                    protocolFinal.setQualificationResult(0);
+                                }
+                            } else if (j == 8 && finalData != null) {
+                                //Итог данного раунда
+                                double cellValue = finalData.getNumericCellValue();
+                                protocolFinal.setResultOfThisStage((int) cellValue);
+                            } else if (j == 8) {
+                                protocolFinal.setResultOfThisStage(0);
+                            }
+                        }
+                        protocolFinalList.add(protocolFinal);
+                        rowNum++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+            }
+        }
+        return protocolFinalList;
     }
 
     /**
@@ -419,11 +607,43 @@ public class ExcelGenerator {
         writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
+//    /**
+//     * Метод для генерации 1/4 финала у мужчин
+//     */
+//    public void generate4StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
+//        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 8));
+//        String excelNameList = "";
+//        if (Objects.equals(bowType.getId(), BL_3D)) {
+//            excelNameList = "1,4финала 3Д_БЛ_Муж";
+//        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+//            excelNameList = "1,4финала 3Д_КЛ_Муж";
+//        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+//            excelNameList = "1,4финала 3Д-Long_Муж";
+//        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+//            excelNameList = "1,4финала 3Д-Составной_Муж";
+//        } else if (Objects.equals(bowType.getId(), Sporting)) {
+//            excelNameList = "1,4финала 3Д-Sporting_Муж";
+//        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+//            excelNameList = "1,4финала 3Д-Исторический_Муж";
+//        } else if (Objects.equals(bowType.getId(), Olympic)) {
+//            excelNameList = "1,4финала 3Д-Олимпик_Муж";
+//        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+//            excelNameList = "1,4финала 3Д-Арбалет_Муж";
+//        }
+//
+//        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+//        int rowNum = 4;
+//
+//        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+//
+//        writeDataToExcel(excelNameList, rowNum, data, file);
+//    }
+
     /**
      * Метод для генерации 1/4 финала у мужчин
      */
-    public void generate4StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
-        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 8));
+    public void generate4StageMAN(File file, BowType bowType, List<?> sportsmanMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 8));
         String excelNameList = "";
         if (Objects.equals(bowType.getId(), BL_3D)) {
             excelNameList = "1,4финала 3Д_БЛ_Муж";
@@ -454,8 +674,8 @@ public class ExcelGenerator {
     /**
      * Метод для генерации 1/2 финала у мужчин
      */
-    public void generate2StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
-        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 4));
+    public void generate2StageMAN(File file, BowType bowType, List<?> sportsmanMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 4));
         String excelNameList = "";
         if (Objects.equals(bowType.getId(), BL_3D)) {
             excelNameList = "1,2финала 3Д_БЛ_Муж";
@@ -482,6 +702,7 @@ public class ExcelGenerator {
 
         writeDataToExcel(excelNameList, rowNum, data, file);
     }
+
 
     /**
      * Метод для генерации 1/8 финала у женщин
@@ -518,8 +739,8 @@ public class ExcelGenerator {
     /**
      * Метод для генерации 1/4 финала у женщин
      */
-    public void generate4StageWOMAN(File file, BowType bowType, List<QualificationRound> sportsmanWOMANListInBowType) throws IOException {
-        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 8));
+    public void generate4StageWOMAN(File file, BowType bowType, List<?> sportsmanWOMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 8));
         String excelNameList = "";
         if (Objects.equals(bowType.getId(), BL_3D)) {
             excelNameList = "1,4финала 3Д_БЛ_Жен";
@@ -550,8 +771,8 @@ public class ExcelGenerator {
     /**
      * Метод для генерации 1/2 финала у мужчин
      */
-    public void generate2StageWOMAN(File file, BowType bowType, List<QualificationRound> sportsmanWOMANListInBowType) throws IOException {
-        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 8));
+    public void generate2StageWOMAN(File file, BowType bowType, List<?> sportsmanWOMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanWOMANListInBowType.subList(0, 4));
         String excelNameList = "";
         if (Objects.equals(bowType.getId(), BL_3D)) {
             excelNameList = "1,2финала 3Д_БЛ_Жен";
@@ -579,12 +800,319 @@ public class ExcelGenerator {
         writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
+    /**
+     * Генерация финалов для определенного типа лука у мужчин
+     */
+    public void generateFinalMAN(File file, BowType bowType, List<?> sportsmanMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 4));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "Финал 3Д_БЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "Финал 3Д_КЛ_Муж";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "Финал 3Д-Long_Муж";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "Финал 3Д-Составной_Муж";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "Финал 3Д-Sporting_Муж";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "Финал 3Д-Исторический_Муж";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "Финал 3Д-Олимпик_Муж";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "Финал 3Д-Арбалет_Муж";
+        }
+
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcelFinal(excelNameList, rowNum, data, file);
+    }
+
+    /**
+     * Генерация финалов для определенного типа лука у женщин
+     */
+    public void generateFinalWOMAN(File file, BowType bowType, List<?> sportsmanMANListInBowType) throws IOException {
+        List<?> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 4));
+        String excelNameList = "";
+        if (Objects.equals(bowType.getId(), BL_3D)) {
+            excelNameList = "Финал 3Д_БЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), CL_3D)) {
+            excelNameList = "Финал 3Д_КЛ_Жен";
+        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
+            excelNameList = "Финал 3Д-Long_Жен";
+        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
+            excelNameList = "Финал 3Д-Составной_Жен";
+        } else if (Objects.equals(bowType.getId(), Sporting)) {
+            excelNameList = "Финал 3Д-Sporting_Жен";
+        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
+            excelNameList = "Финал 3Д-Исторический_Жен";
+        } else if (Objects.equals(bowType.getId(), Olympic)) {
+            excelNameList = "Финал 3Д-Олимпик_Жен";
+        } else if (Objects.equals(bowType.getId(), Arbalet)) {
+            excelNameList = "Финал 3Д-Арбалет_Жен";
+        }
+
+        //Значение 4 четко под формат Pattern.xlsx!!!!!!
+        int rowNum = 4;
+
+        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
+
+        writeDataToExcelFinal(excelNameList, rowNum, data, file);
+    }
+
+    /**
+     * Генерация 1/4 1/2 final стадий для соревнований
+     */
+    public void generateNextStageOfCompetition(String listName, File file, String competitionId) throws IOException {
+        //БЛОК//
+        if (listName.equals("block3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("block3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("block3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("block3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("block3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("block3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(BL_3D).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(BL_3D).orElse(null), lidersSportsmanList);
+        }
+
+        //Классик//
+        if (listName.equals("classic3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("classic3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("classic3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("classic3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("classic3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("classic3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(CL_3D).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(CL_3D).orElse(null), lidersSportsmanList);
+        }
+
+        //LONG_BOW//
+        if (listName.equals("long3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("long3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("long3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("long3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("long3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("long3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(LongBow_3D).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(LongBow_3D).orElse(null), lidersSportsmanList);
+        }
+
+        //CompositeBow_3D//
+        if (listName.equals("composite3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("composite3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("composite3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("composite3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("composite3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("composite3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(CompositeBow_3D).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(CompositeBow_3D).orElse(null), lidersSportsmanList);
+        }
+
+        //Sporting//
+        if (listName.equals("sporting3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("sporting3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("sporting3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("sporting3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("sporting3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("sporting3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Sporting).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(Sporting).orElse(null), lidersSportsmanList);
+        }
+
+        //history//
+        if (listName.equals("historyBow3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("historyBow3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("historyBow3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("historyBow3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("historyBow3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("historyBow3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(HistoryBow).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(HistoryBow).orElse(null), lidersSportsmanList);
+        }
+
+        //olympic//
+        if (listName.equals("olympic3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("olympic3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("olympic3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("olympic3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("olympic3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("olympic3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Olympic).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(Olympic).orElse(null), lidersSportsmanList);
+        }
+
+        //arbalet//
+        if (listName.equals("arbalet3DMan4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), MAN_ID);
+            generate4StageMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("arbalet3DWoman4")) {
+            List<ProtocolStage8> lidersSportsmanList = protocolStage8Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), WOMAN_ID);
+            generate4StageWOMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("arbalet3DMan2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), MAN_ID);
+            generate2StageMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("arbalet3DWoman2")) {
+            List<ProtocolStage4> lidersSportsmanList = protocolStage4Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), WOMAN_ID);
+            generate2StageWOMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("arbalet3DManFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), MAN_ID);
+            generateFinalMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        } else if (listName.equals("arbalet3DWomanFinal")) {
+            List<ProtocolStage2> lidersSportsmanList = protocolStage2Service.findLeaders(competitionId, bowTypeRepository.findById(Arbalet).orElse(null), WOMAN_ID);
+            generateFinalWOMAN(file, bowTypeRepository.findById(Arbalet).orElse(null), lidersSportsmanList);
+        }
+
+    }
+
 
     /**
      * Метод для вставки данных (data) в определенный лист (excelNameList) Excel файла (file)
      * Вставка данных начинается со строки rowNum + 1
      */
     private void writeDataToExcel(String excelNameList, int rowNum, Map<Integer, Object[]> data, File file) throws IOException {
+        if (!data.isEmpty() && file != null) {
+
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
+            XSSFSheet sheet = workbook.getSheet(excelNameList);
+
+            CellStyle style = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            makeFontAndStyle(workbook, style, font);
+
+            //Если листа с таким названием в файле нет, то создадим данный лист
+            if (sheet == null) {
+                sheet = workbook.createSheet(excelNameList);
+                insertTemplate(style, sheet, workbook, file);
+            }
+
+            Set<Integer> keySet = data.keySet();
+
+            Integer indexForCountSportsman = 1;
+
+            for (Integer key : keySet) {
+                XSSFRow row = sheet.createRow(rowNum++);
+                Object[] objArr = data.get(key);
+                int cellNum = 0;
+                Cell firstCellForNum = row.createCell(cellNum);
+                firstCellForNum.setCellValue(indexForCountSportsman.toString());
+                firstCellForNum.setCellStyle(style);
+                for (Object obj : objArr) {
+                    Cell cell = row.createCell(++cellNum);
+                    if (obj instanceof String) {
+                        cell.setCellValue((String) obj);
+                        cell.setCellStyle(style);
+                    } else if (obj instanceof Integer) {
+                        cell.setCellValue(obj.toString());
+                        cell.setCellStyle(style);
+                    } else if (obj instanceof Date) {
+                        cell.setCellValue((Date) obj);
+                        cell.setCellStyle(style);
+                    } else {
+                        cell.setCellValue(obj.toString());
+                        cell.setCellStyle(style);
+                    }
+                }
+                indexForCountSportsman++;
+            }
+
+            sheet.autoSizeColumn(0);
+            sheet.autoSizeColumn(1);
+            sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(3);
+            sheet.autoSizeColumn(4);
+            sheet.autoSizeColumn(5);
+            sheet.autoSizeColumn(6);
+            sheet.autoSizeColumn(7);
+            sheet.autoSizeColumn(8);
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                workbook.write(out);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Метод для вставки данных (data) в определенный лист (excelNameList) Excel файла (file)
+     * Вставка данных начинается со строки rowNum + 1
+     */
+    private void writeDataToExcelFinal(String excelNameList, int rowNum, Map<Integer, Object[]> data, File file) throws IOException {
         if (!data.isEmpty() && file != null) {
 
             XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
@@ -709,4 +1237,5 @@ public class ExcelGenerator {
             }
         }
     }
+
 }

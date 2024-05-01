@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -161,90 +160,6 @@ public class AdminService {
     public void createProtocolForCompetition(Competition savedCompetition) {
         Protocol protocol = new Protocol();
         protocol.setCompetition(savedCompetition);
-        List<String> bowTypeList = new ArrayList<>();
-        for (BowType bowType : savedCompetition.getBowTypeList()) {
-            bowTypeList.add(bowType.getId());
-        }
-        if (!bowTypeList.contains(BL_3D)) {
-            protocol.setBlock3DMan8(true);
-            protocol.setBlock3DMan4(true);
-            protocol.setBlock3DMan2(true);
-            protocol.setBlock3DManFinal(true);
-            protocol.setBlock3DWoman8(true);
-            protocol.setBlock3DWoman4(true);
-            protocol.setBlock3DWoman2(true);
-            protocol.setBlock3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(CL_3D)) {
-            protocol.setClassic3DMan8(true);
-            protocol.setClassic3DMan4(true);
-            protocol.setClassic3DMan2(true);
-            protocol.setClassic3DManFinal(true);
-            protocol.setClassic3DWoman8(true);
-            protocol.setClassic3DWoman4(true);
-            protocol.setClassic3DWoman2(true);
-            protocol.setClassic3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(LongBow_3D)) {
-            protocol.setLong3DMan8(true);
-            protocol.setLong3DMan4(true);
-            protocol.setLong3DMan2(true);
-            protocol.setLong3DManFinal(true);
-            protocol.setLong3DWoman8(true);
-            protocol.setLong3DWoman4(true);
-            protocol.setLong3DWoman2(true);
-            protocol.setLong3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(CompositeBow_3D)) {
-            protocol.setComposite3DMan8(true);
-            protocol.setComposite3DMan4(true);
-            protocol.setComposite3DMan2(true);
-            protocol.setComposite3DManFinal(true);
-            protocol.setComposite3DWoman8(true);
-            protocol.setComposite3DWoman4(true);
-            protocol.setComposite3DWoman2(true);
-            protocol.setComposite3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(Sporting)) {
-            protocol.setSporting3DMan8(true);
-            protocol.setSporting3DMan4(true);
-            protocol.setSporting3DMan2(true);
-            protocol.setSporting3DManFinal(true);
-            protocol.setSporting3DWoman8(true);
-            protocol.setSporting3DWoman4(true);
-            protocol.setSporting3DWoman2(true);
-            protocol.setSporting3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(HistoryBow)) {
-            protocol.setHistoryBow3DMan8(true);
-            protocol.setHistoryBow3DMan4(true);
-            protocol.setHistoryBow3DMan2(true);
-            protocol.setHistoryBow3DManFinal(true);
-            protocol.setHistoryBow3DWoman8(true);
-            protocol.setHistoryBow3DWoman4(true);
-            protocol.setHistoryBow3DWoman2(true);
-            protocol.setHistoryBow3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(Olympic)) {
-            protocol.setOlympic3DMan8(true);
-            protocol.setOlympic3DMan4(true);
-            protocol.setOlympic3DMan2(true);
-            protocol.setOlympic3DManFinal(true);
-            protocol.setOlympic3DWoman8(true);
-            protocol.setOlympic3DWoman4(true);
-            protocol.setOlympic3DWoman2(true);
-            protocol.setOlympic3DWomanFinal(true);
-        }
-        if (!bowTypeList.contains(Arbalet)) {
-            protocol.setArbalet3DMan8(true);
-            protocol.setArbalet3DMan4(true);
-            protocol.setArbalet3DMan2(true);
-            protocol.setArbalet3DManFinal(true);
-            protocol.setArbalet3DWoman8(true);
-            protocol.setArbalet3DWoman4(true);
-            protocol.setArbalet3DWoman2(true);
-            protocol.setArbalet3DWomanFinal(true);
-        }
         protocolRepository.save(protocol);
     }
 }

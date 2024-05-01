@@ -63,4 +63,10 @@ public class ProtocolStage4Service {
         }
         return null;
     }
+
+    public List<ProtocolStage4> findLeaders(String competitionId, BowType bowType, String sexId) {
+        List<ProtocolStage4> sportsmanList = protocolStage4Repository.findProtocolStage4ByCompetitionIdAndBowTypeIdAndSportsmanSexId(competitionId, bowType.getId(), sexId);
+        Collections.sort(sportsmanList);
+        return sportsmanList;
+    }
 }

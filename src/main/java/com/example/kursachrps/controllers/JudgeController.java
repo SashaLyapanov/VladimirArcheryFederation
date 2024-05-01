@@ -80,6 +80,7 @@ public class JudgeController {
      */
     @GetMapping("/generateProtocol")
     public ResponseEntity<Resource> generateProtocol(@RequestParam String competitionId) throws IOException {
+        judgeService.markExtraStages(competitionId);
         File fileName = judgeService.generateProtocol(competitionId);
 
         //Реализация скачивания файла
@@ -110,7 +111,7 @@ public class JudgeController {
                 if (resultOfGenerating) {
                     //TODO
                     // Реализовать скачивание протокола в загрузки компьютера
-                    return ResponseEntity.ok("Все хорошо, так держать!");
+                    return ResponseEntity.ok("Все хорошо, квалификация загружена!");
                 } else {
                     return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
                 }
@@ -118,13 +119,14 @@ public class JudgeController {
             return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
         } else {
             File protocol = judgeService.uploadProtocolWithSomeStage(file, competitionId);
-            return null;
-//            boolean resultOfGenerating = judgeService.generateNextStageOfCompetition(protocol, competitionId);
-//            if (resultOfGenerating) {
-//                return ResponseEntity.ok("Все хорошо, так держать!");
-//            } else {
-//                return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
-//            }
+            boolean resultOfGenerating = judgeService.generateNextStageOfCompetition(protocol, competitionId);
+            if (resultOfGenerating) {
+                //TODO
+                // Реализовать скачивание протокола в загрузки компьютера
+                return ResponseEntity.ok("Все хорошо, различные стадии финала загружены!");
+            } else {
+                return ResponseEntity.badRequest().body("Что-то пошло не так при генерации следующей стадии протокола");
+            }
         }
     }
 
