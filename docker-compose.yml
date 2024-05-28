@@ -1,0 +1,45 @@
+version: '0.1'
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 28jrn2002$
+      POSTGRES_DB: VladimirArcheryFederation111
+      PGDATA: /Users/-/IdeaProjects/VladimirArcheryFederation/src/main/java/db/schema.sql:/db/schema.sql
+      TZ: Europe/Moscow
+    volumes:
+      - C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/main/java/db/schema.sql:/db/schema.sql
+    networks:
+      - fslvo
+    ports:
+      - "54321:5432"
+  backend:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=VladimirArcheryFederation111
+      - DB_PASSWORD=28jrn2002$
+      - TZ=Europe/Moscow
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_OPTS=-Dspring.profiles.active=docker
+    volumes:
+      - ./docker_data/fslvo/log:/log
+    networks:
+      fslvo:
+        aliases:
+          - fslvo-backend
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+networks:
+  fslvo:
+    driver: bridge
