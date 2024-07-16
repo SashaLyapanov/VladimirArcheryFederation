@@ -3,14 +3,6 @@ package com.example.kursachrps.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
 
 @Entity
 @Data
@@ -31,52 +23,46 @@ public class AboutFederation extends GenericEntity{
     private String contacts;
 
     /**
-     * Поле для файла с уставом
+     * Список названий подгруженных файлов через запятую
      */
-    @Transient
-    private MultipartFile regulation;
-
-    @Column(name = "linkForRegulation")
-    private String linkForRegulation;
+    @Column(name = "list_file_names")
+    private String listFileNames;
 
     /**
-     * Поле для файла с уставом
+     * Список ссылок на ресурсы через запятую
      */
-    @Transient
-    private MultipartFile history;
+    @Column(name = "list_links")
+    private String listLinks;
 
-    @Column(name = "linkForHistory")
-    private String linkForHistory;
-
-    @PostLoad
-    public void loadFileLink() {
-        if (linkForRegulation != null) {
-            try {
-                File fileFromLink = ResourceUtils.getFile(linkForRegulation);
-                String originalFilename = fileFromLink.getName();
-                String contentType = "multipart/form-data";
-                byte[] content = Files.readAllBytes(fileFromLink.toPath());
-                regulation = new MockMultipartFile(linkForRegulation, originalFilename, contentType, content);
-            } catch (FileNotFoundException e) {
-                System.out.println("Мы столкнулись с FileNotFoundException: " + e.getMessage());
-            } catch (IOException e) {
-                System.out.println("Мы столкнулись с IOException: " + e.getMessage());
-            }
-        }
-        if (linkForHistory != null) {
-            try {
-                File fileFromLink = ResourceUtils.getFile(linkForHistory);
-                String originalFilename = fileFromLink.getName();
-                String contentType = "multipart/form-data";
-                byte[] content = Files.readAllBytes(fileFromLink.toPath());
-                history = new MockMultipartFile(linkForHistory, originalFilename, contentType, content);
-            } catch (FileNotFoundException e) {
-                System.out.println("Мы столкнулись с FileNotFoundException: " + e.getMessage());
-            } catch (IOException e) {
-                System.out.println("Мы столкнулись с IOException: " + e.getMessage());
-            }
-        }
-    }
+//    @PostLoad
+//    public void loadFileLink() {
+//        if (linkForRegulation != null) {
+//            try {
+//                File fileFromLink = ResourceUtils.getFile(linkForRegulation);
+//                String originalFilename = fileFromLink.getName();
+//                String contentType = "multipart/form-data";
+//                byte[] content = Files.readAllBytes(fileFromLink.toPath());
+//                regulation = new MockMultipartFile(linkForRegulation, originalFilename, contentType, content);
+//            } catch (FileNotFoundException e) {
+//                System.out.println("Мы столкнулись с FileNotFoundException: " + e.getMessage());
+//            } catch (IOException e) {
+//                System.out.println("Мы столкнулись с IOException: " + e.getMessage());
+//            }
+//        }
+//        if (linkForHistory != null) {
+//            try {
+//                File fileFromLink = ResourceUtils.getFile(linkForHistory);
+//                String originalFilename = fileFromLink.getName();
+//                String contentType = "multipart/form-data";
+//                byte[] content = Files.readAllBytes(fileFromLink.toPath());
+//                history = new MockMultipartFile(linkForHistory, originalFilename, contentType, content);
+//            } catch (FileNotFoundException e) {
+//                System.out.println("Мы столкнулись с FileNotFoundException: " + e.getMessage());
+//            } catch (IOException e) {
+//                System.out.println("Мы столкнулись с IOException: " + e.getMessage());
+//            }
+//        }
+//    }
 
 }
 

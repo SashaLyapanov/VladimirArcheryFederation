@@ -8,9 +8,7 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.service.ApplicationService;
 import com.example.kursachrps.service.JudgeService;
 import com.example.kursachrps.service.ProtocolService;
-import com.example.kursachrps.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,21 +30,18 @@ public class JudgeController {
     private final ApplicationMapper applicationMapper;
     private final ApplicationService applicationService;
     private final ProtocolService protocolService;
-    private final FileUtils fileUtils;
 
     @Autowired
     public JudgeController(JudgeService judgeService,
                            CompetitionMapper competitionMapper,
                            ApplicationMapper applicationMapper,
                            ApplicationService applicationService,
-                           ProtocolService protocolService,
-                           FileUtils fileUtils) {
+                           ProtocolService protocolService) {
         this.judgeService = judgeService;
         this.competitionMapper = competitionMapper;
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
         this.protocolService = protocolService;
-        this.fileUtils = fileUtils;
     }
 
     /**
@@ -63,16 +58,15 @@ public class JudgeController {
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
     @PostMapping("/regParticipantToCompetition")
-    public String regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) throws JSONException, IOException, InterruptedException {
+    public void regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) {
         if (applicationService.checkRegistrationInCompetitionByParticipantEmail(competitionId, email)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
             judgeService.registrateParticipantToCompetition(email, competitionId, application);
-            PayController payController = new PayController();
-            String link = payController.getLinkToPay();
-            System.out.println(link);
-            return link;
-        } else
-            return "Участник уже зарегистрирован на данные соревнования";
+//            PayController payController = new PayController();
+//            String link = payController.getLinkToPay();
+//            System.out.println(link);
+//            return link;
+        }
     }
 
     /**

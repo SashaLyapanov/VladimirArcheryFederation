@@ -30,6 +30,7 @@ import java.util.List;
 @RequestMapping("/api/v1/general")
 public class GeneralController {
 
+    private final ActivityFederationService activityFederationService;
     private final CompetitionMapper competitionMapper;
     private final GeneralService generalService;
     private final ApplicationService applicationService;
@@ -39,9 +40,11 @@ public class GeneralController {
     private final AboutFederationService aboutFederationService;
     private final RegionalTeamService regionalTeamService;
 
-    public GeneralController(CompetitionMapper competitionMapper, GeneralService generalService, ApplicationService applicationService,
+    public GeneralController(ActivityFederationService activityFederationService, CompetitionMapper competitionMapper,
+                             GeneralService generalService, ApplicationService applicationService,
                              ApplicationMapper applicationMapper, GeneralMapper generalMapper, ArticleService articleService,
                              AboutFederationService aboutFederationService, RegionalTeamService regionalTeamService) {
+        this.activityFederationService = activityFederationService;
         this.competitionMapper = competitionMapper;
         this.generalService = generalService;
         this.applicationService = applicationService;
@@ -153,7 +156,7 @@ public class GeneralController {
      * Метод для полечения всех новостей
      */
     @GetMapping("/getArticles")
-    public ResponseEntity<List<ArticleDTO>> getAllArticles() throws IOException {
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         List<Article> articleList = articleService.getAllArticles();
         for (Article article : articleList) {
@@ -172,33 +175,44 @@ public class GeneralController {
      * Метод для отображения определенной новости (страница этой новости)
      */
     @GetMapping("getArticle")
-    public ArticleDTO getArticle(@RequestParam String articleId) {
-        return generalMapper.fromArticle(articleService.getArticleById(articleId));
+    public ResponseEntity<?> getArticle(@RequestParam String articleId) {
+        ArticleDTO articleDTO = generalMapper.fromArticle(articleService.getArticleById(articleId));
+        if (articleDTO != null) {
+            return ResponseEntity.ok(articleDTO);
+        }
+        else return ResponseEntity.badRequest().body("Не удалось получить запись новости с id" + articleId);
     }
+
+    List<String> mapStringToList(String str) {
+        if (str != null) {
+            String[] items = str.split(", ");
+            return Arrays.asList(items);
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Метод для информации о федерации
      */
     @GetMapping("/getAboutFederation")
-    public ResponseEntity<List<AboutFederationDTO>> getAllAboutFederation() throws IOException {
-        List<AboutFederationDTO> aboutFederationDTOList = new ArrayList<AboutFederationDTO>();
-        List<AboutFederation> aboutFederationList = aboutFederationService.getAllAboutFederation();
-        for (AboutFederation aboutFederation : aboutFederationList) {
-            AboutFederationDTO aboutFederationDTO = new AboutFederationDTO();
-            aboutFederationDTO.setId(aboutFederation.getId());
-            aboutFederationDTO.setManagers(aboutFederation.getManagers());
-            aboutFederationDTO.setContacts(aboutFederation.getContacts());
-            aboutFederationDTO.setLinkForRegulation(aboutFederation.getLinkForRegulation());
-            aboutFederationDTO.setLinkForHistory(aboutFederation.getLinkForHistory());
-            aboutFederationDTO.setFileRegulationName(aboutFederation.getRegulation().getOriginalFilename());
-            aboutFederationDTO.setFileHistoryName(aboutFederation.getHistory().getOriginalFilename());
-            aboutFederationDTO.setFileRegulationData(Arrays.toString(aboutFederation.getRegulation().getBytes()));
-            aboutFederationDTO.setFileHistoryData(Arrays.toString(aboutFederation.getHistory().getBytes()));
-            aboutFederationDTOList.add(aboutFederationDTO);
+    public ResponseEntity<?> getAllAboutFederation() {
+        AboutFederationDTO aboutFederationDTO;
+        AboutFederation aboutFederation = aboutFederationService.getAllAboutFederation();
+        aboutFederationDTO = generalMapper.fromAboutFederation(aboutFederation);
+        if (aboutFederation.getListFileNames() != null) {
+            aboutFederationDTO.setFileNames(mapStringToList(aboutFederation.getListFileNames()));
         }
-        return ResponseEntity.ok(aboutFederationDTOList);
+        if (aboutFederation.getListLinks() != null) {
+            aboutFederationDTO.setLinks(mapStringToList(aboutFederation.getListLinks()));
+        }
+        if (aboutFederationDTO != null) {
+            return ResponseEntity.ok(aboutFederationDTO);
+        } else {
+            return ResponseEntity.badRequest().body("Не удалось извлечь информацию о федерации.");
+        }
     }
-
 
     //////////////////////////////////////////
     //    СОРЕВНОВАНИЯ    //
@@ -221,9 +235,30 @@ public class GeneralController {
     }
 
     /**
+     * Метод для вывода всех соревнований со статусом Future or Present
+     */
+    @GetMapping("availableCompetitions")
+    public List<CompetitionDTO> getAvailableCompetition() {
+        return competitionMapper.fromCompetition(generalService.showAllAvailableCompetitions());
+    }
+
+    /**
+     * Метод для вывода всех соревнований со статусом Future or Present
+     */
+    @GetMapping("pastCompetitions")
+    public List<CompetitionDTO> getPastCompetition() {
+        return competitionMapper.fromCompetition(generalService.showAllPastCompetitions());
+    }
+
+    @GetMapping("competition")
+    public CompetitionDTO getCompetition(@RequestParam String id) {
+        return competitionMapper.fromCompetition(generalService.showCompetitionById(id));
+    }
+
+    /**
      * Метод для вывода соревнования по дате
      */
-    @GetMapping("competition")
+    @GetMapping("competitionByDate")
     public List<CompetitionDTO> getCompetitions(@RequestParam Date date) {
         return competitionMapper.fromCompetition(generalService.showCompetitionByDate(date));
     }
@@ -283,5 +318,22 @@ public class GeneralController {
     public List<SportsmanDTO> getRegionalTeam() {
         return regionalTeamService.getAllSportsman();
     }
+
+
+    /**
+     * метод для получения списка названий файлов на странице Сборная
+     */
+    @GetMapping("regionalTeamFiles")
+    public List<String> getRegionalTeamFiles() { return regionalTeamService.getAllRegionalTeamFiles(); }
+
+    //////////////////////////////////////////
+    //      Деятельность федерации     //
+    //////////////////////////////////////////
+
+    /**
+     * Метод для получения списка названий файлов на странице Деятельность федерации
+     */
+    @GetMapping("activityFederation")
+    public List<String> getActivityFiles() { return activityFederationService.getAllRegionalActivityFiles(); }
 
 }

@@ -98,7 +98,7 @@ public class AuthController {
                     sportsman.getActivationCode()
             );
 
-            smtpMailSender.send(sportsman.getEmail(), "Activation code", message);
+//            smtpMailSender.send(sportsman.getEmail(), "Activation code", message);
 
         }
 

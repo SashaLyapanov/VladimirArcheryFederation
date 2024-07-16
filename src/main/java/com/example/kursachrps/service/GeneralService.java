@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,24 @@ public class GeneralService {
 
     public List<Competition> showAllCompetitions() {
         return competitionRepository.findAll(Sort.by("date"));
+    }
+
+    public List<Competition> showAllAvailableCompetitions() {
+        List<Competition> presentCompetitions = competitionRepository.findByStatus(StatusOfCompetition.PRESENT, Sort.by("date"));
+        List<Competition> futureCompetitions = competitionRepository.findByStatus(StatusOfCompetition.FUTURE, Sort.by("date"));
+        List<Competition> competitions = new ArrayList<>();
+        competitions.addAll(presentCompetitions);
+        competitions.addAll(futureCompetitions);
+
+        return competitions;
+    }
+
+    public List<Competition> showAllPastCompetitions() {
+        return competitionRepository.findByStatus(StatusOfCompetition.PAST, Sort.by("date"));
+    }
+
+    public Competition showCompetitionById(String id) {
+        return competitionRepository.findById(id).orElse(null);
     }
 
     public List<Competition> showCompetitionByDate(Date date) {

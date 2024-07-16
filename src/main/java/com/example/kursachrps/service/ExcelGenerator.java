@@ -607,38 +607,6 @@ public class ExcelGenerator {
         writeDataToExcel(excelNameList, rowNum, data, file);
     }
 
-//    /**
-//     * Метод для генерации 1/4 финала у мужчин
-//     */
-//    public void generate4StageMAN(File file, BowType bowType, List<QualificationRound> sportsmanMANListInBowType) throws IOException {
-//        List<QualificationRound> lidersSportsmanList = new ArrayList<>(sportsmanMANListInBowType.subList(0, 8));
-//        String excelNameList = "";
-//        if (Objects.equals(bowType.getId(), BL_3D)) {
-//            excelNameList = "1,4финала 3Д_БЛ_Муж";
-//        } else if (Objects.equals(bowType.getId(), CL_3D)) {
-//            excelNameList = "1,4финала 3Д_КЛ_Муж";
-//        } else if (Objects.equals(bowType.getId(), LongBow_3D)) {
-//            excelNameList = "1,4финала 3Д-Long_Муж";
-//        } else if (Objects.equals(bowType.getId(), CompositeBow_3D)) {
-//            excelNameList = "1,4финала 3Д-Составной_Муж";
-//        } else if (Objects.equals(bowType.getId(), Sporting)) {
-//            excelNameList = "1,4финала 3Д-Sporting_Муж";
-//        } else if (Objects.equals(bowType.getId(), HistoryBow)) {
-//            excelNameList = "1,4финала 3Д-Исторический_Муж";
-//        } else if (Objects.equals(bowType.getId(), Olympic)) {
-//            excelNameList = "1,4финала 3Д-Олимпик_Муж";
-//        } else if (Objects.equals(bowType.getId(), Arbalet)) {
-//            excelNameList = "1,4финала 3Д-Арбалет_Муж";
-//        }
-//
-//        //Значение 4 четко под формат Pattern.xlsx!!!!!!
-//        int rowNum = 4;
-//
-//        Map<Integer, Object[]> data = prepareData(rowNum, lidersSportsmanList);
-//
-//        writeDataToExcel(excelNameList, rowNum, data, file);
-//    }
-
     /**
      * Метод для генерации 1/4 финала у мужчин
      */

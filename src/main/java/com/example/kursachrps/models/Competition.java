@@ -20,6 +20,9 @@ public class Competition extends GenericEntity{
     @NotEmpty(message = "Место должно быть!")
     private String place;
 
+    @Column(name="description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "type_id")
     private CompetitionType type;

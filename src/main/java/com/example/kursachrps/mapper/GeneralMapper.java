@@ -1,5 +1,6 @@
 package com.example.kursachrps.mapper;
 
+import com.example.kursachrps.dto.AboutFederationDTO;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AdditionalDTO.*;
 import com.example.kursachrps.dto.CompetitionDTO;
@@ -12,6 +13,14 @@ import java.util.List;
 public interface GeneralMapper {
     RegionDTO fromRegion(Region region);
     List<RegionDTO> fromRegion (List<Region> regions);
+
+    AboutFederation fromAboutFederationDTO(AboutFederationDTO aboutFederationDTO);
+
+    List<AboutFederation> fromAboutFederationDTO(List<AboutFederationDTO> aboutFederationDTOList);
+
+    AboutFederationDTO fromAboutFederation(AboutFederation aboutFederation);
+
+    List<AboutFederationDTO> fromAboutFederation(List<AboutFederation> aboutFederationList);
 
     SportsTitleDTO fromSportsTitle(SportsTitle sportsTitle);
     List<SportsTitleDTO> fromSportsTitle(List<SportsTitle> sportsTitle);

@@ -1,6 +1,7 @@
 package com.example.kursachrps.repositories;
 
 import com.example.kursachrps.models.Competition;
+import com.example.kursachrps.models.StatusOfCompetition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -21,6 +22,8 @@ public interface CompetitionRepository extends JpaRepository<Competition, String
     List<Competition> findByDate(Date date);
 
     Competition findByName(String name);
+
+    List<Competition> findByStatus(StatusOfCompetition status, Sort sort);
 
     List<Competition> findCompetitionByNameAndDateAndCategories(String name, Date date, String categories);
 

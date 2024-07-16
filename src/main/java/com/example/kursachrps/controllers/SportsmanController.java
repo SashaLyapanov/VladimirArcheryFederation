@@ -1,6 +1,5 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.models.Application;
 import com.example.kursachrps.models.SportsTitle;
 import com.example.kursachrps.dto.ApplicationDTO;
@@ -61,6 +60,19 @@ public class SportsmanController {
     }
 
     /**
+     * Проверка на уже существующую регистрацию на определенные соревнования у спортсмена по CompetitinoId и UserId
+     */
+    @GetMapping("/checkApplication")
+    public ResponseEntity<?> checkExistApplication(@RequestParam String sportsmanId, @RequestParam String competitionId) {
+        boolean response = applicationService.checkRegistrationInCompetition(competitionId, sportsmanId);
+        if (response) {
+            return ResponseEntity.status(HttpStatus.OK).body("true");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("false");
+        }
+    }
+
+    /**
      * Просмотр всех собственных заявок на соревнования
      */
     @GetMapping("/allMyApplication")
@@ -83,9 +95,9 @@ public class SportsmanController {
      * Поиск всех спортсменов, зарегистрированных на определенные соревнования по id соревнования и типу лука
      */
     @GetMapping("/sportsmenByCompetitionAndBowType")
-    public List<SportsmanDTO> getAllSportsmanByCompetitionAndBowType(@RequestParam String id,
-                                                                     @RequestParam String bowTypeName) {
-        List<SportsmanDTO> list = sportsmanService.getAllSportmanByCompetitionAndBowType(id, bowTypeName);
+    public List<ApplicationDTO> getAllSportsmanByCompetitionAndBowType(@RequestParam String id,
+                                                                       @RequestParam String bowTypeName) {
+        List<ApplicationDTO> list = sportsmanService.getAllSportmanByCompetitionAndBowType(id, bowTypeName);
         return list;
     }
 

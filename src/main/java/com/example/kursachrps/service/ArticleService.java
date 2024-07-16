@@ -38,15 +38,12 @@ public class ArticleService {
     }
 
     @Transactional
-    public void saveArticle(Article article, MultipartFile file) throws IOException{
+    public void saveArticle(Article article, MultipartFile file) {
         if (file != null && file.getSize() != 0) {
             Article article1 = articleRepository.save(article);
             Article article2 = articleRepository.findById(article1.getId()).orElse(null);
             String fileName = article1.getId() + "_" + file.getOriginalFilename();
             if (article2 != null) {
-                article2.setLink(fileName);
-                articleRepository.save(article2);
-
                 org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -57,6 +54,8 @@ public class ArticleService {
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
                 ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
+                article2.setLink(response.getBody().substring(response.getBody().lastIndexOf('/')+1));
+                articleRepository.save(article2);
             }
         } else  {
             articleRepository.save(article);

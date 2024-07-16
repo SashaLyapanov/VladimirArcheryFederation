@@ -1,18 +1,20 @@
--- таблица Пол спортсмена
-DROP TABLE IF EXISTS sex;
-CREATE TABLE sex (
-                     id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
-                     name varchar(10)
+CREATE TABLE sex (id varchar(36) NOT NULL PRIMARY KEY UNIQUE, name varchar(10));
+
+DROP TABLE IF EXISTS about_federation;
+CREATE TABLE about_federation (
+    id varchar(36),
+    managers varchar(300),
+    contacts varchar(256),
+    listFileNames varchar(1000),
+    listLinks varchar(5000)
 );
 
---таблица типов лука
 DROP TABLE IF EXISTS bow_types;
 CREATE TABLE bow_types (
                            id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                            bow_type_name varchar(250) UNIQUE NOT NULL
 );
 
---таблица разрядов
 DROP TABLE IF EXISTS sports_titles;
 CREATE TABLE sports_titles (
                                id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
@@ -20,7 +22,6 @@ CREATE TABLE sports_titles (
 );
 
 
---таблица юзеров с ролями
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
                        id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
@@ -35,27 +36,23 @@ CREATE TABLE users (
                        birth_date date
 );
 
---таблица судий
 DROP TABLE IF EXISTS judges;
 CREATE TABLE judges (
                         id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                         FOREIGN KEY (id) REFERENCES users (id)
 );
 
---таблица админов
 DROP TABLE IF EXISTS admins;
 CREATE TABLE admins (
                         id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                         FOREIGN KEY (id) REFERENCES users (id)
 );
 
---таблица для хранения всех субъектов
 CREATE TABLE regions (
                          id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                          name varchar(100)
 );
 
---таблица спортсменов
 DROP TABLE IF EXISTS sportsmen;
 CREATE TABLE sportsmen (
                            id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
@@ -77,12 +74,12 @@ CREATE TABLE competition_type (
                                   name varchar(30)
 );
 
---таблица соревнований
 DROP TABLE IF EXISTS competitions;
 CREATE TABLE competitions (
                               id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
                               competition_name varchar(250) NOT NULL,
                               place varchar(250) NOT NULL,
+                              description varchar(10000),
                               competition_date date,
                               status varchar(20),
                               judge varchar(250),
@@ -107,7 +104,6 @@ CREATE table competitions_categories (
                                          FOREIGN KEY (category_id) REFERENCES categories (id)
 );
 
---таблица для связи соревнований и типов лука в данных соревнованиях
 DROP TABLE IF EXISTS competition_bow_type;
 CREATE TABLE competition_bow_type (
                                       competition_id varchar(36) NOT NULL,
@@ -116,7 +112,6 @@ CREATE TABLE competition_bow_type (
                                       FOREIGN KEY (bow_type_id) REFERENCES bow_types (id)
 );
 
---таблица заявок (является также промежуточной для связи спортсмена и соревнований)
 DROP TABLE IF EXISTS applications;
 CREATE TABLE applications (
                               id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
@@ -151,33 +146,36 @@ DROP TABLE IF EXISTS articles;
 CREATE TABLE articles (
     id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
     name varchar(50) NOT NULL,
-    body varchar (1000),
+    body varchar (50000),
     date date,
     preview_image_id varchar(36)
 );
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS regional_team;
+CREATE TABLE regional_team (
+    id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
+    file_name varchar(100) NOT NULL UNIQUE
+);
 
--- Вставка данных для начальной работы
+DROP TABLE IF EXISTS activity_federation;
+CREATE TABLE activity_federation (
+                               id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
+                               file_name varchar(100) NOT NULL UNIQUE
+);
 
--- создание таблицы Пол спортсмена
 insert into sex (id, name) values ('c99ccd51-5731-42a3-9cfc-31cc4011e035','Мужской');
 insert into sex (id, name) values ('848f4054-a9c1-4525-9e10-2ab07e3e9b4c','Женский');
 
--- Создание админа
 insert into users (id, email, password, role, status, name, surname, patronymic, birth_date)
 values ('71b0af32-887c-4903-bc54-af3f96481e9e','admin@mail.ru', '$2a$12$2xHLqWTz63INeUGlIo4U/.tOctTfyYEe41NpMti/mlG7v8wR3DW8K', 'ADMIN', 'ACTIVE', 'admin', 'admin', 'admin', '2002-10-28');
 insert into admins (id) values ('71b0af32-887c-4903-bc54-af3f96481e9e');
 
--- создание спортивных титулов
 insert into sports_titles (id, sports_title_name) values ('5a19807c-0630-435b-a0b8-5158ad900456','1 взрослый');
 insert into sports_titles (id, sports_title_name) values ('6ac053fd-8568-4a36-ae7c-741980d72684','КМС');
 insert into sports_titles (id, sports_title_name) values ('36be5498-fd85-4525-b9b6-57abd91c3666','МС');
 insert into sports_titles (id, sports_title_name) values ('049adae2-b4a7-4f65-aa54-9c3cae532c6a','МСМК');
 insert into sports_titles (id, sports_title_name) values ('dd015fc-da4f-4e6e-a7f8-9052584d7fab','ЗМС');
 
--- Создание типов лука
 insert into bow_types (id, bow_type_name)
 values ('ac6a3094-b354-4ebd-8bb1-19111742c764', '3Д-БЛ');
 insert into bow_types (id, bow_type_name)
@@ -195,7 +193,6 @@ values ('36671015-5c37-4e5c-8eed-9a353e927f32', 'Олимпик');
 insert into bow_types (id, bow_type_name)
 values ('e6dc3841-98a3-4357-a139-61e48ac393e2', 'Арбалет');
 
--- Создание категорий (возрастные+пол) для соревнований
 insert into categories (id,name)
 values ('d146475e-681f-4188-a814-c8fb44b416b1','Мужчины 14+');
 insert into categories (id,name)
@@ -218,14 +215,12 @@ insert into categories (id,name)
 values ('55b3b2f1-5a09-4dee-a249-b4d76d0444d6','Женщины');
 
 
--- Создание типов соревнований (3Д, таргет)
 insert into competition_type (id, name)
 values ('e173e1ac-b01e-4cfb-8b42-e4bbd1f2a180','3D');
 insert into competition_type (id, name)
 values ('e7d55d2b-3ac1-47fd-93d0-c0d11cab4b95','Target archery');
 
 
--- Заполнение таблицы регионов
 insert into regions (id,name) values ('bf9614ff-a9d2-4371-a97c-8c04383ae2e3', 'Алтайский край');
 insert into regions (id,name) values ('652af983-eec9-4738-8107-1d61c37bf201', 'Амурская область');
 insert into regions (id,name) values ('4d33d410-4a14-438d-b221-13eff85c6b9a', 'Архангельская область');
@@ -324,7 +319,6 @@ insert into regions (id,name) values ('9192d844-ac83-4d67-a137-e2873ea04d1e', '�
 insert into regions (id,name) values ('2d244195-29c6-40d1-a26f-a23efe5547c6', 'Ямало-Ненецкий автономный округ');
 insert into regions (id,name) values ('4359ff82-b9bf-4d33-b58f-c763120d808b', 'Ярославская область');
 
--- Создание спортсмена
 insert into users (id, email, password, role, status, name, surname, patronymic, birth_date)
 values ('fd4ccbdf-71cf-4f58-ab95-c01884f5d19c', 'sportsman@mail.ru', '$2a$12$FbG/RhA5yloQfG7vKFKo8.EJQd8Ob0wiHdmVMPNDnB4ZVk0cDF7xy', 'SPORTSMAN', 'ACTIVE', 'sportsman', 'sportsman', 'sportsman', '2003-01-20');
 insert into sportsmen(id, sex_id, sports_title_id, region_id)

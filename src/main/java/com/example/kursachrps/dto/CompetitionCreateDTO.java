@@ -18,6 +18,7 @@ public class CompetitionCreateDTO {
     private String place;
     private CompetitionTypeDTO type;
     private int price;
+    private String description;
     private List<CategoryDTO> categories;
     private List<BowTypeDTO> bowTypeList;
     private String mainJudge;

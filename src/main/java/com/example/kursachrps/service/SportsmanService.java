@@ -1,6 +1,6 @@
 package com.example.kursachrps.service;
 
-import com.example.kursachrps.dto.SportsmanDTO;
+import com.example.kursachrps.dto.ApplicationDTO;
 import com.example.kursachrps.mapper.ApplicationMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
@@ -54,11 +54,16 @@ public class SportsmanService {
     /**
      * Метод для получения всех спортсменов по Соревнованию и Типу лука
      */
-    public List<SportsmanDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
+    public List<ApplicationDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
+//        if (Objects.equals(bowTypeName, "all")) {
+//            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));
+//        } else {
+//            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName)));
+//        }
         if (Objects.equals(bowTypeName, "all")) {
-            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));
+            return applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
         } else {
-            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName)));
+            return applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName));
         }
     }
 
