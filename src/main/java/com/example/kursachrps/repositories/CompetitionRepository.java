@@ -31,5 +31,5 @@ public interface CompetitionRepository extends JpaRepository<Competition, String
     List<Competition> findAllPresent();
 
     @Query("SELECT c FROM Competition c WHERE c.status = 'PAST'")
-    List<Competition> findAllPast();
+    List<Competition> findAllPast(Sort sort);
 }

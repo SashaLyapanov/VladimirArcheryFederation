@@ -49,7 +49,7 @@ public class GeneralService {
     }
 
     public List<Competition> showAllCompetitions() {
-        return competitionRepository.findAll(Sort.by("date"));
+        return competitionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
     }
 
     public List<Competition> showAllAvailableCompetitions() {
@@ -122,7 +122,7 @@ public class GeneralService {
      * Метод для вывода списка соревнований, где status = Past
      */
     public List<Competition> getPastCompetitions() {
-        return competitionRepository.findAllPast();
+        return competitionRepository.findAllPast(Sort.by(Sort.Direction.DESC, "date"));
     }
 
 

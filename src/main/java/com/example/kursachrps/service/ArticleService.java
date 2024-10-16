@@ -4,6 +4,7 @@ import com.example.kursachrps.models.Article;
 import com.example.kursachrps.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -34,7 +35,7 @@ public class ArticleService {
     }
 
     public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+        return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"));
     }
 
     @Transactional
