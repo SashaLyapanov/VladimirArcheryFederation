@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -286,24 +288,22 @@ public class GeneralController {
      */
     @GetMapping("competitionsByParams")
     public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
-                                                @RequestParam(required = false) String place,
+                                                @RequestParam(required = false) String date,
                                                 @RequestParam(required = false) String type,
                                                 @RequestParam(required = false, defaultValue = "0") int page,
                                                 @RequestParam(required = false, defaultValue = "10") int size) {
-//        Competition searchPattern = new Competition();
-//        if (name != null && !name.isEmpty()) {
-//            searchPattern.setName(name);
-//        }
-//        if (place != null && !place.isEmpty()) {
-//            searchPattern.setPlace(place);
-//        }
-//        if (type != null && !type.isEmpty()) {
-//            searchPattern.getType().setName(type);
-//        }
-
-        List<CompetitionDTO> competitions = generalService.getCompetitionsBySearchParams(name, place, type, PageRequest.of(page, size));
-
-        return competitions;
+        if (date == null || date.isEmpty()) {
+            return (generalService.getCompetitionsBySearchParams(name, null, type, PageRequest.of(page, size)));
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date localDate = formatter.parse(date);
+                return (generalService.getCompetitionsBySearchParams(name, localDate, type, PageRequest.of(page, size)));
+            } catch (ParseException e) {
+                System.out.println("Ошибка в парсинге даты: " + e);
+            }
+            return null;
+        }
     }
 
 

@@ -38,7 +38,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void saveArticle(Article article, MultipartFile file) {
+    public Article saveArticle(Article article, MultipartFile file) {
         if (file != null && file.getSize() != 0) {
             Article article1 = articleRepository.save(article);
             Article article2 = articleRepository.findById(article1.getId()).orElse(null);
@@ -55,11 +55,12 @@ public class ArticleService {
 
                 ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
                 article2.setLink(response.getBody().substring(response.getBody().lastIndexOf('/')+1));
-                articleRepository.save(article2);
+                return articleRepository.save(article2);
             }
         } else  {
-            articleRepository.save(article);
+            return articleRepository.save(article);
         }
+        return null;
     }
 
     public void editArticle(String articleId, String name, String body, MultipartFile file) {
@@ -67,22 +68,23 @@ public class ArticleService {
         if (article != null) {
             article.setName(name);
             article.setBody(body);
-            String fileName = article.getId() + "_" + file.getOriginalFilename();
-            String oldFileName = article.getLink();
-            article.setLink(fileName);
             articleRepository.save(article);
-
-            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-            requestBody.add("fileName", fileName);
-            requestBody.add("oldFileName", oldFileName);
-            requestBody.add("file", new FileSystemResource(Objects.requireNonNull(convertMultipartFileToFile(file))));
-
-            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-            ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
+//            String fileName = article.getId() + "_" + file.getOriginalFilename();
+//            String oldFileName = article.getLink();
+//            article.setLink(fileName);
+//            articleRepository.save(article);
+//
+//            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//            MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+//            requestBody.add("fileName", fileName);
+//            requestBody.add("oldFileName", oldFileName);
+//            requestBody.add("file", new FileSystemResource(Objects.requireNonNull(convertMultipartFileToFile(file))));
+//
+//            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+//
+//            ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
         }
     }
 

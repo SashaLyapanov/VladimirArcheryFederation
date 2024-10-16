@@ -129,12 +129,12 @@ public class GeneralService {
     /**
      * Метод для поиска соревнований по расширенному списку параметров (name, place, type(3D / Target)
      */
-    public List<CompetitionDTO> getCompetitionsBySearchParams(String name, String place, String type, Pageable pageable) {
+    public List<CompetitionDTO> getCompetitionsBySearchParams(String name, Date date, String type, Pageable pageable) {
         CompetitionType competitionType = new CompetitionType();
         if (type != null) {
             competitionType = competitionTypeRepository.findById(type).orElse(null);
         }
-        List<Competition> competitions = competitionRepositoryImpl.findCompetitionByParams(name, place, competitionType, pageable).getContent();
+        List<Competition> competitions = competitionRepositoryImpl.findCompetitionByParams(name, date, competitionType, pageable).getContent();
         return competitionMapper.fromCompetition(competitions);
     }
 }

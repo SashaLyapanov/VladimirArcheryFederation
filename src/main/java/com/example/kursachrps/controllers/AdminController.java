@@ -1,5 +1,7 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.dto.ArticleDTO;
+import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
@@ -11,11 +13,11 @@ import com.example.kursachrps.service.AdminService;
 import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -27,15 +29,17 @@ public class AdminController {
     private final UserMapper userMapper;
     private final CompetitionMapper competitionMapper;
     private final ArticleService articleService;
+    private final GeneralMapper generalMapper;
     private final AboutFederationService aboutFederationService;
 
     @Autowired
     public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
-                           ArticleService articleService, AboutFederationService aboutFederationService) {
+                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
         this.articleService = articleService;
+        this.generalMapper = generalMapper;
         this.aboutFederationService = aboutFederationService;
     }
 
@@ -153,14 +157,15 @@ public class AdminController {
     /**
      * Метод для шаблонного создания новости
      */
-    @PostMapping("createArticle")
-    public void createArticle(@RequestParam String name,
-                              @RequestParam String body,
-                              @RequestParam(required = false) MultipartFile file) throws IOException {
+    @PostMapping(value = "createArticle")
+    public ArticleDTO createArticle(@RequestParam String name,
+                                    @RequestParam String body,
+                                    @RequestParam(required = false) MultipartFile file) {
         Article article = new Article();
         article.setName(name);
         article.setBody(body);
-        articleService.saveArticle(article, file);
+        article = articleService.saveArticle(article, file);
+        return generalMapper.fromArticle(article);
     }
 
     /**
@@ -174,13 +179,20 @@ public class AdminController {
     /**
      * Метод для шаблонного редактирования новости
      */
+//    @PutMapping("changeArticle")
+//    public void editArticle(@RequestParam String articleId,
+//                            @RequestParam String name,
+//                            @RequestParam String body,
+//                            @RequestParam(required = false) MultipartFile file) throws IOException {
+//        if (articleId != null) {
+//            articleService.editArticle(articleId, name, body, file);
+//        }
+//    }
     @PutMapping("changeArticle")
-    public void editArticle(@RequestParam String articleId,
-                            @RequestParam String name,
-                            @RequestParam String body,
-                            @RequestParam(required = false) MultipartFile file) throws IOException {
-        if (articleId != null) {
-            articleService.editArticle(articleId, name, body, file);
+    public void editArticle(@RequestBody Article article) {
+        System.out.println("Редактируем новость");
+        if (article != null) {
+            articleService.editArticle(article.getId(), article.getName(), article.getBody(), null);
         }
     }
 
@@ -191,16 +203,19 @@ public class AdminController {
     /**
      * Метод для изменения информации о федерации
      */
-    //TODO
-    // Реализовать статический сервис для работы с файлами
     @PutMapping("changeAboutFederation")
-    public void changeAboutFederation(@RequestParam String aboutFederationId, @RequestParam(name = "managers") String managers,
-                                      @RequestParam(name = "contacts") String contacts,
-                                      @RequestParam(name = "file1", required = false) MultipartFile file1,
-                                      @RequestParam(name = "file2", required = false) MultipartFile file2) throws IOException {
+    public ResponseEntity<?> changeAboutFederation(@RequestBody AboutFederation aboutFederationDTO) {
         AboutFederation aboutFederation = new AboutFederation();
-        aboutFederation.setManagers(managers);
-        aboutFederation.setContacts(contacts);
-        aboutFederationService.editAboutFederation(aboutFederationId, aboutFederation, file1, file2);
+        aboutFederation.setManagers(aboutFederationDTO.getManagers());
+        aboutFederation.setContacts(aboutFederationDTO.getContacts());
+        aboutFederation.setListLinks(aboutFederationDTO.getListLinks());
+        boolean status = aboutFederationService.editAboutFederation(aboutFederationDTO.getId(), aboutFederation);
+        if (status) {
+            return ResponseEntity.ok(aboutFederation);
+        } else {
+            return ResponseEntity.badRequest().body("Что-то пошло не так при обновлении данных");
+        }
     }
+
+
 }

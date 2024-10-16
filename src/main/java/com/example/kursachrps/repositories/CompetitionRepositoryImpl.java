@@ -23,15 +23,15 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryCustom {
     public CompetitionRepositoryImpl(@Lazy CompetitionRepository competitionRepository) { this.competitionRepository = competitionRepository; }
 
     @Override
-    public Page<Competition> findCompetitionByParams(String name, String place, CompetitionType type, Pageable pageable) {
-        return competitionRepository.findAll(generateSpec(name, place, type), pageable);
+    public Page<Competition> findCompetitionByParams(String name, Date date, CompetitionType type, Pageable pageable) {
+        return competitionRepository.findAll(generateSpec(name, date, type), pageable);
     }
 
-    public Specification<Competition> generateSpec(String name, String place, CompetitionType type) {
+    public Specification<Competition> generateSpec(String name, Date date, CompetitionType type) {
         return (root, query, criteriaBuilder) -> {
             return where(byLikeString(root.get("name"), name))
-                    .and(byLikeString(root.get("place"), place))
-                    .and(byCompetitionType(root.get("type").get("id"), type))
+//                    .and(byDate(root.get("date"), date))
+//                    .and(byCompetitionType(root.get("type").get("id"), type))
                     .toPredicate(root, query.orderBy().distinct(true), criteriaBuilder);
         };
     }
@@ -44,6 +44,11 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryCustom {
     public static Specification<Competition> byLikeString(Path<String> path, String queryString) {
         if (queryString == null || queryString.isEmpty()) return null;
         return (((root, query, criteriaBuilder) -> criteriaBuilder.like(path, "%" + queryString + "%")));
+    }
+
+    public static Specification<Competition> byDate(Path<String> path, Date date) {
+        if (date == null) return null;
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(path, date));
     }
 
     public static Specification<Competition> betweenDateInterval(Path<Date> path, DateInterval dateInterval) {
