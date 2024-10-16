@@ -49,7 +49,7 @@ public class GeneralService {
     }
 
     public List<Competition> showAllCompetitions() {
-        return competitionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+        return competitionRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
     public List<Competition> showAllAvailableCompetitions() {

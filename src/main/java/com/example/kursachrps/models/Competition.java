@@ -39,6 +39,9 @@ public class Competition extends GenericEntity{
     @Column(name = "competition_date")
     private Date date;
 
+    @Column(name = "competition_date_end")
+    private Date endDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusOfCompetition status;

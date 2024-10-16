@@ -19,4 +19,5 @@
     <include file="db.migrations/v-0.1/2024-04-26--add_final_in__protocol.sql"/>
     <include file="db.migrations/v-0.1/2024-04-27--add_qualification_in_protocol.sql"/>
     <include file="db.migrations/v-0.1/2024-04-27--add_tables_for_protocol_stages.sql"/>
+    <include file="db.migrations/v-0.1/2024-10-16--add_end_date_of_competition.sql"/>
 </databaseChangeLog>

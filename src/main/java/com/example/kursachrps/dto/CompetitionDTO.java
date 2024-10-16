@@ -29,5 +29,5 @@ public class CompetitionDTO {
     private String zamJudge;
     private String judges;
     private Date date;
-
+    private Date endDate;
 }
