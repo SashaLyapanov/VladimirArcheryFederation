@@ -10,7 +10,6 @@ import com.example.kursachrps.models.Article;
 import com.example.kursachrps.service.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -274,31 +273,19 @@ public class GeneralController {
     }
 
     /**
-     * Метод для поиска соревнований по названию, дате и категории спортсмена
-     */
-    @GetMapping("competitionNDC")
-    public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
-                                                @RequestParam(required = false) Date date,
-                                                @RequestParam(required = false) String categoryName) {
-        return competitionMapper.fromCompetition(generalService.showCompetitionByNameDateCategory(name, date, categoryName));
-    }
-
-    /**
      * Метод для получения соревнований по расширенному списку параметров
      */
     @GetMapping("competitionsByParams")
     public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
                                                 @RequestParam(required = false) String date,
-                                                @RequestParam(required = false) String type,
-                                                @RequestParam(required = false, defaultValue = "0") int page,
-                                                @RequestParam(required = false, defaultValue = "10") int size) {
+                                                @RequestParam(required = false) String type){
         if (date == null || date.isEmpty()) {
-            return (generalService.getCompetitionsBySearchParams(name, null, type, PageRequest.of(page, size)));
+            return (generalService.getCompetitionsBySearchParams(name, null, type));
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date localDate = formatter.parse(date);
-                return (generalService.getCompetitionsBySearchParams(name, localDate, type, PageRequest.of(page, size)));
+                return (generalService.getCompetitionsBySearchParams(name, localDate, type));
             } catch (ParseException e) {
                 System.out.println("Ошибка в парсинге даты: " + e);
             }

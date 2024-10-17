@@ -5,12 +5,12 @@ import com.example.kursachrps.models.CompetitionType;
 import com.example.kursachrps.models.DateInterval;
 import jakarta.persistence.criteria.Path;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.example.kursachrps.utils.DateUtils.*;
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -22,16 +22,17 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryCustom {
 
     public CompetitionRepositoryImpl(@Lazy CompetitionRepository competitionRepository) { this.competitionRepository = competitionRepository; }
 
+
     @Override
-    public Page<Competition> findCompetitionByParams(String name, Date date, CompetitionType type, Pageable pageable) {
-        return competitionRepository.findAll(generateSpec(name, date, type), pageable);
+    public List<Competition> findCompetitionByParams(String name, Date date, CompetitionType type) {
+        return competitionRepository.findAll(generateSpec(name, date, type), Sort.by(Sort.Direction.ASC, "date"));
     }
 
     public Specification<Competition> generateSpec(String name, Date date, CompetitionType type) {
         return (root, query, criteriaBuilder) -> {
             return where(byLikeString(root.get("name"), name))
-//                    .and(byDate(root.get("date"), date))
-//                    .and(byCompetitionType(root.get("type").get("id"), type))
+                    .and(byDate(root.get("date"), date))
+                    .and(byCompetitionType(root.get("type").get("id"), type))
                     .toPredicate(root, query.orderBy().distinct(true), criteriaBuilder);
         };
     }
