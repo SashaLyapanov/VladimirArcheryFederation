@@ -6,7 +6,6 @@ import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.repositories.RegistrAndAuth.CompetitionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -78,11 +77,6 @@ public class GeneralService {
         return competitionRepository.findByName(name);
     }
 
-    //Метод выборки соревнований по названию, дате, категории (пока не работает)
-    public List<Competition> showCompetitionByNameDateCategory(String name, Date date, String categories) {
-        return competitionRepository.findCompetitionByNameAndDateAndCategories(name, date, categories);
-    }
-
     public List<Region> getAllRegions() {
         return regionRepository.findAll();
     }
@@ -129,12 +123,12 @@ public class GeneralService {
     /**
      * Метод для поиска соревнований по расширенному списку параметров (name, place, type(3D / Target)
      */
-    public List<CompetitionDTO> getCompetitionsBySearchParams(String name, Date date, String type, Pageable pageable) {
+    public List<CompetitionDTO> getCompetitionsBySearchParams(String name, Date date, String type) {
         CompetitionType competitionType = new CompetitionType();
         if (type != null) {
             competitionType = competitionTypeRepository.findById(type).orElse(null);
         }
-        List<Competition> competitions = competitionRepositoryImpl.findCompetitionByParams(name, date, competitionType, pageable).getContent();
+        List<Competition> competitions = competitionRepositoryImpl.findCompetitionByParams(name, date, competitionType);
         return competitionMapper.fromCompetition(competitions);
     }
 }
