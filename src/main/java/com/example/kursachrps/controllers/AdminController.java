@@ -125,7 +125,7 @@ public class AdminController {
      * Метод редактирования соревнований
      */
     @PutMapping("editCompetition")
-    public Competition editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
+    public CompetitionCreateDTO editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
         return adminService.editCompetition(id, competition);
     }
