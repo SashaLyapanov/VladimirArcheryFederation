@@ -7,10 +7,7 @@ import com.example.kursachrps.service.PersonalAccountSportsmanService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/personalAccount")
@@ -18,19 +15,17 @@ public class PersonalAccountSportsmanController {
 
     private final PersonalAccountSportsmanService personalAccountSportsmanService;
     private final SportsmanMapper sportsmanMapper;
-    private final RestTemplate restTemplate;
 
     @Autowired
-    public PersonalAccountSportsmanController(PersonalAccountSportsmanService personalAccountSportsmanService, SportsmanMapper sportsmanMapper, RestTemplate restTemplate) {
+    public PersonalAccountSportsmanController(PersonalAccountSportsmanService personalAccountSportsmanService, SportsmanMapper sportsmanMapper) {
         this.personalAccountSportsmanService = personalAccountSportsmanService;
         this.sportsmanMapper = sportsmanMapper;
-        this.restTemplate = restTemplate;
     }
 
     /**
      * Получение данных личного кабинета
      */
-    @GetMapping()
+    @GetMapping("/myProfileData")
     public SportsmanDTO getPersonalAccountBySportsmanId(@RequestParam String sportsmanId) {
         return sportsmanMapper.fromSportsman(personalAccountSportsmanService.getSportsmanById(sportsmanId));
     }
@@ -53,7 +48,7 @@ public class PersonalAccountSportsmanController {
      * Метод для подгрузки фотографии в личный кабинет
      */
     @PostMapping("/uploadImage")
-    public void uploadImage(@RequestParam String sportsmanId, @RequestParam MultipartFile file) throws IOException {
+    public void uploadImage(@RequestParam String sportsmanId, @RequestParam MultipartFile file) {
         if (file != null && !file.isEmpty()) {
             personalAccountSportsmanService.uploadAvatarImage(sportsmanId, file);
         } else {

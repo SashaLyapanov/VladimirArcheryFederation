@@ -5,8 +5,8 @@ CREATE TABLE about_federation (
     id varchar(36),
     managers varchar(300),
     contacts varchar(256),
-    listFileNames varchar(1000),
-    listLinks varchar(5000)
+    list_file_names varchar(1000),
+    list_links varchar(5000)
 );
 
 DROP TABLE IF EXISTS bow_types;

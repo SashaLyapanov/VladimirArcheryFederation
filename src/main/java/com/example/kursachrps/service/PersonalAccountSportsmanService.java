@@ -63,8 +63,7 @@ public class PersonalAccountSportsmanService {
         sportsman.setBirthDate(updatedSportsman.getBirthDate());
         sportsman.setSportsTitle(updatedSportsman.getSportsTitle());
         sportsman.setSex(updatedSportsman.getSex());
-        sportsman.setClub(updatedSportsman.getClub());
-
+        sportsman.setRegion(updatedSportsman.getRegion());
         return sportsman;
     }
 
@@ -72,7 +71,7 @@ public class PersonalAccountSportsmanService {
      * Метод для редактирования аватарки в личном кабинете спортсмена
      */
     @Transactional
-    public void uploadAvatarImage(String sportsmanId, MultipartFile file) throws IOException {
+    public void uploadAvatarImage(String sportsmanId, MultipartFile file) {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId).orElse(null);
         if (sportsman != null) {
             String oldFileName = sportsman.getAvatarImage();
