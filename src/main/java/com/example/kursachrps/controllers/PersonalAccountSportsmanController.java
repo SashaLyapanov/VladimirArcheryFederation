@@ -48,7 +48,7 @@ public class PersonalAccountSportsmanController {
      * Метод для подгрузки фотографии в личный кабинет
      */
     @PostMapping("/uploadImage")
-    public void uploadImage(@RequestParam String sportsmanId, @RequestParam MultipartFile file) {
+    public void uploadImage(@RequestParam String sportsmanId, @RequestParam("file") MultipartFile file) {
         if (file != null && !file.isEmpty()) {
             personalAccountSportsmanService.uploadAvatarImage(sportsmanId, file);
         } else {
