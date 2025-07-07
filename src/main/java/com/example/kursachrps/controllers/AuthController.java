@@ -1,16 +1,15 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.models.Role;
-import com.example.kursachrps.models.Sportsman;
-import com.example.kursachrps.models.Status;
+import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AuthAndRegistration.LoginDTO;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
 import com.example.kursachrps.dto.UserDTO;
 import com.example.kursachrps.mapper.SportsmanMapper;
 import com.example.kursachrps.mapper.UserMapper;
-import com.example.kursachrps.models.User;
 import com.example.kursachrps.repositories.SportsmanRepository;
 import com.example.kursachrps.repositories.UserMainRepository;
+import com.example.kursachrps.security.JwtUtils;
+import com.example.kursachrps.security.RefreshTokenService;
 import com.example.kursachrps.service.AuthenticationService;
 import com.example.kursachrps.service.SmtpMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -55,26 +54,55 @@ public class AuthController {
     @Autowired
     private SmtpMailSender smtpMailSender;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User user = userMainRepository.findByEmail(loginDTO.getEmail()).orElse(null);
+        User user = userMainRepository.findByEmail(loginDTO.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (user != null && Objects.equals(user.getActivationCode(), "true")) {
             UserDTO userDTO = userMapper.transform(user);
+            String accessToken = jwtUtils.generateAccessToken(user);
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+            return ResponseEntity.ok(Map.of(
+                    "accessToken", accessToken,
+                    "refreshToken", refreshToken.getToken(),
+                    "userData", userDTO
+            ));
         } else {
             return new ResponseEntity<>("Please, check your email and activate account.", HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        String userId = jwtUtils.extractUserIdForRefreshToken(refreshToken);
+
+        return refreshTokenService.getRefreshTokenByUserId(userId)
+                .filter(token -> token.getToken().equals(refreshToken))
+                .map(token -> {
+                    if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token expired");
+                    }
+                    String newAccessToken = jwtUtils.generateAccessToken(token.getUser());
+                    return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+                })
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token"));
+    }
+
+
     @PostMapping("/signup")
     public ResponseEntity<String> registrationUser(@RequestBody SignUpDTO signUpDTO) {
-        // Проверка на условие, что такого пользователя еще нет в БД
         if (userMainRepository.existsByEmail(signUpDTO.getEmail())) {
             return new ResponseEntity<>("This email address is already registered in the system.", HttpStatus.BAD_REQUEST);
         }
@@ -87,27 +115,25 @@ public class AuthController {
 
         sportsmanRepository.save(sportsman);
 
-        //TODO
-        // изменить ссылку для фронта (клиентской части), чтобы в письме было указано http://localhost:3000/activate/$s
-        // и на фронте уже выполнять запрос к беку на контроллер activate/{code} (который представлен ниже)
-        if (!StringUtils.isEmpty(sportsman.getEmail())) {
+        if (!org.apache.commons.lang3.StringUtils.isEmpty(signUpDTO.getEmail())) {
             String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to our Archery Federation. Please, visit next link: http://localhost:8080/api/v1/auth/activate/%s",
-                    sportsman.getFirstName(),
+                    "Здравствуйте, %s! \n" +
+                            "Мы очень рады, что вы заинтересовались нашим продуктом и успешно прошли регистрацию! \n" +
+                            "Пожалуйста, перейдите по ссылке для активации вашего профиля: http://localhost:8080/api/v1/auth/activate/%s/%s",
+                    sportsman.getFirstName() + " " + sportsman.getSurname(),
+                    sportsman.getEmail(),
                     sportsman.getActivationCode()
             );
 
-//            smtpMailSender.send(sportsman.getEmail(), "Activation code", message);
-
+            smtpMailSender.send(sportsman.getEmail(), "Activation code", message);
         }
 
         return new ResponseEntity<>("Your account has been created, please check you email.", HttpStatus.OK);
     }
 
-    @GetMapping("activate/{code}")
-    public ResponseEntity<?> activate(@PathVariable String code) {
-        boolean isActivated = authenticationService.activateUser(code);
+    @GetMapping("activate/{email}/{code}")
+    public ResponseEntity<?> activate(@PathVariable String email, @PathVariable String code) {
+        boolean isActivated = authenticationService.authenticate(email, code);
 
         if (isActivated) {
             return new ResponseEntity<>("User successfully activated", HttpStatus.OK);

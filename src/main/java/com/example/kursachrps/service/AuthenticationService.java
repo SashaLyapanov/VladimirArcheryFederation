@@ -11,16 +11,12 @@ public class AuthenticationService {
     @Autowired
     private UserMainRepository userMainRepository;
 
-    public boolean activateUser(String code) {
-        User user = userMainRepository.findByActivationCode(code).orElse(null);
-
-        if (user == null) {
-            return false;
-        }
+    public boolean authenticate(String email, String code) {
+        User user = userMainRepository.findByEmailAndActivationCode(email, code).orElse(null);
+        if (user == null) return false;
 
         user.setActivationCode("true");
         userMainRepository.save(user);
-
         return true;
     }
 }

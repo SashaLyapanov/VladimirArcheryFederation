@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class SportsmanController {
      * Должна генерироваться заявка на соревнования, которая связана вторичными ключами со спортсменом(1 к мн) и с соревнованиями(1 к мн)
      */
     @PostMapping("/regInCompetition")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public ResponseEntity<?> regInCompetition(@RequestParam String sportsmanId, @RequestParam String competitionId, @RequestBody ApplicationDTO applicationDTO) {
         if (applicationService.checkRegistrationInCompetition(competitionId, sportsmanId)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
@@ -63,6 +65,7 @@ public class SportsmanController {
      * Проверка на уже существующую регистрацию на определенные соревнования у спортсмена по CompetitinoId и UserId
      */
     @GetMapping("/checkApplication")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public ResponseEntity<?> checkExistApplication(@RequestParam String sportsmanId, @RequestParam String competitionId) {
         boolean response = applicationService.checkRegistrationInCompetition(competitionId, sportsmanId);
         if (response) {
@@ -76,6 +79,7 @@ public class SportsmanController {
      * Просмотр всех собственных заявок на соревнования
      */
     @GetMapping("/allMyApplication")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public List<ApplicationDTO> getMyApplications(@RequestParam String myId) {
 
         List<Application> applications = applicationService.getMyApplications(myId);
@@ -87,6 +91,7 @@ public class SportsmanController {
      * Отмена заявки
      */
     @PostMapping("deleteApplication")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public void deleteMyApplication(@RequestParam String sportsmanId, @RequestParam String competitionId) {
         applicationService.deleteMyApplication(sportsmanId, competitionId);
     }
@@ -95,6 +100,7 @@ public class SportsmanController {
      * Поиск всех спортсменов, зарегистрированных на определенные соревнования по id соревнования и типу лука
      */
     @GetMapping("/sportsmenByCompetitionAndBowType")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public List<ApplicationDTO> getAllSportsmanByCompetitionAndBowType(@RequestParam String id,
                                                                        @RequestParam String bowTypeName) {
         List<ApplicationDTO> list = sportsmanService.getAllSportmanByCompetitionAndBowType(id, bowTypeName);
@@ -105,6 +111,7 @@ public class SportsmanController {
      * Получение всех спортивных титулов, у которых название содержит входной параметр name
      */
     @GetMapping("/titles")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public Page<SportsTitle> getSportTitles(@PageableDefault(page = 0, size = 10) Pageable pageable,
                                             @RequestParam String name) {
         SportsTitle searchPattern = new SportsTitle();
@@ -119,6 +126,7 @@ public class SportsmanController {
      * Получение всех спортивных титулов, у которых название содержит входной параметр name с пагинацией!
      */
     @GetMapping("/titlesWithPagination")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public List<SportsTitle> getSportTitlesWithPagination(@RequestParam String name,
                                                           @RequestParam(required = false, defaultValue = "0") int page,
                                                           @RequestParam(required = false, defaultValue = "10") int size) {

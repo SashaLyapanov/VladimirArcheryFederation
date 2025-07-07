@@ -1,6 +1,7 @@
 package com.example.kursachrps.dto;
 
 import com.example.kursachrps.models.Role;
+import com.example.kursachrps.models.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,8 +17,6 @@ public class UserDTO {
 
     private String email;
 
-//    private String password;
-
     private Role role;
 
     private String name;
@@ -27,4 +26,6 @@ public class UserDTO {
     private String patronymic;
 
     private Date birthDate;
+
+    private Status status;
 }

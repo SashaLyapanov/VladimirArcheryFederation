@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 
 @NoRepositoryBean
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 }

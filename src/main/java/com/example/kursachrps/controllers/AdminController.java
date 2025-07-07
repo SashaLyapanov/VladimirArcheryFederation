@@ -14,6 +14,7 @@ import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,7 @@ public class AdminController {
      * Метод для вывода всех Sportsman'ов споском (сортируются по алфавиту по фамилии)
      */
     @GetMapping("sportsmen")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<SportsmanAdmDTO> getAllSportsmen() {
         List<Sportsman> sportsmen = adminService.showAllSportsmen();
         return userMapper.fromSportsmanList(sportsmen);
@@ -61,6 +63,7 @@ public class AdminController {
      * Метод для вывода спортсмена по email(Sportsman)
      */
     @GetMapping("sportsmanByEmail")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public SportsmanAdmDTO getSportsmanByEmail(@RequestParam String email) {
         return userMapper.fromSportsman(adminService.getSportsmanByEmail(email));
     }
@@ -69,6 +72,7 @@ public class AdminController {
      * Метод для вывода спортсмена по id
      */
     @GetMapping("sportsmanById")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public SportsmanAdmDTO getSportsmanById(@RequestParam String id) {
         return userMapper.fromSportsman(adminService.getSportsmanById(id));
     }
@@ -79,6 +83,7 @@ public class AdminController {
      */
     @Transactional
     @PostMapping("createSportsman")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Sportsman createSportsman(@RequestBody @Valid SportsmanDTO sportsmanDTO) {
         adminService.hashPassword(sportsmanDTO);
         Sportsman sportsman = userMapper.fromSportsmanDTO(sportsmanDTO);
@@ -86,6 +91,7 @@ public class AdminController {
     }
 
     @PutMapping("editSportsman")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public SportsmanAdmDTO editSportsman(@RequestParam String id, @RequestBody @Valid SportsmanAdmDTO sportsmanAdmDTO) {
         Sportsman sportsman = userMapper.fromSportsmanAdmDTO(sportsmanAdmDTO);
         adminService.editSportsman(id, sportsman);
@@ -97,11 +103,13 @@ public class AdminController {
     /////////////////////////////////////////////////////////////////////////////////
 
     @PutMapping("blockUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void blockingSportsman(@RequestParam @Valid String id) {
         adminService.blockingUser(id);
     }
 
     @PutMapping("unlockUser")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void unblockingSportsman(@RequestParam @Valid String id) {
         adminService.unblockingUser(id);
     }
@@ -114,6 +122,7 @@ public class AdminController {
      * Метод для создания соревнований администратором
      */
     @PostMapping("createCompetition")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Competition createCompetition(@RequestBody CompetitionCreateDTO competitionCreateDTO) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(competitionCreateDTO);
         Competition savedCompetition = adminService.createCompetition(competition);
@@ -125,6 +134,7 @@ public class AdminController {
      * Метод редактирования соревнований
      */
     @PutMapping("editCompetition")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CompetitionCreateDTO editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
         return adminService.editCompetition(id, competition);
@@ -138,6 +148,7 @@ public class AdminController {
     // В параметры метода добавить параметр для передачи статуса, на который будем менять
     // и дальше в adminService.changeStatusOfCompetition(id) реализовать логику по смене статуса именно на указанынй в параметрах
     @PutMapping("changeStatusCompetition")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void changeStatusOfCompetition(@RequestParam String id) {
         adminService.changeStatusOfCompetition(id);
     }
@@ -146,6 +157,7 @@ public class AdminController {
      * Удаление неправильносозданных соревнований
      */
     @DeleteMapping("deleteCompetitionById")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteCompetitionById(@RequestParam String id) {
         adminService.deleteCompetition(id);
     }
@@ -158,6 +170,7 @@ public class AdminController {
      * Метод для шаблонного создания новости
      */
     @PostMapping(value = "createArticle")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ArticleDTO createArticle(@RequestParam String name,
                                     @RequestParam String body,
                                     @RequestParam(required = false) MultipartFile file) {
@@ -172,6 +185,7 @@ public class AdminController {
      * Метод для удаления новости по id
      */
     @PostMapping("deleteArticle")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteArticleById(@RequestParam String articleId) {
         articleService.deleteArticle(articleId);
     }
@@ -189,6 +203,7 @@ public class AdminController {
 //        }
 //    }
     @PutMapping("changeArticle")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void editArticle(@RequestBody Article article) {
         System.out.println("Редактируем новость");
         if (article != null) {
@@ -204,6 +219,7 @@ public class AdminController {
      * Метод для изменения информации о федерации
      */
     @PutMapping("changeAboutFederation")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> changeAboutFederation(@RequestBody AboutFederation aboutFederationDTO) {
         AboutFederation aboutFederation = new AboutFederation();
         aboutFederation.setManagers(aboutFederationDTO.getManagers());

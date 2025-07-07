@@ -12,6 +12,10 @@ import java.util.Date;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends GenericEntity{
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
+
     @NotEmpty(message = "Email should not be empty")
     @Email
     @Column(name = "email")
