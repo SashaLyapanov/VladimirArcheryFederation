@@ -163,6 +163,9 @@ CREATE TABLE activity_federation (
                                file_name varchar(100) NOT NULL UNIQUE
 );
 
+insert into about_federation (id, managers, contacts, list_links)
+values ('7fa1257a-332b-258d-bca6-ba78fa263e0f', 'Здесь располагается информация о нашем управляющем составе.!', '8-960-719-47-61 - Мой телефон. Звонить в любое время дня и ночи.', 'https://totopizza.ru/?q#showModal=product_to_cart_modal&expiresAt=1730545312206');
+
 insert into sex (id, name) values ('c99ccd51-5731-42a3-9cfc-31cc4011e035','Мужской');
 insert into sex (id, name) values ('848f4054-a9c1-4525-9e10-2ab07e3e9b4c','Женский');
 

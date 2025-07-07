@@ -8,6 +8,7 @@ import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
 import com.example.kursachrps.service.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -55,6 +56,9 @@ public class GeneralController {
         this.aboutFederationService = aboutFederationService;
         this.regionalTeamService = regionalTeamService;
     }
+
+    @Value("${pdffiles}")
+    private String pdfFilesPath;
 
     /**
      * Метод для просмотра всех заявок на определенные соревнования
@@ -134,7 +138,8 @@ public class GeneralController {
     @GetMapping("/savePDFProtocol")
     public ResponseEntity<Resource> savePDFProtocol(@RequestParam String competitionId) throws IOException {
         String fileName = generalService.getProtocolNameByCompetitionId(competitionId);
-        File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filePDF\\" + fileName);
+//        File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filePDF\\" + fileName);
+        File file = new File(pdfFilesPath + fileName);
         //Реализация скачивания файла
 
         HttpHeaders header = new HttpHeaders();

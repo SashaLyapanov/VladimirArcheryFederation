@@ -9,6 +9,7 @@ import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.utils.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,9 @@ public class JudgeService {
         this.sexRepository = sexRepository;
     }
 
+    @Value("${projectPath}")
+    private String projectPath;
+
     /**
      * Метод для генерации EXCEL протокола 3D соревнований.
      */
@@ -93,7 +97,8 @@ public class JudgeService {
             return null;
         } else {
             LocalDate today = LocalDate.now();
-            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
+//            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
+            File protocol = new File(projectPath + "/src/filesExcel/" + today + ".xlsx");
             try {
                 boolean created = protocol.createNewFile();
                 if (created) {
@@ -104,7 +109,8 @@ public class JudgeService {
                 System.out.println(e.getMessage());
             }
 
-            try (InputStream inputStream = new FileInputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
+//            try (InputStream inputStream = new FileInputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
+            try (InputStream inputStream = new FileInputStream(projectPath + "/src/filesExcel/Pattern.xlsx");
                  OutputStream outputStream = new FileOutputStream(protocol)) {
                 inputStream.transferTo(outputStream);
             } catch (IOException e) {
@@ -142,11 +148,13 @@ public class JudgeService {
     @Transactional
     public File uploadQualificationProtocol(MultipartFile file, String competitionId) {
         try (InputStream inputStream = new FileInputStream(fileUtils.convertMultipartFileToFile(file));
-             OutputStream outputStream = new FileOutputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename())) {
+//             OutputStream outputStream = new FileOutputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename())) {
+             OutputStream outputStream = new FileOutputStream(projectPath + "/src/filesExcel/" + file.getOriginalFilename())) {
             inputStream.transferTo(outputStream);
             System.out.println("Файл успешно скопирован в исходник:" + file.getOriginalFilename());
             //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
-            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+//            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+            File fileProtocol = new File(projectPath + "/src/filesExcel/" + file.getOriginalFilename());
             List<QualificationRound> qualificationRoundList = excelGenerator.readQualificationToDB(fileProtocol, competitionId);
             qualificationRoundList = qualificationRoundService.calculateSportsmanPlaceInQualification(qualificationRoundList, competitionId);
             if (qualificationRoundList != null) {
@@ -172,7 +180,8 @@ public class JudgeService {
             inputStream.transferTo(outputStream);
             System.out.println("Файл успешно скопирован в исходник:" + file.getOriginalFilename());
             //Считывание данных из файла в сущнсоти QualificationRound и запись в БД
-            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+//            File fileProtocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + file.getOriginalFilename());
+            File fileProtocol = new File(projectPath + "/src/filesExcel/" + file.getOriginalFilename());
             Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
             List<ProtocolStage2> protocolStage2List = excelGenerator.readStage2ToDB(fileProtocol, competitionId, protocol);
             List<ProtocolStage4> protocolStage4List = excelGenerator.readStage4ToDB(fileProtocol, competitionId, protocol);
@@ -197,8 +206,7 @@ public class JudgeService {
             }
             if (fileProtocol.exists()) {
                 return fileProtocol;
-            }
-            else {
+            } else {
                 return null;
             }
         } catch (IOException e) {
@@ -243,7 +251,7 @@ public class JudgeService {
                             protocolService.setProtocolFieldTrueForMAN2(bowType, protocol);
                             protocolService.setProtocolFieldTrueForMAN4(bowType, protocol);
                             protocolService.setProtocolFieldTrueForMAN8(bowType, protocol);
-                        } else if (sportsmanMANListInBowType.size() > 0){
+                        } else if (sportsmanMANListInBowType.size() > 0) {
                             // Нужно считывать данные в финальную таблицу соревнований!
                             // Т.е. сразу же заполняем этими 5 людьми таблицу результата
                             AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(bowType, sexRepository.findById(MAN_ID).orElse(null));
@@ -274,7 +282,7 @@ public class JudgeService {
                             protocolService.setProtocolFieldTrueForWOMAN2(bowType, protocol);
                             protocolService.setProtocolFieldTrueForWOMAN4(bowType, protocol);
                             protocolService.setProtocolFieldTrueForWOMAN8(bowType, protocol);
-                        } else if (sportsmanWOMANListInBowType.size() > 0){
+                        } else if (sportsmanWOMANListInBowType.size() > 0) {
                             // Нужно считывать данные в финальную таблицу соревнований!
                             // Т.е. сразу же заполняем этими 5 людьми таблицу результата
                             AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(bowType, sexRepository.findById(WOMAN_ID).orElse(null));
@@ -303,12 +311,12 @@ public class JudgeService {
      */
     @Transactional
     public boolean generateNextStageOfCompetition(File protocol, String competitionId) throws IOException {
-        List<String> listsNamesForGenerating  = protocolService.getStageForGenerating(competitionId);
+        List<String> listsNamesForGenerating = protocolService.getStageForGenerating(competitionId);
         System.out.println("listsNamesForGenerating=");
         System.out.println(listsNamesForGenerating);
 
         if (listsNamesForGenerating != null) {
-            for (String listName: listsNamesForGenerating) {
+            for (String listName : listsNamesForGenerating) {
                 excelGenerator.generateNextStageOfCompetition(listName, protocol, competitionId);
             }
             return true;
@@ -329,7 +337,8 @@ public class JudgeService {
             try {
                 byte[] bytes = file.getBytes();
                 LocalDate today = LocalDate.now();
-                File oldFile = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
+//                File oldFile = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
+                File oldFile = new File(projectPath + "/src/filesExcel/" + today + ".xlsx");
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(oldFile));
                 stream.write(bytes);
                 stream.close();
@@ -352,7 +361,8 @@ public class JudgeService {
         options.setOnePagePerSheet(true);
 
         LocalDate today = LocalDate.now();
-        workbook.save("C:/Users/-/IdeaProjects/KursachRPS/src/filePDF/" + today + ".pdf", options);
+//        workbook.save("C:/Users/-/IdeaProjects/KursachRPS/src/filePDF/" + today + ".pdf", options);
+        workbook.save(projectPath + "/src/filePDF/" + today + ".pdf", options);
 
         return today + ".pdf";
     }
@@ -374,6 +384,7 @@ public class JudgeService {
         User participant = userMainRepository.findByEmail(email).orElse(null);
 
         application.setCompetition(competition);
+        assert participant != null;
         if (participant.getRole() == Role.SPORTSMAN) {
             Sportsman sportsman = sportsmanMapper.fromUser(participant);
             application.setSportsman(sportsman);
@@ -383,27 +394,12 @@ public class JudgeService {
         applicationRepository.save(application);
     }
 
-    @Transactional
-    public void addPathFileInCompetition(String competitionId, String name) {
-        Competition competition = competitionRepository.findById(competitionId).orElse(null);
-        assert competition != null;
-        competition.setPdfFile(name);
-    }
-
-
-    @Transactional
-    public void changeStatusOfCompetition(String competitionId) {
-        Competition competition = competitionRepository.findById(competitionId).orElse(null);
-        assert competition != null;
-        competition.setStatus(StatusOfCompetition.PAST);
-    }
-
     public void markExtraStages(String competitionId) {
         Protocol protocol = protocolRepository.findProtocolByCompetitionId(competitionId);
         List<Application> applicationList = applicationRepository.findApplicationByCompetitionId(competitionId);
         HashMap<AbstractMap.SimpleEntry<BowType, Sex>, Application> uniqueApplicationsSet = new HashMap<>();
 
-        for (Application application: applicationList) {
+        for (Application application : applicationList) {
             AbstractMap.SimpleEntry<BowType, Sex> key = new AbstractMap.SimpleEntry<>(application.getBowType(), application.getSportsman().getSex());
             uniqueApplicationsSet.put(key, application);
         }
