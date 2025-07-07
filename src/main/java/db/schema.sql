@@ -163,6 +163,15 @@ CREATE TABLE activity_federation (
                                file_name varchar(100) NOT NULL UNIQUE
 );
 
+DROP TABLE IF EXISTS refresh_token;
+CREATE TABLE refresh_token (
+                               id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
+                               user_id varchar(36),
+                               token varchar(300),
+                               expiry_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                               FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
 insert into about_federation (id, managers, contacts, list_links)
 values ('7fa1257a-332b-258d-bca6-ba78fa263e0f', 'Здесь располагается информация о нашем управляющем составе.!', '8-960-719-47-61 - Мой телефон. Звонить в любое время дня и ночи.', 'https://totopizza.ru/?q#showModal=product_to_cart_modal&expiresAt=1730545312206');
 

@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,7 @@ public class JudgeController {
      * !Других соревнований он не видит
      */
     @GetMapping("/presentCompetitions")
+    @PreAuthorize("hasAuthority('ROLE_JUDGE')")
     public List<CompetitionDTO> getPresentCompetitions() {
         return competitionMapper.fromCompetition(judgeService.getPresentCompetitions());
     }
@@ -58,6 +60,7 @@ public class JudgeController {
      * Метод для регистрации спортсменов или тренеров на соревнования
      */
     @PostMapping("/regParticipantToCompetition")
+    @PreAuthorize("hasAuthority('ROLE_JUDGE')")
     public void regParticipantToCompetition(@RequestParam String competitionId, @RequestParam String email, @RequestBody ApplicationDTO applicationDTO) {
         if (applicationService.checkRegistrationInCompetitionByParticipantEmail(competitionId, email)) {
             Application application = applicationMapper.fromApplicationDTO(applicationDTO);
@@ -73,6 +76,7 @@ public class JudgeController {
      * Метод для генерирования протокола и автоматического скачивания файла на локальный пк пользователя
      */
     @GetMapping("/generateProtocol")
+    @PreAuthorize("hasAuthority('ROLE_JUDGE')")
     public ResponseEntity<Resource> generateProtocol(@RequestParam String competitionId) throws IOException {
         judgeService.markExtraStages(competitionId);
         File fileName = judgeService.generateProtocol(competitionId);
@@ -96,6 +100,7 @@ public class JudgeController {
      * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
      */
     @PostMapping("/uploadFile")
+    @PreAuthorize("hasAuthority('ROLE_JUDGE')")
     @Transactional
     public ResponseEntity<?> uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
         if (!protocolService.checkQualificationIsCompleted(competitionId)) {
@@ -130,6 +135,7 @@ public class JudgeController {
 //     * Автоматическакя генерация следующих этапов соревнований и загрузка файла на компьютер в папку Загрузки
 //     */
 //    @PostMapping("/uploadFile")
+//    @PreAuthorize("hasAuthority('ROLE_JUDGE')")
 //    @Transactional
 //    public ResponseEntity<?> uploadQualificationFile(@RequestParam("file") MultipartFile file, @RequestParam String competitionId) throws IOException {
 //        File protocol = judgeService.uploadQualificationProtocol(file, competitionId);

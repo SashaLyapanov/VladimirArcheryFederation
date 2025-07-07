@@ -6,6 +6,7 @@ import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.service.PersonalAccountSportsmanService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ public class PersonalAccountSportsmanController {
      * Получение данных личного кабинета
      */
     @GetMapping("/myProfileData")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public SportsmanDTO getPersonalAccountBySportsmanId(@RequestParam String sportsmanId) {
         return sportsmanMapper.fromSportsman(personalAccountSportsmanService.getSportsmanById(sportsmanId));
     }
@@ -34,6 +36,7 @@ public class PersonalAccountSportsmanController {
      * Редактирование личного кабинета
      */
     @PutMapping("/editProfile")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public SportsmanDTO editProfile(@RequestParam String sportsmanId, @RequestBody @Valid SportsmanDTO sportsmanDTO) {
         if (sportsmanDTO.getPassword() != null) {
             personalAccountSportsmanService.hashPassword(sportsmanDTO);
@@ -48,6 +51,7 @@ public class PersonalAccountSportsmanController {
      * Метод для подгрузки фотографии в личный кабинет
      */
     @PostMapping("/uploadImage")
+    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
     public void uploadImage(@RequestParam String sportsmanId, @RequestParam("file") MultipartFile file) {
         if (file != null && !file.isEmpty()) {
             personalAccountSportsmanService.uploadAvatarImage(sportsmanId, file);
