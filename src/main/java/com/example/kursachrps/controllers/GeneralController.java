@@ -244,7 +244,7 @@ public class GeneralController {
      * Метод для вывода всех соревнований со статусом Future or Present
      */
     @GetMapping("availableCompetitions")
-    public List<CompetitionDTO> getAvailableCompetition() {
+    public List<CompetitionDTO> getAvailableCompetitions() {
         return competitionMapper.fromCompetition(generalService.showAllAvailableCompetitions());
     }
 

@@ -1,5 +1,6 @@
 package com.example.kursachrps.controllers;
 
+import com.example.kursachrps.config.CookieConfig;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AuthAndRegistration.LoginDTO;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
@@ -12,7 +13,9 @@ import com.example.kursachrps.security.JwtUtils;
 import com.example.kursachrps.security.RefreshTokenService;
 import com.example.kursachrps.service.AuthenticationService;
 import com.example.kursachrps.service.SmtpMailSender;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,9 +63,15 @@ public class AuthController {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
+//    @Autowired
+//    private CookieU
+
+    private final String sameSite = "Strict";
+
+    private final String cookieDomain = null;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
@@ -71,6 +80,16 @@ public class AuthController {
             UserDTO userDTO = userMapper.transform(user);
             String accessToken = jwtUtils.generateAccessToken(user);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
+//            boolean https = request.isSecure();
+//            var accessCookie = CookieConfig.accessCookie(accessToken, https);
+//            var refreshCookie = CookieConfig.refreshCookie(refreshToken.getToken(), https);
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+//                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+//                    .body(Map.of(
+//                            "userData", userDTO
+//                    ));
 
             return ResponseEntity.ok(Map.of(
                     "accessToken", accessToken,
@@ -141,6 +160,19 @@ public class AuthController {
             return new ResponseEntity<>("Activation code isn't found", HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity<Void> logout(HttpServletRequest request) {
+//        boolean https = request.isSecure();
+//
+//        var clearAccess = CookieConfig.clearCookie("accessToken", https);
+//        var clearRefresh = CookieConfig.clearCookie("refreshToken", https);
+//
+//        return ResponseEntity.noContent()
+//                .header(HttpHeaders.SET_COOKIE, clearAccess.toString())
+//                .header(HttpHeaders.SET_COOKIE, clearRefresh.toString())
+//                .build();
+//    }
 
 }
 
