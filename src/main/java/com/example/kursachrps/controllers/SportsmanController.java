@@ -100,7 +100,7 @@ public class SportsmanController {
      * Поиск всех спортсменов, зарегистрированных на определенные соревнования по id соревнования и типу лука
      */
     @GetMapping("/sportsmenByCompetitionAndBowType")
-    @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_SPORTSMAN', 'ROLE_ADMIN')")
     public List<ApplicationDTO> getAllSportsmanByCompetitionAndBowType(@RequestParam String id,
                                                                        @RequestParam String bowTypeName) {
         List<ApplicationDTO> list = sportsmanService.getAllSportmanByCompetitionAndBowType(id, bowTypeName);

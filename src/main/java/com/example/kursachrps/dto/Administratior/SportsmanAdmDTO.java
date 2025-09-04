@@ -17,6 +17,8 @@ public class SportsmanAdmDTO {
 
     private String email;
 
+    private String avatarImage;
+
     private String firstName;
 
     private String surname;

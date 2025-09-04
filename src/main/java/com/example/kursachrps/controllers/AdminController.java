@@ -1,13 +1,11 @@
 package com.example.kursachrps.controllers;
 
 import com.example.kursachrps.dto.ArticleDTO;
-import com.example.kursachrps.mapper.GeneralMapper;
+import com.example.kursachrps.mapper.*;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
-import com.example.kursachrps.mapper.CompetitionMapper;
-import com.example.kursachrps.mapper.UserMapper;
 import com.example.kursachrps.service.AboutFederationService;
 import com.example.kursachrps.service.AdminService;
 import com.example.kursachrps.service.ArticleService;
@@ -32,16 +30,18 @@ public class AdminController {
     private final ArticleService articleService;
     private final GeneralMapper generalMapper;
     private final AboutFederationService aboutFederationService;
+    private final SportsmanMapper sportsmanMapper;
 
     @Autowired
     public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
-                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService) {
+                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService, SportsmanMapper sportsmanMapper) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
         this.articleService = articleService;
         this.generalMapper = generalMapper;
         this.aboutFederationService = aboutFederationService;
+        this.sportsmanMapper = sportsmanMapper;
     }
 
 
@@ -77,6 +77,15 @@ public class AdminController {
         return userMapper.fromSportsman(adminService.getSportsmanById(id));
     }
 
+    @GetMapping("sportsmenByFIO")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getSportsmenByFIO(@RequestParam(required = false) String surname,
+                                               @RequestParam(required = false) String name,
+                                               @RequestParam(required = false) String patronymic) {
+        List<SportsmanAdmDTO> result = userMapper.fromSportsmanList(adminService.getSportsmanByFio(surname, name, patronymic));
+        return ResponseEntity.ok(result);
+    }
+
     /**
      * Метод для создания спортсмена в системе (регистрация от Админа)
      * JSON (email, password, firstName, surname, patronymic, birthDate)
@@ -97,6 +106,35 @@ public class AdminController {
         adminService.editSportsman(id, sportsman);
         return sportsmanAdmDTO;
     }
+
+    @PutMapping("addInRegionalTeam")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> addInRegionalTeam(@RequestParam String id) {
+        if (id.isEmpty()) {
+            return ResponseEntity.badRequest().body("Спортсмен не найден в базе данных");
+        }
+        SportsmanDTO response = sportsmanMapper.fromSportsman(adminService.addSportsmanToRegionalTeam(id));
+        if (response != null) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.badRequest().body("Спортсмен не найден в базе данных");
+        }
+    }
+
+    @PutMapping("deleteFromRegionalTeam")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteFromRegionalTeam(@RequestParam String id) {
+        if (id.isEmpty()) {
+            return ResponseEntity.badRequest().body("Спортсмен не найден в базе данных");
+        }
+        SportsmanDTO response = sportsmanMapper.fromSportsman(adminService.deleteFromRegionalTeam(id));
+        if (response != null) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.badRequest().body("Спортсмен не найден в базе данных");
+        }
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////
     //      Блокировка и разблокировка пользователей      //

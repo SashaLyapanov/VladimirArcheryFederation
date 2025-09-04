@@ -7,11 +7,13 @@ import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AdminService {
@@ -31,19 +33,21 @@ public class AdminService {
     private final CompetitionRepository competitionRepository;
     private final ProtocolRepository protocolRepository;
     private final CompetitionMapper competitionMapper;
+    private final SportsmanRepositoryImpl sportsmanRepositoryImpl;
 
     @Autowired
     public AdminService(SportsmanRepository sportsmanRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
                         CompetitionRepository competitionRepository,
-                        ProtocolRepository protocolRepository, CompetitionMapper competitionMapper) {
+                        ProtocolRepository protocolRepository, CompetitionMapper competitionMapper, SportsmanRepositoryImpl sportsmanRepositoryImpl) {
         this.sportsmanRepository = sportsmanRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
         this.competitionRepository = competitionRepository;
         this.protocolRepository = protocolRepository;
         this.competitionMapper = competitionMapper;
+        this.sportsmanRepositoryImpl = sportsmanRepositoryImpl;
     }
 
 
@@ -166,5 +170,38 @@ public class AdminService {
         Protocol protocol = new Protocol();
         protocol.setCompetition(savedCompetition);
         protocolRepository.save(protocol);
+    }
+
+    @Transactional
+    public Sportsman addSportsmanToRegionalTeam(String id) {
+        Sportsman sportsman = sportsmanRepository.findById(id).orElse(null);
+        if (sportsman == null) {
+            return null;
+        } else {
+            sportsman.setIsRegionalTeamSportsman(true);
+            sportsmanRepository.save(sportsman);
+            return sportsman;
+        }
+    }
+
+    @Transactional
+    public Sportsman deleteFromRegionalTeam(String id) {
+        Sportsman sportsman = sportsmanRepository.findById(id).orElse(null);
+        if (sportsman == null) {
+            return null;
+        } else {
+            sportsman.setIsRegionalTeamSportsman(false);
+            sportsmanRepository.save(sportsman);
+            return sportsman;
+        }
+    }
+
+    @Transactional
+    public List<Sportsman> getSportsmanByFio(String surname, String name, String patronymic) {
+        if (surname == null && surname.isEmpty() && surname == null && surname.isEmpty() && surname == null && surname.isEmpty()) {
+            return null;
+        }
+        return sportsmanRepositoryImpl.findSportsmenByParams(surname, name.toLowerCase(), patronymic.toLowerCase());
+
     }
 }
