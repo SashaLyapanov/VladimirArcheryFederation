@@ -11,6 +11,7 @@ import com.example.kursachrps.service.AdminService;
 import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -269,6 +270,17 @@ public class AdminController {
         } else {
             return ResponseEntity.badRequest().body("Что-то пошло не так при обновлении данных");
         }
+    }
+
+    /**
+     * Метод для изменения информации о федерации
+     */
+    @PostMapping(value = "changeFilesAboutFederation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> changeFilesAboutFederation(@RequestParam(name = "files", required = false) MultipartFile[] files) {
+        aboutFederationService.editFilesAboutFederation("7fa1257a-332b-258d-bca6-ba78fa263e0f", files);
+
+        return null;
     }
 
 

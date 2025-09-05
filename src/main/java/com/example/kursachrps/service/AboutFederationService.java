@@ -2,15 +2,30 @@ package com.example.kursachrps.service;
 
 import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.repositories.AboutFederationRepository;
+import io.jsonwebtoken.io.IOException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AboutFederationService {
 
+    private final RestTemplate restTemplate;
     AboutFederationRepository aboutFederationRepository;
 
-    AboutFederationService(AboutFederationRepository aboutFederationRepository) {
+    AboutFederationService(AboutFederationRepository aboutFederationRepository, RestTemplate restTemplate) {
         this.aboutFederationRepository = aboutFederationRepository;
+        this.restTemplate = restTemplate;
     }
 
     public AboutFederation getAllAboutFederation() {
@@ -29,4 +44,48 @@ public class AboutFederationService {
         return true;
     }
 
+    public void editFilesAboutFederation(String id, MultipartFile[] files) {
+        AboutFederation aboutFederation = aboutFederationRepository.findById(id).orElse(null);
+        if (aboutFederation != null) {
+            try {
+                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+                if (files != null && files.length > 0) {
+                    for (MultipartFile file: files) {
+                        body.add("files", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
+                    }
+                }
+
+                org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
+
+                ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
+                        "http://localhost:8081/aboutFederation/uploadFiles",
+                        HttpMethod.POST,
+                        requestEntity,
+                        String.class
+                );
+                if (responseFromFileManager.getStatusCode().is2xxSuccessful()) {
+                    // Обработка успешного ответа
+                    if (files != null && files.length > 0) {
+                        List<String> fileNames = Arrays.stream(files)
+                                .map(MultipartFile::getOriginalFilename)
+                                .collect(Collectors.toList());
+                        aboutFederation.setListFileNames(String.join(", ", fileNames));
+                    } else {
+                        aboutFederation.setListFileNames(null);
+                    }
+                    aboutFederationRepository.save(aboutFederation);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return;
+        }
+    }
 }
