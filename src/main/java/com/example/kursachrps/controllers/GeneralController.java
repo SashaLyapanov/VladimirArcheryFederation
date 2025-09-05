@@ -23,10 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/general")
@@ -326,6 +323,6 @@ public class GeneralController {
      * Метод для получения списка названий файлов на странице Деятельность федерации
      */
     @GetMapping("activityFederation")
-    public List<String> getActivityFiles() { return activityFederationService.getAllRegionalActivityFiles(); }
+    public Map<String, List<String>> getActivityFiles() { return activityFederationService.getAllRegionalActivityFiles(); }
 
 }

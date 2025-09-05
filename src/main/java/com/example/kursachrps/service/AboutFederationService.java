@@ -44,7 +44,7 @@ public class AboutFederationService {
         return true;
     }
 
-    public void editFilesAboutFederation(String id, MultipartFile[] files) {
+    public boolean editFilesAboutFederation(String id, MultipartFile[] files) {
         AboutFederation aboutFederation = aboutFederationRepository.findById(id).orElse(null);
         if (aboutFederation != null) {
             try {
@@ -79,13 +79,15 @@ public class AboutFederationService {
                     }
                     aboutFederationRepository.save(aboutFederation);
                 }
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (java.io.IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            return;
+            return false;
         }
+        return false;
     }
 }

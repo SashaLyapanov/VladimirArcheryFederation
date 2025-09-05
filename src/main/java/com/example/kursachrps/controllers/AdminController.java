@@ -7,6 +7,7 @@ import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.service.AboutFederationService;
+import com.example.kursachrps.service.ActivityFederationService;
 import com.example.kursachrps.service.AdminService;
 import com.example.kursachrps.service.ArticleService;
 import jakarta.validation.Valid;
@@ -32,10 +33,11 @@ public class AdminController {
     private final GeneralMapper generalMapper;
     private final AboutFederationService aboutFederationService;
     private final SportsmanMapper sportsmanMapper;
+    private final ActivityFederationService activityFederationService;
 
     @Autowired
     public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
-                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService, SportsmanMapper sportsmanMapper) {
+                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService, SportsmanMapper sportsmanMapper, ActivityFederationService activityFederationService) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
@@ -43,6 +45,7 @@ public class AdminController {
         this.generalMapper = generalMapper;
         this.aboutFederationService = aboutFederationService;
         this.sportsmanMapper = sportsmanMapper;
+        this.activityFederationService = activityFederationService;
     }
 
 
@@ -278,10 +281,49 @@ public class AdminController {
     @PostMapping(value = "changeFilesAboutFederation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> changeFilesAboutFederation(@RequestParam(name = "files", required = false) MultipartFile[] files) {
-        aboutFederationService.editFilesAboutFederation("7fa1257a-332b-258d-bca6-ba78fa263e0f", files);
+        boolean response = aboutFederationService.editFilesAboutFederation("7fa1257a-332b-258d-bca6-ba78fa263e0f", files);
 
-        return null;
+        if (response) {
+            return ResponseEntity.ok().body("Файлы успешно обновлены");
+        } else {
+            return ResponseEntity.badRequest().body("Не удалось обновить файлы");
+        }
     }
+
+    @PostMapping(value = "changeFilesActivityFederation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> changeFilesActivityFederation(@RequestParam String flag, @RequestParam(name = "files", required = false) MultipartFile[] files) {
+        boolean response = activityFederationService.editFilesActivityFederation("7fa1257a-152j-258d-bca6-ba78fa263e0f", flag, files);
+        if (response) {
+            return ResponseEntity.ok().body("Файлы успешно обновлены");
+        } else {
+            return ResponseEntity.badRequest().body("Не удалось обновить файлы");
+        }
+    }
+
+//    @PostMapping(value = "changeFilesActivityFederation3D", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public ResponseEntity<?> changeFilesActivityFederation3D(@RequestParam(name = "files", required = false) MultipartFile[] files) {
+//
+//
+//        return ResponseEntity.ok().body("Файлы успешно обновлены");
+//    }
+//
+//    @PostMapping(value = "changeFilesActivityFederationClassic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public ResponseEntity<?> changeFilesActivityFederationClassic(@RequestParam(name = "files", required = false) MultipartFile[] files) {
+//
+//
+//        return ResponseEntity.ok().body("Файлы успешно обновлены");
+//    }
+//
+//    @PostMapping(value = "changeFilesActivityFederationBiathlon", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public ResponseEntity<?> changeFilesActivityFederationBiathlon(@RequestParam(name = "files", required = false) MultipartFile[] files) {
+//
+//
+//        return ResponseEntity.ok().body("Файлы успешно обновлены");
+//    }
 
 
 }
