@@ -46,13 +46,14 @@ public class AdminService {
     private final ProtocolRepository protocolRepository;
     private final CompetitionMapper competitionMapper;
     private final SportsmanRepositoryImpl sportsmanRepositoryImpl;
+    private final RegionalTeamRepository regionalTeamRepository;
 
     @Autowired
     public AdminService(RestTemplate restTemplate, SportsmanRepository sportsmanRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
                         CompetitionRepository competitionRepository,
-                        ProtocolRepository protocolRepository, CompetitionMapper competitionMapper, SportsmanRepositoryImpl sportsmanRepositoryImpl) {
+                        ProtocolRepository protocolRepository, CompetitionMapper competitionMapper, SportsmanRepositoryImpl sportsmanRepositoryImpl, RegionalTeamRepository regionalTeamRepository) {
         this.restTemplate = restTemplate;
         this.sportsmanRepository = sportsmanRepository;
         this.passwordEncoder = passwordEncoder;
@@ -61,6 +62,7 @@ public class AdminService {
         this.protocolRepository = protocolRepository;
         this.competitionMapper = competitionMapper;
         this.sportsmanRepositoryImpl = sportsmanRepositoryImpl;
+        this.regionalTeamRepository = regionalTeamRepository;
     }
 
 
@@ -267,5 +269,50 @@ public class AdminService {
     }
 
 
+    public boolean addFilesToRegionalFederation(String id, MultipartFile[] files) {
+        RegionalTeam regionalTeam = regionalTeamRepository.findById(id).orElse(null);
+        if (regionalTeam != null) {
+            try {
+                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
+                if (files != null && files.length > 0) {
+                    for (MultipartFile file: files) {
+                        body.add("files", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
+                    }
+                }
+
+                org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
+
+                ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
+                        "http://localhost:8081/regionalTeam/uploadFiles",
+                        HttpMethod.POST,
+                        requestEntity,
+                        String.class
+                );
+                if (responseFromFileManager.getStatusCode().is2xxSuccessful()) {
+                    // Обработка успешного ответа
+                    if (files != null && files.length > 0) {
+                        List<String> fileNames = Arrays.stream(files)
+                                .map(MultipartFile::getOriginalFilename)
+                                .collect(Collectors.toList());
+                        regionalTeam.setFileName(String.join(", ", fileNames));
+                    } else {
+                        regionalTeam.setFileName(null);
+                    }
+                    regionalTeamRepository.save(regionalTeam);
+                }
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return false;
+        }
+        return false;
+    }
 }

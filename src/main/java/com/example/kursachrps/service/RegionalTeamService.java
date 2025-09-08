@@ -8,6 +8,7 @@ import com.example.kursachrps.repositories.SportsmanRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,11 +29,20 @@ public class RegionalTeamService {
     }
 
     public List<String> getAllRegionalTeamFiles() {
-        List<RegionalTeam> list =  regionalTeamRepository.findAll();
-        List<String> response = new ArrayList<>();
-        for (RegionalTeam team: list) {
-            response.add(team.getFileName());
+        RegionalTeam regionalTeam =  regionalTeamRepository.findById("c99ccd51-5731-42a3-9cfc-2ab07e3e9b4c").orElse(null);
+        List<String> response = null;
+        if (regionalTeam != null) {
+            response = mapStringToList(regionalTeam.getFileName());
         }
         return response;
+    }
+
+    List<String> mapStringToList(String str) {
+        if (str != null) {
+            String[] items = str.split(", ");
+            return Arrays.asList(items);
+        } else {
+            return null;
+        }
     }
 }

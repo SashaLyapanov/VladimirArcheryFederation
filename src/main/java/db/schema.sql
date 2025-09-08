@@ -154,7 +154,7 @@ CREATE TABLE articles (
 DROP TABLE IF EXISTS regional_team;
 CREATE TABLE regional_team (
     id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
-    file_name varchar(100) NOT NULL UNIQUE
+    file_name varchar(10000)
 );
 
 DROP TABLE IF EXISTS activity_federation;
@@ -177,6 +177,9 @@ values ('7fa1257a-332b-258d-bca6-ba78fa263e0f', 'Здесь располагае
 
 insert into activity_federation (id, file_names_3d, file_names_classic, file_names_biathlon)
 values ('7fa1257a-152j-258d-bca6-ba78fa263e0f', null, null, null);
+
+insert into regional_team (id, file_name)
+values ('c99ccd51-5731-42a3-9cfc-2ab07e3e9b4c', null);
 
 insert into sex (id, name) values ('c99ccd51-5731-42a3-9cfc-31cc4011e035','Мужской');
 insert into sex (id, name) values ('848f4054-a9c1-4525-9e10-2ab07e3e9b4c','Женский');

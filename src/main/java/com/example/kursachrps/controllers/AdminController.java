@@ -324,4 +324,15 @@ public class AdminController {
 //    }
 
 
+    @PostMapping("addFilesToRegionalFederation")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> addFilesToRegionalFederation(@RequestParam(name = "files", required = false) MultipartFile[] files) {
+        boolean response = adminService.addFilesToRegionalFederation("c99ccd51-5731-42a3-9cfc-2ab07e3e9b4c", files);
+        if (response) {
+            return ResponseEntity.ok().body("Файлы успешно добавлены");
+        } else {
+            return ResponseEntity.badRequest().body("Не удалось добавить файлы в систему");
+        }
+    }
+
 }

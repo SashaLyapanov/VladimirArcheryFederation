@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("api/v1/personalAccount")
 public class PersonalAccountSportsmanController {
@@ -52,7 +54,7 @@ public class PersonalAccountSportsmanController {
      */
     @PostMapping("/uploadImage")
     @PreAuthorize("hasAuthority('ROLE_SPORTSMAN')")
-    public void uploadImage(@RequestParam String sportsmanId, @RequestParam("file") MultipartFile file) {
+    public void uploadImage(@RequestParam String sportsmanId, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.isEmpty()) {
             personalAccountSportsmanService.uploadAvatarImage(sportsmanId, file);
         } else {

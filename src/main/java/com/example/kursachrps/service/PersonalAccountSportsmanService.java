@@ -71,7 +71,7 @@ public class PersonalAccountSportsmanService {
      * Метод для редактирования аватарки в личном кабинете спортсмена
      */
     @Transactional
-    public void uploadAvatarImage(String sportsmanId, MultipartFile file) {
+    public void uploadAvatarImage(String sportsmanId, MultipartFile file) throws IOException {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId).orElse(null);
         if (sportsman != null) {
             String oldFileName = sportsman.getAvatarImage();
@@ -83,28 +83,13 @@ public class PersonalAccountSportsmanService {
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("oldFileName", oldFileName);
             body.add("sportsmanId", sportsmanId);
-            body.add("file", new FileSystemResource(Objects.requireNonNull(convertMultipartFileToFile(file))));
+            body.add("file", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/personalAccount/upload", HttpMethod.POST, requestEntity, String.class);
 
             System.out.println(response);
-        }
-    }
-
-    private File convertMultipartFileToFile(MultipartFile file) {
-        if (!file.isEmpty()) {
-            File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-            try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
-                fos.write(file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return convertedFile;
-        }
-        else {
-            return null;
         }
     }
 
