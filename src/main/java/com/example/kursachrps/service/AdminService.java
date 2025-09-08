@@ -5,15 +5,26 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
+import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -27,6 +38,7 @@ public class AdminService {
     private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
 
 
+    private final RestTemplate restTemplate;
     private final SportsmanRepository sportsmanRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMainRepository userMainRepository;
@@ -36,11 +48,12 @@ public class AdminService {
     private final SportsmanRepositoryImpl sportsmanRepositoryImpl;
 
     @Autowired
-    public AdminService(SportsmanRepository sportsmanRepository,
+    public AdminService(RestTemplate restTemplate, SportsmanRepository sportsmanRepository,
                         PasswordEncoder passwordEncoder,
                         UserMainRepository userMainRepository,
                         CompetitionRepository competitionRepository,
                         ProtocolRepository protocolRepository, CompetitionMapper competitionMapper, SportsmanRepositoryImpl sportsmanRepositoryImpl) {
+        this.restTemplate = restTemplate;
         this.sportsmanRepository = sportsmanRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMainRepository = userMainRepository;
@@ -140,6 +153,7 @@ public class AdminService {
         competition.setPlace(updatedCompetition.getPlace());
         competition.setType(updatedCompetition.getType());
         competition.setBowTypeList(updatedCompetition.getBowTypeList());
+        competition.setStatus(updatedCompetition.getStatus());
         competition.setMainJudge(updatedCompetition.getMainJudge());
         competition.setSecretary(updatedCompetition.getSecretary());
         competition.setZamJudge(updatedCompetition.getZamJudge());
@@ -147,7 +161,6 @@ public class AdminService {
         competition.setDate(updatedCompetition.getDate());
         competition.setEndDate(updatedCompetition.getEndDate());
         competition.setDescription(updatedCompetition.getDescription());
-        competition.setStatus(StatusOfCompetition.FUTURE);
         return competitionMapper.fromCompetitionCraeteDTO(competition);
     }
 
@@ -204,4 +217,55 @@ public class AdminService {
         return sportsmanRepositoryImpl.findSportsmenByParams(surname, name.toLowerCase(), patronymic.toLowerCase());
 
     }
+
+    @Transactional
+    public boolean addFilesToCompetition(String competitionId, MultipartFile[] files) {
+        Competition competition = competitionRepository.findById(competitionId).orElse(null);
+        if (competition == null) {
+            return false;
+        }
+        try {
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+            if (files != null && files.length > 0) {
+                for (MultipartFile file: files) {
+                    body.add("files", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
+                }
+            }
+
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
+
+            ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
+                    "http://localhost:8081/competition/uploadFiles?competitionId=" + competitionId,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
+            if (responseFromFileManager.getStatusCode().is2xxSuccessful()) {
+                // Обработка успешного ответа
+                if (files != null && files.length > 0) {
+                    List<String> fileNames = Arrays.stream(files)
+                            .map(MultipartFile::getOriginalFilename)
+                            .collect(Collectors.toList());
+                    competition.setPdfFile(String.join(", ", fileNames));
+                } else {
+                    competition.setPdfFile(null);
+                }
+                competitionRepository.save(competition);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
+
+
+
 }

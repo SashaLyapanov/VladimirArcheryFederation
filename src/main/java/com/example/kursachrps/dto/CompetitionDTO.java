@@ -30,4 +30,5 @@ public class CompetitionDTO {
     private String judges;
     private Date date;
     private Date endDate;
+    private List<String> files;
 }

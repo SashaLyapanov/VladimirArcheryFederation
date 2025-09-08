@@ -65,7 +65,9 @@ public class Competition extends GenericEntity{
     @Column(name = "judges")
     private String judges;
 
-    //Название pdf Протокола
+    /**
+     * Список названий подгруженных файлов через запятую
+     */
     @Column(name = "pdf_file")
     private String pdfFile;
 

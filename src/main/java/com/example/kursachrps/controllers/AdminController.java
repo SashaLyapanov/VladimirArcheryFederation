@@ -183,25 +183,23 @@ public class AdminController {
     }
 
     /**
-     * Метод для смены статуса соревнованиям
-     */
-    //TODO
-    // Сделать следующую логику
-    // В параметры метода добавить параметр для передачи статуса, на который будем менять
-    // и дальше в adminService.changeStatusOfCompetition(id) реализовать логику по смене статуса именно на указанынй в параметрах
-    @PutMapping("changeStatusCompetition")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public void changeStatusOfCompetition(@RequestParam String id) {
-        adminService.changeStatusOfCompetition(id);
-    }
-
-    /**
      * Удаление неправильносозданных соревнований
      */
     @DeleteMapping("deleteCompetitionById")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteCompetitionById(@RequestParam String id) {
         adminService.deleteCompetition(id);
+    }
+
+    @PostMapping("addFilesToCompetition")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> addFilesToCompetition(@RequestParam String competitionId, @RequestParam(name = "files", required = false) MultipartFile[] files) {
+        boolean response = adminService.addFilesToCompetition(competitionId, files);
+        if (response) {
+            return ResponseEntity.ok().body("Файлы успешно добавлены");
+        } else {
+            return ResponseEntity.badRequest().body("Не удалось добавить файлы в систему");
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////

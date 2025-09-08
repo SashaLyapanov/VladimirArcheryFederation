@@ -3,6 +3,8 @@ package com.example.kursachrps.dto;
 import com.example.kursachrps.dto.AdditionalDTO.BowTypeDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CategoryDTO;
 import com.example.kursachrps.dto.AdditionalDTO.CompetitionTypeDTO;
+import com.example.kursachrps.dto.AdditionalDTO.StatusOfCompetitionDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -21,11 +23,13 @@ public class CompetitionCreateDTO {
     private String description;
     private List<CategoryDTO> categories;
     private List<BowTypeDTO> bowTypeList;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private StatusOfCompetitionDTO status;
     private String mainJudge;
     private String secretary;
     private String zamJudge;
     private String judges;
     private Date date;
     private Date endDate;
-
+    private List<String> files;
 }

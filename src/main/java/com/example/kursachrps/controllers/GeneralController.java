@@ -7,6 +7,7 @@ import com.example.kursachrps.mapper.CompetitionMapper;
 import com.example.kursachrps.mapper.GeneralMapper;
 import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
+import com.example.kursachrps.models.Competition;
 import com.example.kursachrps.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -95,6 +96,16 @@ public class GeneralController {
     @GetMapping("allBowTypes")
     List<BowTypeDTO> getAllBowType() {
         return generalMapper.fromBowType(generalService.getAllBowType());
+    }
+    
+    @GetMapping("allCompetitionStatuses")
+    List<StatusOfCompetitionDTO> getAllCompetitionStatuses() {
+        List<StatusOfCompetitionDTO> response = new ArrayList<>();
+        response.add(StatusOfCompetitionDTO.FUTURE);
+        response.add(StatusOfCompetitionDTO.PRESENT);
+        response.add(StatusOfCompetitionDTO.PAST);
+        response.add(StatusOfCompetitionDTO.CANCELLED);
+        return response;
     }
 
     /**
@@ -255,7 +266,13 @@ public class GeneralController {
 
     @GetMapping("competition")
     public CompetitionDTO getCompetition(@RequestParam String id) {
-        return competitionMapper.fromCompetition(generalService.showCompetitionById(id));
+        Competition competition = generalService.showCompetitionById(id);
+        CompetitionDTO competitionDTO = competitionMapper.fromCompetition(competition);
+
+        if (competition.getPdfFile() != null) {
+            competitionDTO.setFiles(mapStringToList(competition.getPdfFile()));
+        }
+        return competitionDTO;
     }
 
     /**
