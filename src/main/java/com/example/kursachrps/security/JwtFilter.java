@@ -1,5 +1,6 @@
 package com.example.kursachrps.security;
 
+import com.example.kursachrps.exceptions.JwtAuthenticationException;
 import com.example.kursachrps.models.User;
 import com.example.kursachrps.repositories.RegistrAndAuth.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -12,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,24 +45,39 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String userId = jwtUtils.extractUserId(token);
 
-        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUserId(userId);
-            User user = userRepository.findById(userId).orElse(null);
+        try {
+            String userId = jwtUtils.extractUserId(token);
 
-            if (jwtUtils.validateToken(token, userId) && user != null) {
-                List<GrantedAuthority> authorities = new ArrayList<>(userDetails.getAuthorities());
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUserId(userId);
+                User user = userRepository.findById(userId).orElse(null);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                if (jwtUtils.validateToken(token, userId) && user != null) {
+                    List<GrantedAuthority> authorities = new ArrayList<>(userDetails.getAuthorities());
+                    authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    sendUnauthorizedResponse(response, "Invalid token or user not found");
+                    return;
+                }
             }
+            filterChain.doFilter(request, response);
+
+        } catch (JwtAuthenticationException e) {
+            sendUnauthorizedResponse(response, e.getMessage());
+        } catch (Exception e) {
+            sendUnauthorizedResponse(response, "Authentication failed");
         }
+    }
 
-        filterChain.doFilter(request, response);
-
+    private void sendUnauthorizedResponse(HttpServletResponse response, String message) throws IOException {
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("{\"error\": \"UNAUTHORIZED\", \"message\": \"" + message + "\"}");
     }
 }

@@ -1,8 +1,12 @@
 package com.example.kursachrps.security;
 
+import com.example.kursachrps.exceptions.JwtAuthenticationException;
+import com.example.kursachrps.exceptions.JwtTokenExpiredException;
 import com.example.kursachrps.models.User;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,12 +57,18 @@ public class JwtUtils {
     }
 
     public String extractUserId(String token) {
-        JwtParser parser = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build();
-        return parser.parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            JwtParser parser = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build();
+            return parser.parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new JwtTokenExpiredException("Token expired");
+        } catch (Exception e) {
+            throw new JwtAuthenticationException("Invalid JWT token");
+        }
     }
 
     public String extractUserIdForRefreshToken(String token) {
@@ -71,17 +81,30 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token, String id) {
-        String userId = extractUserId(token);
-        return userId.equals(id) && !isTokenExpired(token);
+        try {
+            String userId = extractUserId(token);
+            return userId.equals(id) && !isTokenExpired(token);
+        } catch (JwtTokenExpiredException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new JwtAuthenticationException("Invalid JWT token");
+        }
+
     }
 
     private boolean isTokenExpired(String token) {
-        JwtParser parser = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build();
-        return parser.parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
+        try {
+            JwtParser parser = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build();
+            return parser.parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration()
+                    .before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (Exception e) {
+            throw new JwtAuthenticationException("JWT token validation failed");
+        }
     }
 }
