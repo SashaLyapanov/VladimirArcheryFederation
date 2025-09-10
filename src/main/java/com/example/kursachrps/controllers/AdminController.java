@@ -299,31 +299,6 @@ public class AdminController {
         }
     }
 
-//    @PostMapping(value = "changeFilesActivityFederation3D", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public ResponseEntity<?> changeFilesActivityFederation3D(@RequestParam(name = "files", required = false) MultipartFile[] files) {
-//
-//
-//        return ResponseEntity.ok().body("Файлы успешно обновлены");
-//    }
-//
-//    @PostMapping(value = "changeFilesActivityFederationClassic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public ResponseEntity<?> changeFilesActivityFederationClassic(@RequestParam(name = "files", required = false) MultipartFile[] files) {
-//
-//
-//        return ResponseEntity.ok().body("Файлы успешно обновлены");
-//    }
-//
-//    @PostMapping(value = "changeFilesActivityFederationBiathlon", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public ResponseEntity<?> changeFilesActivityFederationBiathlon(@RequestParam(name = "files", required = false) MultipartFile[] files) {
-//
-//
-//        return ResponseEntity.ok().body("Файлы успешно обновлены");
-//    }
-
-
     @PostMapping("addFilesToRegionalFederation")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> addFilesToRegionalFederation(@RequestParam(name = "files", required = false) MultipartFile[] files) {

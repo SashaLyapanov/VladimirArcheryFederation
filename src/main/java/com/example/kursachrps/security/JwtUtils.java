@@ -19,7 +19,7 @@ import java.util.Date;
 public class JwtUtils {
 
 
-    private final long accessTokenValidity = 600000; //10 минут
+    private final long accessTokenValidity = 60000; //10 минут
     private final long refreshTokenValidity = 10L * 24 * 60 * 60 * 1000; //10 дней
 
     @Value("${jwt.secret.access}")

@@ -55,11 +55,6 @@ public class SportsmanService {
      * Метод для получения всех спортсменов по Соревнованию и Типу лука
      */
     public List<ApplicationDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
-//        if (Objects.equals(bowTypeName, "all")) {
-//            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId)));
-//        } else {
-//            return applicationService.getSportsmenDTOFromApplications(applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName)));
-//        }
         if (Objects.equals(bowTypeName, "all")) {
             return applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
         } else {
