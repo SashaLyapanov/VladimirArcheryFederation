@@ -100,6 +100,7 @@ public class AdminController {
     public Sportsman createSportsman(@RequestBody @Valid SportsmanDTO sportsmanDTO) {
         adminService.hashPassword(sportsmanDTO);
         Sportsman sportsman = userMapper.fromSportsmanDTO(sportsmanDTO);
+        sportsman.setActivationCode("true");
         return adminService.saveSportsman(sportsman);
     }
 

@@ -15,7 +15,6 @@ import com.example.kursachrps.service.AuthenticationService;
 import com.example.kursachrps.service.SmtpMailSender;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -155,9 +154,9 @@ public class AuthController {
         boolean isActivated = authenticationService.authenticate(email, code);
 
         if (isActivated) {
-            return new ResponseEntity<>("User successfully activated", HttpStatus.OK);
+            return new ResponseEntity<>("Success! Welcome to our system: <a href='http://localhost:3000/login'>Login page!</a>", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Activation code isn't found", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The bad news is that the account could not be activated. Contact customer support.", HttpStatus.BAD_REQUEST);
         }
     }
 
