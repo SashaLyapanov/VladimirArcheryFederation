@@ -177,9 +177,9 @@ public class AdminController {
      */
     @PutMapping("editCompetition")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public CompetitionCreateDTO editCompetition(@RequestParam String id, @RequestBody CompetitionCreateDTO updatedCompetition) {
+    public CompetitionCreateDTO editCompetition(@RequestBody CompetitionCreateDTO updatedCompetition) {
         Competition competition = competitionMapper.fromCompetitionCreateDTO(updatedCompetition);
-        return adminService.editCompetition(id, competition);
+        return adminService.editCompetition(updatedCompetition.getId(), competition);
     }
 
     /**
