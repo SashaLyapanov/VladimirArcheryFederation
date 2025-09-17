@@ -7,6 +7,7 @@ import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.repositories.*;
 import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -37,6 +38,8 @@ public class AdminService {
     private static final String Olympic = "36671015-5c37-4e5c-8eed-9a353e927f32";
     private static final String Arbalet = "e6dc3841-98a3-4357-a139-61e48ac393e2";
 
+    @Value("${file.manager.path}")
+    private String fileManagerPath;
 
     private final RestTemplate restTemplate;
     private final SportsmanRepository sportsmanRepository;
@@ -241,7 +244,7 @@ public class AdminService {
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
 
             ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
-                    "http://localhost:8081/competition/uploadFiles?competitionId=" + competitionId,
+                    fileManagerPath + "/competition/uploadFiles?competitionId=" + competitionId,
                     HttpMethod.POST,
                     requestEntity,
                     String.class
@@ -287,7 +290,7 @@ public class AdminService {
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
 
                 ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
-                        "http://localhost:8081/regionalTeam/uploadFiles",
+                        fileManagerPath + "/regionalTeam/uploadFiles",
                         HttpMethod.POST,
                         requestEntity,
                         String.class

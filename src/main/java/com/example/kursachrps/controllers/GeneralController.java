@@ -55,8 +55,8 @@ public class GeneralController {
         this.regionalTeamService = regionalTeamService;
     }
 
-    @Value("${pdffiles}")
-    private String pdfFilesPath;
+//    @Value("${pdffiles}")
+//    private String pdfFilesPath;
 
     /**
      * Метод для просмотра всех заявок на определенные соревнования
@@ -143,28 +143,28 @@ public class GeneralController {
     /**
      * Метод для скачивания pdf протокола
      */
-    @GetMapping("/savePDFProtocol")
-    public ResponseEntity<Resource> savePDFProtocol(@RequestParam String competitionId) throws IOException {
-        String fileName = generalService.getProtocolNameByCompetitionId(competitionId);
-//        File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filePDF\\" + fileName);
-        File file = new File(pdfFilesPath + fileName);
-        //Реализация скачивания файла
-
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
-
-        Path path = Paths.get(file.getAbsolutePath());
-        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-        return ResponseEntity.ok()
-                .headers(header)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
-    }
+//    @GetMapping("/savePDFProtocol")
+//    public ResponseEntity<Resource> savePDFProtocol(@RequestParam String competitionId) throws IOException {
+//        String fileName = generalService.getProtocolNameByCompetitionId(competitionId);
+////        File file = new File("C:\\Users\\-\\IdeaProjects\\KursachRPS\\src\\filePDF\\" + fileName);
+//        File file = new File(pdfFilesPath + fileName);
+//        //Реализация скачивания файла
+//
+//        HttpHeaders header = new HttpHeaders();
+//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+//        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+//        header.add("Pragma", "no-cache");
+//        header.add("Expires", "0");
+//
+//        Path path = Paths.get(file.getAbsolutePath());
+//        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+//
+//        return ResponseEntity.ok()
+//                .headers(header)
+//                .contentLength(file.length())
+//                .contentType(MediaType.parseMediaType("application/octet-stream"))
+//                .body(resource);
+//    }
 
     /**
      * Метод для полечения всех новостей

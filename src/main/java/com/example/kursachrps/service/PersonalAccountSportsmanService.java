@@ -4,6 +4,7 @@ import com.example.kursachrps.dto.SportsmanDTO;
 import com.example.kursachrps.models.Sportsman;
 import com.example.kursachrps.repositories.SportsmanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -28,6 +29,9 @@ public class PersonalAccountSportsmanService {
     private final PasswordEncoder passwordEncoder;
     private final SportsmanRepository sportsmanRepository;
     private final RestTemplate restTemplate;
+
+    @Value("${file.manager.path}")
+    private String fileManagerPath;
 
     @Autowired
     public PersonalAccountSportsmanService(PasswordEncoder passwordEncoder, SportsmanRepository sportsmanRepository, RestTemplate restTemplate) {
@@ -87,7 +91,7 @@ public class PersonalAccountSportsmanService {
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-            ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/personalAccount/upload", HttpMethod.POST, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(fileManagerPath + "/personalAccount/upload", HttpMethod.POST, requestEntity, String.class);
 
             System.out.println(response);
         }

@@ -134,7 +134,7 @@ CREATE TABLE achievements (
                               FOREIGN KEY (competition_id) REFERENCES competitions (id)
 );
 
-DROP TABLE IF EXISTS sportsmans_competition;
+DROP TABLE IF EXISTS sportsman_competition;
 CREATE TABLE sportsman_competition (
                                        sportsman_id varchar(36) NOT NULL,
                                        competition_id varchar(36) NOT NULL,
@@ -160,7 +160,7 @@ CREATE TABLE regional_team (
 DROP TABLE IF EXISTS activity_federation;
 CREATE TABLE activity_federation (
                                id varchar(36) NOT NULL PRIMARY KEY UNIQUE,
-                               file_name varchar(100) NOT NULL UNIQUE
+                               file_name varchar(100)
 );
 
 DROP TABLE IF EXISTS refresh_token;
@@ -175,8 +175,8 @@ CREATE TABLE refresh_token (
 insert into about_federation (id, managers, contacts, list_links)
 values ('7fa1257a-332b-258d-bca6-ba78fa263e0f', 'Здесь располагается информация о нашем управляющем составе.!', '8-960-719-47-61 - Мой телефон. Звонить в любое время дня и ночи.', 'https://totopizza.ru/?q#showModal=product_to_cart_modal&expiresAt=1730545312206');
 
-insert into activity_federation (id, file_names_3d, file_names_classic, file_names_biathlon)
-values ('7fa1257a-152j-258d-bca6-ba78fa263e0f', null, null, null);
+insert into activity_federation (id, file_name)
+values ('7fa1257a-152j-258d-bca6-ba78fa263e0f', null);
 
 insert into regional_team (id, file_name)
 values ('c99ccd51-5731-42a3-9cfc-2ab07e3e9b4c', null);
@@ -184,15 +184,19 @@ values ('c99ccd51-5731-42a3-9cfc-2ab07e3e9b4c', null);
 insert into sex (id, name) values ('c99ccd51-5731-42a3-9cfc-31cc4011e035','Мужской');
 insert into sex (id, name) values ('848f4054-a9c1-4525-9e10-2ab07e3e9b4c','Женский');
 
-insert into users (id, email, password, role, status, name, surname, patronymic, birth_date)
-values ('71b0af32-887c-4903-bc54-af3f96481e9e','admin@mail.ru', '$2a$12$2xHLqWTz63INeUGlIo4U/.tOctTfyYEe41NpMti/mlG7v8wR3DW8K', 'ADMIN', 'ACTIVE', 'admin', 'admin', 'admin', '2002-10-28');
+insert into users (id, email, activation_code, password, role, status, name, surname, patronymic, birth_date)
+values ('71b0af32-887c-4903-bc54-af3f96481e9e','admin@mail.ru', 'true', '$2a$12$2xHLqWTz63INeUGlIo4U/.tOctTfyYEe41NpMti/mlG7v8wR3DW8K', 'ADMIN', 'ACTIVE', 'admin', 'admin', 'admin', '2002-10-28');
 insert into admins (id) values ('71b0af32-887c-4903-bc54-af3f96481e9e');
 
-insert into sports_titles (id, sports_title_name) values ('5a19807c-0630-435b-a0b8-5158ad900456','1 взрослый');
+insert into sports_titles (id, sports_title_name) values ('dd015fc2-da4f-4e6e-a7f8-9052584d7fab','1 юношеский спортивный разряд');
+insert into sports_titles (id, sports_title_name) values ('3b19807c-2330-435b-a0b8-1244ce900625','2 юношеский спортивный разряд');
+insert into sports_titles (id, sports_title_name) values ('4a19823d-0644-435b-a0b8-5158ad004234','3 юношеский спортивный разряд');
+insert into sports_titles (id, sports_title_name) values ('5a19807c-0630-435b-a0b8-5158ad900456','1 спортивный разряд');
+insert into sports_titles (id, sports_title_name) values ('6ac3280a-0631-435b-a0b8-5158ad234668','2 спортивный разряд');
+insert into sports_titles (id, sports_title_name) values ('5a19234c-0632-435a-a0b8-5158ad841658','3 спортивный разряд');
 insert into sports_titles (id, sports_title_name) values ('6ac053fd-8568-4a36-ae7c-741980d72684','КМС');
 insert into sports_titles (id, sports_title_name) values ('36be5498-fd85-4525-b9b6-57abd91c3666','МС');
 insert into sports_titles (id, sports_title_name) values ('049adae2-b4a7-4f65-aa54-9c3cae532c6a','МСМК');
-insert into sports_titles (id, sports_title_name) values ('dd015fc-da4f-4e6e-a7f8-9052584d7fab','ЗМС');
 
 insert into bow_types (id, bow_type_name)
 values ('ac6a3094-b354-4ebd-8bb1-19111742c764', '3Д-БЛ');
@@ -205,11 +209,19 @@ values ('62cb799b-0ff8-4843-82c0-61a215d4af97', '3Д-составной лук')
 insert into bow_types (id, bow_type_name)
 values ('62cb799b-0ff8-4843-b732-af5706b8153d', 'Спортинг');
 insert into bow_types (id, bow_type_name)
-values ('26454f95-0e38-45d4-a85e-dd37f4a04944', 'Исторический лук');
-insert into bow_types (id, bow_type_name)
 values ('36671015-5c37-4e5c-8eed-9a353e927f32', 'Олимпик');
 insert into bow_types (id, bow_type_name)
+values ('26454f95-0e38-45d4-a85e-dd37f4a04944', 'Исторический лук');
+insert into bow_types (id, bow_type_name)
 values ('e6dc3841-98a3-4357-a139-61e48ac393e2', 'Арбалет');
+insert into bow_types (id, bow_type_name)
+values ('5e7bc5e4-8951-47b4-86ef-57077b915564', 'КЛ');
+insert into bow_types (id, bow_type_name)
+values ('3bd4d917-3b69-40dd-8245-8c0a324be3fd', 'БД');
+insert into bow_types (id, bow_type_name)
+values ('a2b668e3-6391-4e32-89d8-5dd18e824697', 'КЛ-бесприцельный');
+insert into bow_types (id, bow_type_name)
+values ('5354372c-d802-44c1-a2fb-e2b42f72fff4', 'Для арчери-биатлона');
 
 insert into categories (id,name)
 values ('d146475e-681f-4188-a814-c8fb44b416b1','Мужчины 14+');
@@ -234,9 +246,11 @@ values ('55b3b2f1-5a09-4dee-a249-b4d76d0444d6','Женщины');
 
 
 insert into competition_type (id, name)
-values ('e173e1ac-b01e-4cfb-8b42-e4bbd1f2a180','3D');
+values ('e173e1ac-b01e-4cfb-8b42-e4bbd1f2a180','3Д стрельба из лука');
 insert into competition_type (id, name)
-values ('e7d55d2b-3ac1-47fd-93d0-c0d11cab4b95','Target archery');
+values ('e7d55d2b-3ac1-47fd-93d0-c0d11cab4b95','Стрельба из лука (Таргет)');
+insert into competition_type (id, name)
+values ('e7d55d2b-3ac1-47fd-12b3-d0c34cab4b32','Арчери-биатлон');
 
 
 insert into regions (id,name) values ('bf9614ff-a9d2-4371-a97c-8c04383ae2e3', 'Алтайский край');
@@ -337,7 +351,7 @@ insert into regions (id,name) values ('9192d844-ac83-4d67-a137-e2873ea04d1e', '�
 insert into regions (id,name) values ('2d244195-29c6-40d1-a26f-a23efe5547c6', 'Ямало-Ненецкий автономный округ');
 insert into regions (id,name) values ('4359ff82-b9bf-4d33-b58f-c763120d808b', 'Ярославская область');
 
-insert into users (id, email, password, role, status, name, surname, patronymic, birth_date)
-values ('fd4ccbdf-71cf-4f58-ab95-c01884f5d19c', 'sportsman@mail.ru', '$2a$12$FbG/RhA5yloQfG7vKFKo8.EJQd8Ob0wiHdmVMPNDnB4ZVk0cDF7xy', 'SPORTSMAN', 'ACTIVE', 'sportsman', 'sportsman', 'sportsman', '2003-01-20');
+insert into users (id, email, activation_code, password, role, status, name, surname, patronymic, birth_date)
+values ('fd4ccbdf-71cf-4f58-ab95-c01884f5d19c', 'sportsman@mail.ru', 'true', '$2a$12$FbG/RhA5yloQfG7vKFKo8.EJQd8Ob0wiHdmVMPNDnB4ZVk0cDF7xy', 'SPORTSMAN', 'ACTIVE', 'sportsman', 'sportsman', 'sportsman', '2003-01-20');
 insert into sportsmen(id, sex_id, sports_title_id, region_id)
-values ('fd4ccbdf-71cf-4f58-ab95-c01884f5d19c', 'c99ccd51-5731-42a3-9cfc-31cc4011e035', '6ac053fd-8568-4a36-ae7c-741980d72684', 'b14c7476-fdb9-4d3d-9338-33c846b1042f')
+values ('fd4ccbdf-71cf-4f58-ab95-c01884f5d19c', 'c99ccd51-5731-42a3-9cfc-31cc4011e035', '6ac053fd-8568-4a36-ae7c-741980d72684', 'b14c7476-fdb9-4d3d-9338-33c846b1042f');

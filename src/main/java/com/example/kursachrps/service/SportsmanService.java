@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SportsmanService {
@@ -40,7 +43,7 @@ public class SportsmanService {
      */
     @Transactional
     public void registrateSportsman(String sportsmanId, String competitionId, Application application) {
-        if (application.getBowType().getId() == null ) {
+        if (application.getBowType().getId() == null) {
             return;
         }
         Competition competition = competitionRepository.findById(competitionId).orElse(null);
@@ -55,12 +58,20 @@ public class SportsmanService {
      * Метод для получения всех спортсменов по Соревнованию и Типу лука
      */
     public List<ApplicationDTO> getAllSportmanByCompetitionAndBowType(String competitionId, String bowTypeName) {
+        List<ApplicationDTO> response;
         if (Objects.equals(bowTypeName, "all")) {
-            return applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
+            response = applicationMapper.fromApplication(applicationService.getApplicationsForCompetition(competitionId));
         } else {
-            return applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName));
+            response = applicationMapper.fromApplication(applicationService.getApplicationsForCompetitionAndBowType(competitionId, bowTypeName));
         }
+        Comparator<ApplicationDTO> compareByBowTypeName = Comparator
+                .comparing(dto -> dto.getBowType().getBowTypeName());
+
+        return response.stream()
+                .sorted(compareByBowTypeName)
+                .collect(Collectors.toList());
     }
+
 
     public List<Sportsman> getAllSportsmanByCompetition(String competitionId) {
         if (competitionId == null || competitionId.equals("")) {

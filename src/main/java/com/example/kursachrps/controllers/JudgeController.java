@@ -32,6 +32,7 @@ public class JudgeController {
     private final ApplicationService applicationService;
     private final ProtocolService protocolService;
 
+
     @Autowired
     public JudgeController(JudgeService judgeService,
                            CompetitionMapper competitionMapper,

@@ -1,45 +1,95 @@
-version: '0.1'
+version: "3.9"
+
 services:
   db:
-    container_name: db
+    container_name: vladimirArcheryFederationDB
     image: postgres:latest
-    restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 28jrn2002$
-      POSTGRES_DB: VladimirArcheryFederation111
-      PGDATA: /Users/-/IdeaProjects/VladimirArcheryFederation/src/main/java/db/schema.sql:/db/schema.sql
-      TZ: Europe/Moscow
-    volumes:
-      - C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/main/java/db/schema.sql:/db/schema.sql
-    networks:
-      - fslvo
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: VladimirArcheryFederation
+    restart: always
     ports:
-      - "54321:5432"
-  backend:
-    depends_on:
-      - db
+      - "54322:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data   #Для Linux
+      - ./src/main/java/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    networks:
+      archery-network:
+        aliases:
+          - db
+
+  vladimir-archery-federation:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=VladimirArcheryFederation111
-      - DB_PASSWORD=28jrn2002$
-      - TZ=Europe/Moscow
-      - SPRING_PROFILES_ACTIVE=docker
-      - JAVA_OPTS=-Dspring.profiles.active=docker
-    volumes:
-      - ./docker_data/fslvo/log:/log
-    networks:
-      fslvo:
-        aliases:
-          - fslvo-backend
+    image: sashalyapanov/vladimir-archery-federation:latest
+    container_name: vladimir-archery-federation
+    restart: always
     ports:
       - "8080:8080"
-    expose:
-      - "8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/VladimirArcheryFederation
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      FILE_MANAGER_BASE_URL: file-manager-fslvo
+      SPRING_PROFILES_ACTIVE: docker
+      PDF_FILES_PATH: /app/filesExcel/
+      PROJECT_PATH: /app
+    volumes:
+      - ./src/filesExcel:/app/filesExcel:rw
+    depends_on:
+      - db
+      - file-manager-fslvo
+    networks:
+      archery-network:
+        aliases:
+          - vladimir-archery-federation
+
+  file-manager-fslvo:
+    build:
+      context: ./../FileManagerFSLVO
+      dockerfile: Dockerfile
+    image: sashalyapanov/file-manager-fslvo:latest
+    container_name: file-manager-fslvo
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: 8081
+      STORAGE_DIR: /data/files
+      SPRING_PROFILES_ACTIVE: docker
+    volumes:
+      - filemanager_data:/data/files
+    depends_on:
+      - db
+    networks:
+      archery-network:
+        aliases:
+          - file-manager-fslvo
+
+  vladimir-archery-federation-front:
+    build:
+      context: ./../../WebstormProjects/VladimirArcheryFederationFront
+      dockerfile: Dockerfile
+    image: sashalyapanov/vladimir-archery-federation-front:latest
+    container_name: vladimir-archery-federation-front
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - vladimir-archery-federation
+      - file-manager-fslvo
+    networks:
+      archery-network:
+        aliases:
+          - vladimir-archery-federation-front
+
+volumes:
+  db-data:
+    driver: local
+  filemanager_data:
+    driver: local
+
 networks:
-  fslvo:
+  archery-network:
     driver: bridge

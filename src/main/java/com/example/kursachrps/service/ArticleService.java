@@ -3,6 +3,7 @@ package com.example.kursachrps.service;
 import com.example.kursachrps.models.Article;
 import com.example.kursachrps.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
@@ -27,6 +28,9 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final RestTemplate restTemplate;
+
+    @Value("${file.manager.path}")
+    private String fileManagerPath;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository, RestTemplate restTemplate) {
@@ -54,7 +58,8 @@ public class ArticleService {
 
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-                ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
+//                ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
+                ResponseEntity<String> response = restTemplate.exchange(fileManagerPath + "/articleImages/upload", HttpMethod.POST, requestEntity, String.class);
                 article2.setLink(response.getBody().substring(response.getBody().lastIndexOf('/')+1));
                 return articleRepository.save(article2);
             }

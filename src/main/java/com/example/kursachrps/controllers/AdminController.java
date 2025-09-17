@@ -6,12 +6,12 @@ import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.Administratior.SportsmanAdmDTO;
 import com.example.kursachrps.dto.CompetitionCreateDTO;
 import com.example.kursachrps.dto.SportsmanDTO;
-import com.example.kursachrps.service.AboutFederationService;
-import com.example.kursachrps.service.ActivityFederationService;
-import com.example.kursachrps.service.AdminService;
-import com.example.kursachrps.service.ArticleService;
+import com.example.kursachrps.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -34,10 +37,11 @@ public class AdminController {
     private final AboutFederationService aboutFederationService;
     private final SportsmanMapper sportsmanMapper;
     private final ActivityFederationService activityFederationService;
+    private final JudgeService judgeService;
 
     @Autowired
     public AdminController(AdminService adminService, UserMapper userMapper, CompetitionMapper competitionMapper,
-                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService, SportsmanMapper sportsmanMapper, ActivityFederationService activityFederationService) {
+                           ArticleService articleService, GeneralMapper generalMapper, AboutFederationService aboutFederationService, SportsmanMapper sportsmanMapper, ActivityFederationService activityFederationService, JudgeService judgeService) {
         this.adminService = adminService;
         this.userMapper = userMapper;
         this.competitionMapper = competitionMapper;
@@ -46,6 +50,7 @@ public class AdminController {
         this.aboutFederationService = aboutFederationService;
         this.sportsmanMapper = sportsmanMapper;
         this.activityFederationService = activityFederationService;
+        this.judgeService = judgeService;
     }
 
 
@@ -309,6 +314,30 @@ public class AdminController {
         } else {
             return ResponseEntity.badRequest().body("Не удалось добавить файлы в систему");
         }
+    }
+
+
+    /**
+     * Метод для генерирования протокола и автоматического скачивания файла на локальный пк пользователя
+     */
+    @GetMapping("/generateProtocol")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Resource> generateProtocol(@RequestParam String competitionId) throws IOException {
+        judgeService.markExtraStages(competitionId);
+        File fileName = judgeService.generateProtocol(competitionId);
+
+        //Реализация скачивания файла
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(fileName));
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName.getName());
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentLength(fileName.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
     }
 
 }

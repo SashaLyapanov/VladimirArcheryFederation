@@ -58,12 +58,12 @@ public class GlobalExceptionHandler {
     }
 
     // 500 Internal Server Error (Неизвестная ошибка)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGenericException(Exception ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Внутренняя ошибка сервера");
-        response.put("error", "INTERNAL_SERVER_ERROR");
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<?> handleGenericException(Exception ex) {
+//        Map<String, String> response = new HashMap<>();
+//        response.put("message", "Внутренняя ошибка сервера");
+//        response.put("error", "INTERNAL_SERVER_ERROR");
+//        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
 }

@@ -3,6 +3,7 @@ package com.example.kursachrps.service;
 import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.repositories.AboutFederationRepository;
 import io.jsonwebtoken.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ public class AboutFederationService {
 
     private final RestTemplate restTemplate;
     AboutFederationRepository aboutFederationRepository;
+
+    @Value("${file.manager.path}")
+    private String fileManagerPath;
 
     AboutFederationService(AboutFederationRepository aboutFederationRepository, RestTemplate restTemplate) {
         this.aboutFederationRepository = aboutFederationRepository;
@@ -62,7 +66,7 @@ public class AboutFederationService {
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
 
                 ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
-                        "http://localhost:8081/aboutFederation/uploadFiles",
+                        fileManagerPath + "/aboutFederation/uploadFiles",
                         HttpMethod.POST,
                         requestEntity,
                         String.class

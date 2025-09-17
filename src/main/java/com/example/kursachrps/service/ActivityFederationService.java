@@ -5,6 +5,7 @@ import com.example.kursachrps.models.ActivityFederation;
 import com.example.kursachrps.repositories.ActivityFederationRepository;
 import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -23,6 +24,9 @@ public class ActivityFederationService {
 
     private final ActivityFederationRepository activityFederationRepository;
     private final RestTemplate restTemplate;
+
+    @Value("${file.manager.path}")
+    private String fileManagerPath;
 
     @Autowired
     public ActivityFederationService(ActivityFederationRepository activityFederationRepository, RestTemplate restTemplate) {
@@ -96,7 +100,7 @@ public class ActivityFederationService {
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
                 ResponseEntity<?> responseFromFileManager = restTemplate.exchange(
-                        "http://localhost:8081/activityFederation/uploadFiles",
+                        fileManagerPath + "/activityFederation/uploadFiles",
                         HttpMethod.POST,
                         requestEntity,
                         String.class
