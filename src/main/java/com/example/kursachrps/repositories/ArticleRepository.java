@@ -13,4 +13,7 @@ public interface ArticleRepository extends JpaRepository<Article, String> {
 
     Optional<Article> findById(String id);
     List<Article> findAll(Sort sort);
+
+
+    List<Article> findTop5ByOrderByDateTimeDesc();
 }

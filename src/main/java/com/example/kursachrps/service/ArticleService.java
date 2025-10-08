@@ -42,6 +42,10 @@ public class ArticleService {
         return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"));
     }
 
+    public List<Article> getLastFiveArticles() {
+        return articleRepository.findTop5ByOrderByDateTimeDesc();
+    }
+
     @Transactional
     public Article saveArticle(Article article, MultipartFile file) {
         if (file != null && file.getSize() != 0) {

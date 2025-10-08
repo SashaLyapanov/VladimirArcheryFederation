@@ -1,6 +1,5 @@
 package com.example.kursachrps.controllers;
 
-import com.example.kursachrps.config.CookieConfig;
 import com.example.kursachrps.models.*;
 import com.example.kursachrps.dto.AuthAndRegistration.LoginDTO;
 import com.example.kursachrps.dto.AuthAndRegistration.SignUpDTO;
@@ -137,7 +136,7 @@ public class AuthController {
             String message = String.format(
                     "Здравствуйте, %s! \n" +
                             "Мы очень рады, что вы заинтересовались нашим продуктом и успешно прошли регистрацию! \n" +
-                            "Пожалуйста, перейдите по ссылке для активации вашего профиля: http://localhost:8080/api/v1/auth/activate/%s/%s",
+                            "Пожалуйста, перейдите по ссылке для активации вашего профиля: https://api.fslvo.ru/api/v1/auth/activate/%s/%s",
                     sportsman.getFirstName() + " " + sportsman.getSurname(),
                     sportsman.getEmail(),
                     sportsman.getActivationCode()
@@ -154,7 +153,7 @@ public class AuthController {
         boolean isActivated = authenticationService.authenticate(email, code);
 
         if (isActivated) {
-            return new ResponseEntity<>("Success! Welcome to our system: <a href='http://localhost:3000/login'>Login page!</a>", HttpStatus.OK);
+            return new ResponseEntity<>("Success! Welcome to our system: <a href='https://fslvo.ru/login'>Login page!</a>", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("The bad news is that the account could not be activated. Contact customer support.", HttpStatus.BAD_REQUEST);
         }

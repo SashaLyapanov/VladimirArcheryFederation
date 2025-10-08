@@ -9,19 +9,9 @@ import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
 import com.example.kursachrps.models.Competition;
 import com.example.kursachrps.service.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -173,6 +163,22 @@ public class GeneralController {
     public ResponseEntity<List<ArticleDTO>> getAllArticles() {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         List<Article> articleList = articleService.getAllArticles();
+        for (Article article : articleList) {
+            ArticleDTO articleDTO = new ArticleDTO();
+            articleDTO.setId(article.getId());
+            articleDTO.setName(article.getName());
+            articleDTO.setBody(article.getBody());
+            articleDTO.setDateTime(article.getDateTime());
+            articleDTO.setLink(article.getLink());
+            articleDTOList.add(articleDTO);
+        }
+        return ResponseEntity.ok(articleDTOList);
+    }
+
+    @GetMapping("/getArticlesForHomePage")
+    public ResponseEntity<List<ArticleDTO>> getArticlesForHomePage() {
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        List<Article> articleList = articleService.getLastFiveArticles();
         for (Article article : articleList) {
             ArticleDTO articleDTO = new ArticleDTO();
             articleDTO.setId(article.getId());

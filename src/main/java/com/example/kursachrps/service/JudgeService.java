@@ -97,7 +97,6 @@ public class JudgeService {
             return null;
         } else {
             LocalDate today = LocalDate.now();
-//            File protocol = new File("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/" + today + ".xlsx");
             File protocol = new File(projectPath + "/src/filesExcel/" + today + ".xlsx");
             try {
                 boolean created = protocol.createNewFile();
@@ -108,8 +107,6 @@ public class JudgeService {
                 System.out.println("Вероятнее всего файл с таким именем уже существует");
                 System.out.println(e.getMessage());
             }
-
-//            try (InputStream inputStream = new FileInputStream("C:/Users/-/IdeaProjects/VladimirArcheryFederation/src/filesExcel/Pattern.xlsx");
             try (InputStream inputStream = new FileInputStream(projectPath + "/src/filesExcel/Pattern.xlsx");
                  OutputStream outputStream = new FileOutputStream(protocol)) {
                 inputStream.transferTo(outputStream);

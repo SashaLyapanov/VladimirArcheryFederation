@@ -185,7 +185,7 @@ insert into sex (id, name) values ('c99ccd51-5731-42a3-9cfc-31cc4011e035','Му�
 insert into sex (id, name) values ('848f4054-a9c1-4525-9e10-2ab07e3e9b4c','Женский');
 
 insert into users (id, email, activation_code, password, role, status, name, surname, patronymic, birth_date)
-values ('71b0af32-887c-4903-bc54-af3f96481e9e','admin@mail.ru', 'true', '$2a$12$2xHLqWTz63INeUGlIo4U/.tOctTfyYEe41NpMti/mlG7v8wR3DW8K', 'ADMIN', 'ACTIVE', 'admin', 'admin', 'admin', '2002-10-28');
+values ('71b0af32-887c-4903-bc54-af3f96481e9e','fslvo@mail.ru', 'true', '$2a$10$61QYCJs0kRbj2XE8Xfxv2OvC5eqy8DVzBijNT7A1P6zFd26Psnxha', 'ADMIN', 'ACTIVE', 'Ляпанов', 'Артем', 'Владимирович', '1979-01-08');
 insert into admins (id) values ('71b0af32-887c-4903-bc54-af3f96481e9e');
 
 insert into sports_titles (id, sports_title_name) values ('dd015fc2-da4f-4e6e-a7f8-9052584d7fab','1 юношеский спортивный разряд');
