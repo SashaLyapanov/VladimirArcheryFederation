@@ -5,6 +5,9 @@ import com.example.kursachrps.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,6 +43,12 @@ public class ArticleService {
 
     public List<Article> getAllArticles() {
         return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"));
+    }
+
+    public Page<Article> getAllArticlesWithPagination(int numPage, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "dateTime");
+        Pageable pageable = PageRequest.of(numPage, pageSize).withSort(sort);
+        return articleRepository.findAll(pageable);
     }
 
     public List<Article> getLastFiveArticles() {

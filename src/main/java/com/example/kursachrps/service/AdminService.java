@@ -219,8 +219,7 @@ public class AdminService {
         if (surname == null && surname.isEmpty() && surname == null && surname.isEmpty() && surname == null && surname.isEmpty()) {
             return null;
         }
-        return sportsmanRepositoryImpl.findSportsmenByParams(surname, name.toLowerCase(), patronymic.toLowerCase());
-
+        return sportsmanRepositoryImpl.findSportsmenByParams(surname, name, patronymic);
     }
 
     @Transactional

@@ -9,12 +9,14 @@ import com.example.kursachrps.models.AboutFederation;
 import com.example.kursachrps.models.Article;
 import com.example.kursachrps.models.Competition;
 import com.example.kursachrps.service.*;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/api/v1/general")
@@ -173,6 +175,22 @@ public class GeneralController {
             articleDTOList.add(articleDTO);
         }
         return ResponseEntity.ok(articleDTOList);
+    }
+
+    @GetMapping("/getArticlesWithPagination")
+    public ResponseEntity<Page<ArticleDTO>> getAllArticles(@RequestParam int numPage,
+                                                           @RequestParam int pageSize) {
+        Page<Article> articleList = articleService.getAllArticlesWithPagination(numPage, pageSize);
+        Page<ArticleDTO> articleDTOS = articleList.map(article -> {
+            ArticleDTO articleDTO = new ArticleDTO();
+            articleDTO.setId(article.getId());
+            articleDTO.setName(article.getName());
+            articleDTO.setBody(article.getBody());
+            articleDTO.setDateTime(article.getDateTime());
+            articleDTO.setLink(article.getLink());
+            return articleDTO;
+        });
+        return ResponseEntity.ok(articleDTOS);
     }
 
     @GetMapping("/getArticlesForHomePage")
