@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
 
 @RestController
 @RequestMapping("/api/v1/general")
@@ -89,7 +88,7 @@ public class GeneralController {
     List<BowTypeDTO> getAllBowType() {
         return generalMapper.fromBowType(generalService.getAllBowType());
     }
-    
+
     @GetMapping("allCompetitionStatuses")
     List<StatusOfCompetitionDTO> getAllCompetitionStatuses() {
         List<StatusOfCompetitionDTO> response = new ArrayList<>();
@@ -217,8 +216,7 @@ public class GeneralController {
         ArticleDTO articleDTO = generalMapper.fromArticle(articleService.getArticleById(articleId));
         if (articleDTO != null) {
             return ResponseEntity.ok(articleDTO);
-        }
-        else return ResponseEntity.badRequest().body("Не удалось получить запись новости с id" + articleId);
+        } else return ResponseEntity.badRequest().body("Не удалось получить запись новости с id" + articleId);
     }
 
     List<String> mapStringToList(String str) {
@@ -272,6 +270,14 @@ public class GeneralController {
         return competitionMapper.fromCompetition(generalService.showAllCompetitions());
     }
 
+    @GetMapping("competitionsWithPagination")
+    public ResponseEntity<Page<CompetitionDTO>> getCompetitionsWithPagination(@RequestParam int numPage,
+                                                                              @RequestParam int pageSize) {
+        Page<Competition> page = generalService.showAllCompetitionsWithPagination(numPage, pageSize);
+        Page<CompetitionDTO> response = page.map(competitionMapper::fromCompetition);
+        return ResponseEntity.ok(response);
+    }
+
     /**
      * Метод для вывода всех соревнований со статусом Future or Present
      */
@@ -321,7 +327,7 @@ public class GeneralController {
     @GetMapping("competitionsByParams")
     public List<CompetitionDTO> getCompetitions(@RequestParam(required = false) String name,
                                                 @RequestParam(required = false) String date,
-                                                @RequestParam(required = false) String type){
+                                                @RequestParam(required = false) String type) {
         if (date == null || date.isEmpty()) {
             return (generalService.getCompetitionsBySearchParams(name, null, type));
         } else {
@@ -354,7 +360,9 @@ public class GeneralController {
      * метод для получения списка названий файлов на странице Сборная
      */
     @GetMapping("regionalTeamFiles")
-    public List<String> getRegionalTeamFiles() { return regionalTeamService.getAllRegionalTeamFiles(); }
+    public List<String> getRegionalTeamFiles() {
+        return regionalTeamService.getAllRegionalTeamFiles();
+    }
 
     //////////////////////////////////////////
     //      Деятельность федерации     //
@@ -364,6 +372,8 @@ public class GeneralController {
      * Метод для получения списка названий файлов на странице Деятельность федерации
      */
     @GetMapping("activityFederation")
-    public Map<String, List<String>> getActivityFiles() { return activityFederationService.getAllRegionalActivityFiles(); }
+    public Map<String, List<String>> getActivityFiles() {
+        return activityFederationService.getAllRegionalActivityFiles();
+    }
 
 }

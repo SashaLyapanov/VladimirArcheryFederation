@@ -6,6 +6,9 @@ import com.example.kursachrps.models.*;
 import com.example.kursachrps.repositories.*;
 import com.example.kursachrps.repositories.RegistrAndAuth.CompetitionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +51,13 @@ public class GeneralService {
     }
 
     public List<Competition> showAllCompetitions() {
-        return competitionRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+        return competitionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+    }
+
+    public Page<Competition> showAllCompetitionsWithPagination(int numPage, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        Pageable pageable = PageRequest.of(numPage, pageSize).withSort(sort);
+        return competitionRepository.findAll(pageable);
     }
 
     public List<Competition> showAllAvailableCompetitions() {
