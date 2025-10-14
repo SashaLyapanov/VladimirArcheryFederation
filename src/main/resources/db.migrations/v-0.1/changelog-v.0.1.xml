@@ -24,4 +24,5 @@
     <include file="db.migrations/v-0.1/2025-09-05--alter_activity_federation.sql"/>
     <include file="db.migrations/v-0.1/2025-09-05--drop_not_null_for_column.sql"/>
     <include file="db.migrations/v-0.1/2025-09-05--alter_activity_federation2.sql"/>
+    <include file="db.migrations/v-0.1/2025-10-14--change_article_name_size_and_add_sports_title.sql"/>
 </databaseChangeLog>
