@@ -1,0 +1,1 @@
+UPDATE bow_types SET id='3bd4d917-3b69-40dd-8245-8c0a324be3fd', bow_type_name='БЛ' WHERE id='3bd4d917-3b69-40dd-8245-8c0a324be3fd';
