@@ -1,0 +1,2427 @@
+{
+	"info": {
+		"_postman_id": "efa5f02c-abdd-4c9f-9b37-8e52089f2ee3",
+		"name": "kursachRPS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24149406"
+	},
+	"item": [
+		{
+			"name": "GeneralFunction",
+			"item": [
+				{
+					"name": "GetCompetitions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/competitions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"competitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCompetitionByDate",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/competition?date=2023/07/12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"competition"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023/07/12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCompetitionsByParams",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/competitionNDC?name=ЧМ Владимирской области 2023&date=2023/05/31&categoryName=Мужчины 14+",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"competitionNDC"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ЧМ Владимирской области 2023"
+								},
+								{
+									"key": "date",
+									"value": "2023/05/31"
+								},
+								{
+									"key": "categoryName",
+									"value": "Мужчины 14+"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetApplicationByCompetitionId",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "tigr",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "tigr@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/applicationsForCompetition?competitionId=fd4ccbdf-70br-5f58-br12-c01884f5d19c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"applicationsForCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDeclaredSportsmenForCompetition",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/declaredSportsmenForCompetition?competitionId=fd4ccbdf-70br-5f58-br12-c01884f5d19c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"declaredSportsmenForCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRegions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allRegions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allRegions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllSportsTitle",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allSportsTitle",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allSportsTitle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllTeams",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allTeams",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allTeams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCategories",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allCategories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allCategories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllBowTypes",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allBowTypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allBowTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SavePDFFile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/savePDFProtocol?competitionId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"savePDFProtocol"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPastCompetitions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allPastCompetitions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allPastCompetitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllNews",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/new?newId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"new"
+							],
+							"query": [
+								{
+									"key": "newId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllBowTypeForCompetition",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allBowTypesByCompetition?competitionId=fd4ccbdf-70br-5f58-br12-c01884f5d19c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allBowTypesByCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allSex",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allSex"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllArticles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/getArticles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"getArticles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAboutFederation",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/getAboutFederation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"getAboutFederation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCompetitionsByParams",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"type": "file",
+									"src": "/C:/Users/-/OneDrive/Документы/Работа/Задача.html"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/rest-api/external/wbr/application/v1/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rest-api",
+								"external",
+								"wbr",
+								"application",
+								"v1",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCompetitionTypes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allCompetitionTypes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allCompetitionTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllBowTypesByCompetition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/allBowTypesByCompetition?competitionId=fd4ccbdf-70br-5f58-br12-c01884f5d19c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"allBowTypesByCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetArticleById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/getArticle?articleId=2ee0078b-434a-438c-bca6-cd81fd603e0f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"getArticle"
+							],
+							"query": [
+								{
+									"key": "articleId",
+									"value": "2ee0078b-434a-438c-bca6-cd81fd603e0f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRegionalTeam",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "tigr",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "tigr@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/general/regionalTeam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"general",
+								"regionalTeam"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AdminController",
+			"item": [
+				{
+					"name": "SportsmanCRUD",
+					"item": [
+						{
+							"name": "CreateSportsman",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"kosmonavt2@mail.ru\",\r\n    \"password\": \"kosmonavt1\",\r\n    \"firstName\": \"Kosmonavt1\",\r\n    \"surname\": \"kosmonavtov1\",\r\n    \"patronymic\": \"kosmonavich1\",\r\n    \"birthDate\": \"2002-10-28\",\r\n    \"sex\": {\r\n        \"id\": \"c99ccd51-5731-42a3-9cfc-31cc4011e035\"\r\n    },\r\n    \"isRegionalTeamSportsman\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/createSportsman",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"createSportsman"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSportsmanByEmail",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTE4ODgyODYsImV4cCI6MTc1MTg4ODg4Nn0.7O5scZqLXWvsYFsuEHoskPSc4azrZLnoKerHmdKtheLOnxY7xvXleaj87lBDs-5tM97513weEi7LkmIpqHfDEQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/sportsmanByEmail?email=sportsman@mail.ru",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"sportsmanByEmail"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "sportsman@mail.ru"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditSportsman",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Vasilka\",\r\n    \"surname\": \"Kupcov\",\r\n    \"patronymic\": \"Agrigatovich\",\r\n    \"region\": {\r\n        \"id\": \"b14c7476-fdb9-4d3d-9338-33c846b1042f\"\r\n    },\r\n    \"sex\": {\r\n        \"id\": \"c99ccd51-5731-42a3-9cfc-31cc4011e035\"\r\n    },\r\n    \"isRegionalTeamSportsman\": \"true\",\r\n    \"sportsTitle\": {\r\n        \"id\": \"6ac053fd-8568-4a36-ae7c-741980d72684\"\r\n    },\r\n    \"birthDate\": \"2002-10-28\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/admin/editSportsman?id=7582652a-2ae5-4273-a98a-cdbf13325ad1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"editSportsman"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "7582652a-2ae5-4273-a98a-cdbf13325ad1"
+										}
+									]
+								},
+								"description": "EditSportsman"
+							},
+							"response": []
+						},
+						{
+							"name": "GetSportsmen",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTU1MTE4NDIsImV4cCI6MTc1NTUxMjQ0Mn0.VDnJX08gDMCZgL-BAJBIJsuEnJ7UIUlIQGiN_ezuZ7XzX92Lx6M2eAF9nL9YEkQ_lkX1dsFaO28KC_ZvFsDlmg",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/sportsmen",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"sportsmen"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSportsmanById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/sportsmanById?id=7582652a-2ae5-4273-a98a-cdbf13325ad1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"sportsmanById"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "7582652a-2ae5-4273-a98a-cdbf13325ad1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BlockUser",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/blockUser?id=39ea8967-a637-49e2-b036-65b00a6d058a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"blockUser"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "39ea8967-a637-49e2-b036-65b00a6d058a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UnblockUser",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/unlockUser?id=39ea8967-a637-49e2-b036-65b00a6d058a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"unlockUser"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "39ea8967-a637-49e2-b036-65b00a6d058a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "AddInRegionalTeam",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTU2NzUzODQsImV4cCI6MTc1NTY3NTk4NH0.FR2gsIKLqluOjSsnQKpHY8NCEqbN3kYaTKTQ3l-ZKcyy0rA21JB6iRPutNlGQx30qgtJX8xORbHtgW-t_YW1bA",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/addInRegionalTeam?id=1e89d773-7b06-4b2c-825c-44208229ae8a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"addInRegionalTeam"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1e89d773-7b06-4b2c-825c-44208229ae8a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteFromRegionalTeam",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTU2NzUzODQsImV4cCI6MTc1NTY3NTk4NH0.FR2gsIKLqluOjSsnQKpHY8NCEqbN3kYaTKTQ3l-ZKcyy0rA21JB6iRPutNlGQx30qgtJX8xORbHtgW-t_YW1bA",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/deleteFromRegionalTeam?id=1e89d773-7b06-4b2c-825c-44208229ae8a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"deleteFromRegionalTeam"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1e89d773-7b06-4b2c-825c-44208229ae8a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSportsmenByFIO",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTU3ODI2OTQsImV4cCI6MTc1NTc4MzI5NH0.PB_SXgTFrH2LEGFFKbJjqPiKWYFuDd6P1C4zIHc8pNd2IMt0Cfucylii8sJ4-S3uy3aS4NC2H4JjTeTNL-ZyKQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/sportsmenByFIO?surname=Lyapanov&name=&patronymic=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"sportsmenByFIO"
+									],
+									"query": [
+										{
+											"key": "surname",
+											"value": "Lyapanov"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "patronymic",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSportsmanByFIO",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CompetitionCRUD",
+					"item": [
+						{
+							"name": "CreateCompetition",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"name\": \"ЧФО\",\r\n        \"place\": \"Владимир, ул. Верхняя Дуброва, 36ж, 19\",\r\n        \"type\": {\r\n            \"id\": \"e173e1ac-b01e-4cfb-8b42-e4bbd1f2a180\"          \r\n        },\r\n        \"price\": 10,\r\n        \"categories\": [\r\n            {\r\n                \"id\": \"d146475e-681f-4188-a814-c8fb44b416b1\"\r\n            },\r\n            {\r\n                \"id\": \"35b34c98-acef-4a51-904d-4db53a2cc4f6\"\r\n            },\r\n            {\r\n                \"id\": \"7c1d9beb-9eb2-4542-ad67-8ef2b53d3af4\"\r\n            },\r\n            {\r\n                \"id\": \"55b3b2f1-5a09-4dee-a249-b4d76d0444d6\"\r\n            }\r\n        ],\r\n        \"bowTypeList\": [\r\n            {\r\n                \"id\": \"62cb799b-0ff8-4843-82c0-61a215d4af97\"\r\n            },\r\n            {\r\n                \"id\": \"ac6a3094-b354-4ebd-8bb1-19111742c764\"\r\n            }\r\n        ],\r\n        \"mainJudge\": \"Главный судья\",\r\n        \"secretary\": \"Главный секретарь\",\r\n        \"zamJudge\": \"Главный зам судьи\",\r\n        \"judges\": \"Иванов, Петров, Сидоров, Краснов, Утенков, Ганин\",\r\n        \"date\": \"2023-07-15T21:00:00.000+00:00\"\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/createCompetition",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"createCompetition"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditCompetition",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTc1MDQ3MjMsImV4cCI6MTc1NzUwNDc4M30.XKYBSp5bJKz3Vt_s-rhm_QUQDOhvgvzDAPexASWi0onktDZu7cyb6iBtPJEeiPks3NNRq0nXsHWLn46HNQHozw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\":\"Тестовые 1 1 1\",\"place\":\"Тест 1\",\"type\":{\"id\":\"e7d55d2b-3ac1-47fd-93d0-c0d11cab4b95\"},\"bowTypeList\":[{\"id\":{\"id\":\"62cb799b-0ff8-4843-82c0-61a215d4af97\",\"bowTypeName\":\"3Д-составной лук\"}},{\"id\":{\"id\":\"36671015-5c37-4e5c-8eed-9a353e927f32\",\"bowTypeName\":\"Олимпик\"}}],\"status\":\"PRESENT\",\"mainJudge\":\"Ляпанов Александр Артемович 1\",\"secretary\":\"Ляпанов Александр Артемович 1\",\"zamJudge\":\"Ляпанов Александр Артемович 1\",\"judges\":\"Ляпанов Александр Артемович 1\",\"date\":\"2025-12-13\",\"endDate\":\"2025-12-13\",\"description\":\"ыфвафыва 1\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/editCompetition?id=4570191f-a701-41b9-b87e-85499c2c1fd4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"editCompetition"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4570191f-a701-41b9-b87e-85499c2c1fd4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ChangeStatusOfCompetition",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/changeStatusCompetition?id=3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"changeStatusCompetition"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetAllCompetition",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/general/competitions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"general",
+										"competitions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteCompetitionById",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/deleteCompetitionById?id=94f508b6-5bfa-44b8-8123-635b01de7bc8",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"deleteCompetitionById"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "94f508b6-5bfa-44b8-8123-635b01de7bc8"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ArticleCRUD",
+					"item": [
+						{
+							"name": "CreateArticle",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin@mail.ru",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data; boundary=<//>",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Mi/Pictures/Saved Pictures/Аудюшечка.jpg"
+										},
+										{
+											"key": "name",
+											"value": "Красавчег",
+											"type": "text"
+										},
+										{
+											"key": "body",
+											"value": "Описание какашечки\n",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/createArticle",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"createArticle"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditArticle",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "articleId",
+											"value": "d8ec888c-4eb3-4fcd-ab31-3e3d653d894f",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Название статейки на 11,04",
+											"type": "text"
+										},
+										{
+											"key": "body",
+											"value": "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/-/OneDrive/Рабочий стол/фото/Фотки/Аватарка.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/changeArticle",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"changeArticle"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SportsmanController",
+			"item": [
+				{
+					"name": "RegistrateOnCompetition",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"payment\": false,\r\n    \"bowType\": {\r\n        \"id\": \"ac6a3094-b354-4ebd-8bb1-19111742c764\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/regInCompetition?competitionId=fd4ccbdf-70br-5f58-br12-c01884f5d19c&sportsmanId=fc4ead62-fe78-449d-8a8e-cdea2ccf6c7e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"regInCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								},
+								{
+									"key": "sportsmanId",
+									"value": "fc4ead62-fe78-449d-8a8e-cdea2ccf6c7e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMyApplicaitons",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3NTVhMGNmMy00OTZkLTQyMGMtODA0OC1lZDgxN2IzMzEzNjkiLCJpYXQiOjE3NTM5NjA5MTAsImV4cCI6MTc1Mzk2MTUxMH0.FLV0qg1ULPI8pXw4gLXMtP0d298s1Vj6k9BIPPg5tl-q5mqlyQPvpnaCja65XcMR6Uo7_zm6H5J__KqG6C_MJg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/allMyApplication?myId=755a0cf3-496d-420c-8048-ed817b331369",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"allMyApplication"
+							],
+							"query": [
+								{
+									"key": "myId",
+									"value": "755a0cf3-496d-420c-8048-ed817b331369"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditMyProfile",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"lexa\",\r\n    \"firstName\": \"Lexa\",\r\n    \"surname\": \"Alexeev\",\r\n    \"patronymic\": \"Alexeevich\",\r\n    \"sex\": {\r\n        \"id\":\"c99ccd51-5731-42a3-9cfc-31cc4011e035\"\r\n    },\r\n    \"region\": {\r\n        \"id\":\"bf9614ff-a9d2-4371-a97c-8c04383ae2e3\"\r\n    },\r\n    \"sportsTitle\": {\r\n        \"id\": \"dd015fc-da4f-4e6e-a7f8-9052584d7fab\"\r\n    },\r\n    \"birthDate\": \"2002-10-28T12:10:00.000+00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/personalAccount/editProfile?sportsmanId=fd4ccbdf-71cf-4f58-ab95-c01884f5d19c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"personalAccount",
+								"editProfile"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "fd4ccbdf-71cf-4f58-ab95-c01884f5d19c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSportsTytleByPartOfWord",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/titles?name=М",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"titles"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "М"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSportsTytleByPartOfWordWithPagination",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/titlesWithPagination?name=М&page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"titlesWithPagination"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "М"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSportsmenByCompetitionAndBowType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/sportsmenByCompetitionAndBowType?id=fd4ccbdf-70br-5f58-br12-c01884f5d19c&bowTypeName=all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"sportsmenByCompetitionAndBowType"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c"
+								},
+								{
+									"key": "bowTypeName",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteApplicaiton",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/deleteApplication?sportsmanId=fd4ccbdf-71cf-4f58-ab95-c01884f5d19c&competitionId=0172d61c-1736-4915-b9e7-ab40e6e08f79",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"deleteApplication"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "fd4ccbdf-71cf-4f58-ab95-c01884f5d19c"
+								},
+								{
+									"key": "competitionId",
+									"value": "0172d61c-1736-4915-b9e7-ab40e6e08f79"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkApplication",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxZTg5ZDc3My03YjA2LTRiMmMtODI1Yy00NDIwODIyOWFlOGEiLCJpYXQiOjE3NTQwMzgyMTksImV4cCI6MTc1NDAzODgxOX0.kyqZdMlRVhNbXZTa1DT1PNJFZH_3DoJ7LbRQMI5jSTdIISryu7tiaP45xfiamV36pvWJXEXvvFOaMsvevDNuwg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/sportsman/checkApplication?sportsmanId=1e89d773-7b06-4b2c-825c-44208229ae8a&competitionId=2fca736d-71a7-4c9c-a3d9-28a8a6b198c7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"sportsman",
+								"checkApplication"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "1e89d773-7b06-4b2c-825c-44208229ae8a"
+								},
+								{
+									"key": "competitionId",
+									"value": "2fca736d-71a7-4c9c-a3d9-28a8a6b198c7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AuthAndRegistration",
+			"item": [
+				{
+					"name": "Authorization",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@mail.ru\",\r\n    \"password\": \"admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Ляпанов\",\r\n    \"surname\": \"Александр\",\r\n    \"patronymic\": \"Артемович\",\r\n    \"email\": \"lyapanov_s@mail.ru\",\r\n    \"password\": \"admin\",\r\n    \"region\": {\r\n        \"id\": \"b14c7476-fdb9-4d3d-9338-33c846b1042f\"\r\n        },\r\n    \"sex\": {\r\n        \"id\": \"848f4054-a9c1-4525-9e10-2ab07e3e9b4c\"\r\n    },\r\n    \"sportsTitle\": {\r\n        \"id\": \"5a19807c-0630-435b-a0b8-5158ad900456\"\r\n    },\r\n    \"birthDate\": \"2002-11-04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActivateAccount",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/activate/9a2bc071-7a64-47da-b8f8-498b6479e3b8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"activate",
+								"9a2bc071-7a64-47da-b8f8-498b6479e3b8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3NTVhMGNmMy00OTZkLTQyMGMtODA0OC1lZDgxN2IzMzEzNjkiLCJpYXQiOjE3NTE4ODg4OTUsImV4cCI6MTc1Mjc1Mjg5NX0.Elf05wBqH0x9LzQOrfU9hIhl4olJP0QDyplesNMfDrZ9M-hLQYA9mEHHdsvY1kazYUDK_rsv2uoaYIPQtxmI1A\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JudgeController",
+			"item": [
+				{
+					"name": "GetPresentCompetiitons",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/judge/presentCompetitions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"judge",
+								"presentCompetitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RegistrateParticipantToCompetition",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"payment\": true,\r\n    \"bowType\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/judge/regParticipantToCompetition?competitionId=53&email=coach1@mail.ru",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"judge",
+								"regParticipantToCompetition"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "53"
+								},
+								{
+									"key": "email",
+									"value": "coach1@mail.ru"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadFile",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/-/OneDrive/Документы/2024-04-25.xlsx"
+								},
+								{
+									"key": "competitionId",
+									"value": "fd4ccbdf-70br-5f58-br12-c01884f5d19c",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/judge/uploadFile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"judge",
+								"uploadFile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GenerateProtocol",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTc2NjQwMTksImV4cCI6MTc1NzY2NDYxOX0._WYXUfYC02Qfw0S_0NPxT0lT6C-MDXf97lLSe2wLcpFVIQ2O7PhBG6I5Zlpw6uwNXjPkw_3FeIg-mWFF3xPQHg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/admin/generateProtocol?competitionId=4570191f-a701-41b9-b87e-85499c2c1fd4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"generateProtocol"
+							],
+							"query": [
+								{
+									"key": "competitionId",
+									"value": "4570191f-a701-41b9-b87e-85499c2c1fd4"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GenerateProtocol",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MWIwYWYzMi04ODdjLTQ5MDMtYmM1NC1hZjNmOTY0ODFlOWUiLCJpYXQiOjE3NTc2NjQwMTksImV4cCI6MTc1NzY2NDYxOX0._WYXUfYC02Qfw0S_0NPxT0lT6C-MDXf97lLSe2wLcpFVIQ2O7PhBG6I5Zlpw6uwNXjPkw_3FeIg-mWFF3xPQHg",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/admin/generateProtocol?competitionId=4570191f-a701-41b9-b87e-85499c2c1fd4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"admin",
+										"generateProtocol"
+									],
+									"query": [
+										{
+											"key": "competitionId",
+											"value": "4570191f-a701-41b9-b87e-85499c2c1fd4"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Disposition",
+									"value": "attachment; filename=2025-09-12.xlsx"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/octet-stream"
+								},
+								{
+									"key": "Content-Length",
+									"value": "7047"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Sep 2025 08:08:22 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0013\u0000\u0000\u0000[Content_Types].xml�T�n�0\u0010����*6�PU\u0015�C\u001f�\u0016��\u0003\\{C,���P��n\f�TJ%\u0010�\u0012Ǚٙ�(�h�v�ZA�&��\r��U�U���\u001b�6{�oY�Qz-m��0\u001f�d<�m\"�F}nX�\u0018�Ȫ\u0003'3\u000f\u0011<!mHN\"m�\\D�\u0016r\u000e�z0�\u0011*x\u0004�5�\u001al<z�V.-V���t�d��(��J���\u0013�w�<�-�ܙ������5�lOChf�\b���~Os/�K2\u001aN�\u0016��(�A-\u001d�p�U5�:&\"&4��9�\t��#AA�)�Y�4?���\u0016\u0015\u0012\u001ce�\u0013�r�;m�\t��\u001d\u0000:�s'\u0013�WL�2�\u000e���\u0007�9pc\u000f��\u0007(�:#}\u0004pȪ\u0000����ʝ4�P���\u0016�!,.��;����\u000b�EY�{\u0010�2�\u0004PK\u0007\b\b|�\u001aH\u0001\u0000\u0000�\u0004\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u000b\u0000\u0000\u0000_rels/.rels���j�0\f�_���8�`�Q��2�m��\u00014[ILb��ږ���.[K\n\u001b�($}���v?�I�Q.���uӂ�h���\u001bx>=��@\u0015��p�H\u0006\"�~�}�\t�n����*\"\u0016\u0003�H�׺؁\u0002��\u0013���8\u0007�Z�^'�#��7m{��O\u0006�3��\u0019�G�\u0006u�ܓ\u0018�'��y|a\u001e�����D�\t��\u000el_\u0003EYȾ�\u0000���vql\u001f3�M˙�fs�\u0004:��C�/�*�\u0000��\\\u0013�Y\u0010��:4\u000bEG��H����\u0013PK\u0007\bnC�\"�\u0000\u0000\u0000I\u0002\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0010\u0000\u0000\u0000docProps/app.xml���n�0\u0010��\u0002y\u0007�{L9-���\u0018\u0014N\u0003\u000f-b�Nv�:�D$� ς�-E��C��%�NA�\u0012�\u001b��aE�;e�����OG��U�G%8��NH�\u0017�\b�4���\\�.�O�\u0019?��&�Xp��G�\u000b�\u0013�@�CJ�\\@!|/�u�d�\u0015\u0002C���d��pn�\u0000��$�\u0007\u0014V\b:��ض�d�8,񽡩�5����m��쳵��\u0002�O�oJ:�M�ї�����)ȥS��1�ݒM��a\u0014�y&r\u000f��6�\u0018D���P�sV�\u0004��E^}�����Fx�q\u0012R\n��F��m�F�֣��C�������b�m6���j���\u001bC\u0010�Fڂ\u0004��8S����&����]ↁt\u0019�T���9��������>��\u0007Ļ�ߜ62�\u0015zM9������3s.\u0010v{�o��B8H�U�{o\u001bl\u001c\u0000]^�G\u000b���<���\u0015\\o_6�\u000fz��8n.�c��Q�\u0017PK\u0007\b�w\u0004�\u0001\u0000\u0000\t\u0003\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0011\u0000\u0000\u0000docProps/core.xml���K�0\u0010\u0007���=M�ve��{P�� XQ|\u000b�+6?H����Y�:q�����rWm\u000ejL>����\u001a���\u0004�4ݠ�\u001a=�[�F�\u000fBwb4\u001aj�\r�4��\\\u001a\u0007��Xpa\u0000�DF{.m��!XN��{P§1�cqg�\u0012!>]O���\u0007�QZ\u0012\u0005At\"\br\u0004�]Dt\";���Í3�I\u0002#(��\u0013�2r�\u0006p���0W���\u000fKj��t��\\���ׇ��yx<���%��:�\\:\u0010\u0001�$\u0002<|ٸ�s�%��k���([aZb�jٚ�\u001b�\u0017o\u0015��\u0001U��n�G�\nL\u000b��--yV�b�C<\u0003ME���|\u0003PK\u0007\b|�\u0010\u0010\u0001\u0000\u0000�\u0001\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0014\u0000\u0000\u0000xl/sharedStrings.xmluS[J�@\u0014�\u0017��0߶�\n�%�\u001f�+�\u0005�:ڀIj&\u0015?�*������@�A�D��t\u000bw��J<3\u0014\n\u001d�\t̽�{Μ��z\u0010�}�� �\u001a|�Z�LD�x+�v\u001a|sc���W��\u0019Wʔ5�N�\u0002��Y'\n�:bmR\u0000M$\u001b�������fK����m\u0011��\u001d'����8��\bK��H�]g�V[rB?�����sS�n��a�^�d�P\u001dS�z�O?4�/t^뮓z����\u0007��\u0003�̀\n�����\u0003��\u001c�o*\fG�h�(\u0007c�2F#�AH\u0005J������4�Ru���<�3�����7E�Ù\u0014ɾ�\u001e]�9gf����Y�OZ;��(�z9F �:�og���h��6]�=���\u0017�FU��\tOP��K--�\u001e=Ꜭ�-\rMb=FCu�Ȳi�m�\u000e�G&>���\u001c\u0014\u0005}��u)W]�t\u0002(~��\u0006���ǲw��7�iw������\u0004+^��͐\u0011\b^�&��tzl��*���Ae\u0010�E��N�\u000e�\u0017�\u000fPK\u0007\b\u0004�x�\u0001\u0000\u0000]\u0003\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\r\u0000\u0000\u0000xl/styles.xml�Vˎ�6\u0014�\u0017�?\u0010�k�\u0018K�\rYA<\u001e\u0001\u0001Ҡȸ@��D�D�\u0010(j\"'躋�C���.�\u000f3TR���y��d\u0015mH^�{�W|E�jJ�5\u0012%�layg�\u0005\u0010Ky��va��N��*~�KT�=AW;�$���͖q\u00017\u0004-�ڛ�\u0014�^(|\u000b(2V.�����q�t�(,�x���ɹ�P���:e!\u0010�J�G��n�P�Y�0��)$\u0014�\u000fUa��\u0016P�\r&X�\u001b����v�Dq*x�sy�<\u001d��8Eǂf�́����{\u001e�\u00178�o��#Vф�\u0012��bRջ7\u0001Ӽɔ1�X��y�3U��,'���;�r�\u0006�s%R':���G��)ìQqT~\u0002א(��9RN�\u0000R�G\u001a�,\fRd\u0010\u0017����ژC��ޘ}mhRnq\u0014���\b2\u0011�ę<\u0015g�)*�;�\u0011��\u0014����\u001d\u0014�ZlF�;9\n�(ݠE-���it�0!}�|�\u0018�H�\"�\u0004K�\u0000����P�\u0019g��4�'�[\u0001��\u001f�\u001c�F��p����E\u000e��\u0014G\u0004�R9\b���V��ѓR��\u0015G\u0019�[� є���\u00134�sa�]��L�1�P�Ԃ\nM�4��p\u0012�A6RN�+\\��$��>��=t���JtN�<���-tG���n!ڎZE)\"�J���\u000f\u000e�:\u001f\u001d\"�>BX�U��\u001a\u001a3��c6�=�}�,ZP�=�C����\u0000\u0016\u0005���=\u0013�/��\u0010�\u0019-\u001b�0~M�Qԕ\u0013vC��\u0002R��DI�\u0001�ï����,��$��:�(�\u0001Q�����PkxW�\r\u0012Is\u0005\u001fLt�\u001bS�{���l��-�[���\u0016���7��~�����헛G:6\u0015&\u0012�{�����aG6�R?�\u000e�)�\f�\"r�O������2\\Q�G����lQC��>��P�@�|[ʦ\u0005��\u000b�����lu����]N��9\n�Y�\\���b�Z%3�w/�\u001c=����վ�\u0014ɼ$\n%�d[�W�ma�\u0006F~S?%{�}����s�����I\b��4<\u000f�$��U8Y^\u0006I0�\u001e<��:�7�\u000f�R=M\bf�P�zl5�G�p�?�\fo��?PK\u0007\b~�suv\u0003\u0000\u0000�\u000b\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0013\u0000\u0000\u0000xl/theme/theme1.xml�Y݊�F\u0014�/�\u001d��\u001d�K�\u0012o�%;i����&%�cylM<�\u0018i��&\u0004��7-�������\u0017�t�)\r����<�BB�>DG#���q�i����`��w��朙3#��\u000bG1V\u000e`�!��U㜮*0\tI\u0017%��zc�]��\u0017���<آ\u0011����\u0018��ɷ��'�MN���\u001e\n��0-I�\u0005�jD�pKӲ��Av�\fa��z$�\u0001eմ�uSpȴ�X3u��b�\u0012u{����OB��!��^(\u001a�����d�x�pr��\u001e+?f��r������q��T9\u0000��2\u001b]r�\u000f���`�Q�QWu�Q����\\\b�5��\\��rS����ri�3\u0017�m�v\u001bs�f�\u0015��Zn˝��\u0000\u0010�l��\n�i֚�3�\n��(�\u001dx�e���~k\u0005�p�o\to-��\n���\u0017>\u0014@Eё��3}��w\u0016xw\u0005����Jx\u000e�0J\u0006+h�q-6�9�G�%)���mϜ�\u0017(M�m�|B�:�bp��m&��\r(J\u0014:\u001e�\u001e\b��\u000f0�H�A��M�!HHƚuSo�\u0016�Ϳ6/q\u000f�-\b\u0004�)�V�r~J\u0016�hH��L�*@�>ztz��������O���^��\u0004��(���������O_?�\u001c���g?|����_���h}q�����/?���\u0007\u0012x#\u0005\u001d\u0011��b�)W�r��l�\u0012\u0003�����~\u0004PI\u0002D\f)\u0001�hT\u0002^\u0019\u0003,�5aم7S�9d����%�{Q:�H\u0002�\u001c�%�.!�IR�p.��ጒ��x:\u0012q�\u00018����\u0002�\u001a\r�\u0012@2�~\u0004K4�a\u0016mЇ\t�J�G\u0006\u0010J�n!T��.\nS��\u001eUn!�\t��%��C�B�P��2�\u0011d�.�f���$X�>�\u0007e$[\u0016\u0000�TB\\r�E0� �2\u00061\u0016�;�F2�{�4,9<�,�}�����,��\\M�%��Y���}\u0017��22�h C�\u0000BDd@\u0006~\u0004⡔3J\"\u0011�A6`S\u0014(�\b�� �\u0015��Y\u001c@�6�7\u0011����o�\f$� y�(�-\tH��q�{\u0000&Ӎ���c��4�/ev����o,�o>�7R$]S�9|\u001d�?��\u00030J�A�X�%�w�����׭�ͧ�E��ĳ;W\u0013�� �C\u0018��1�;\u0019��\u0019\u001bn��\u001ay�+�?G\f#V��/��)�e%%�#D��\b\f�Y�[�gS��L\u0019���\u0016�Z�|�\u0019Ż�[�\u001a��ѕ\t\u0000�hg�ͬ��M�hu��3�\\=��3��Õ���`�L�𬳑0�M��IXT�\u0017�Є��������c\u0017���\u0003\u0018v�8\u0015��n<��Y\u001e�)\u0019^��X�K$��V&!L�\bt�r�c]��CmJix�7\u0011km57�\\S\u000eٚ�\u001c�&\u0004ú�c�DV��L_��Q��I]\r����$�\fӌ\u0006 �\n\u0018�*�\u001f#\nS\u0005���u1\f8Yp3LO{�����s�r�a�\u0007C��eQe}�\u0012i�k��\n\u00191�{Q�P��Qz\u001d0G9��;��2:�f\u0017���^xq)]M�b��b�\u0002<��tG\u0011�y\u0001��9\u001da\u001c���4�\u000b;��&vݗ\u000b-%�5\u001b��6���M^`e�Y9�\\W��/�%^C\u0010�U��,9�u{�\u0006\u000f\u0004�9w��̵�|��`y�j�9��V�2H�6��\u0001;��0͊�\u0001G����u.2\u0001o�e�#��RTW��N��Mǯ�U�U�-[�T��Ui8�e�\u001cC\u000f��]�\u0014\u001aņS�n��\u001b<��y�K\u001ae?�P\u0015�Fu�5�5��t+5�Ѯ�A�Z��n�\u0012��\u0017�\u0003ߩ��wU倃���n�Zq\r߯خ����*�m�\r�kT[v���\u000e��X�\u0007�gg�s!�5�\ti�)�\u00072��\u001eh�\f����^\u000e��\u001bPK\u0007\bJg��\u0007\u0006\u0000\u0000�\u001a\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u000f\u0000\u0000\u0000xl/workbook.xml���k�0\u0014���\u000fBw�?�I�S�%c�1J�ڳ\"˱�d\u0019In\u0012�.c�{��Ah/ec���\u001f�ٮ��^z�����~߳��;)�\rӆ�,�~�ÈeT�<[G���3��ׯ�[�7+�6H��b�)MV�Ex��0\u0002Df\"�Z��\\�ДIb:*g\u0019�I����V�]�kFb�2f�p\u0003�뻒��0�/a�$��\u0014-$�l\u0003�L\u0010\u000b\u0006L�s��$}\tN\u0012�)r�*�\u0003b�\u0005��\u001a�b��3��T+�\u0012ہ{�����=��\u001b�q�\u0005�j��H�$�j��H\u0010c�1�,�0�\u0014j��;�E>-���\u001f������(.4\u0002�e�B�\u001bB���\u0011��5����ky(o�?�Cy_\u001e0�YB\na�`�\u0015\u0003w����\u0015�b^q�5�JT[���Y��\u0011�oc\u0012o���6�p\u0010\u0004������S\u000b�\u001fv1�duY�'�ðv����\u001b֮(k�ߖw �w�p�\u0006����w�`Tg-�ڪ\u001eq\b�\"�ջ-�\u0012A�5�R'���߭2��~0�^Q�y�?�����\u001b��7���p0\f�A�\r���,�������\u0005�\u0007����4%�.5�\u001b�K.Y2%�U�*\u0015\u0000o�u)��5�\u000bPK\u0007\bHx4�\t\u0002\u0000\u0000i\u0003\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000xl/_rels/workbook.xml.rels���j�0\u0010\u0000E�^;-��(��B�m�\u0001BZ[&�$��G���\u000b�\u0003\t����X43�]o��A}P�>\u0006\rMU��`��C��m�|�\u0000��\u0004g�\u0018HC��ݬ_h0R~��\u0013��\b����GD��F�UL\u0014ʤ�y4R���d��t�����<g�9S휆�s\r���\u001d��Ϙ\u000f쉄q��������?�ض���h�G\nr�\u0000�\u0004��cV�\u0018)\u001e��\\�c�^k�=5�\u001c\u0007����k���ޛL�Urٔ�+��\u0018<۸�7PK\u0007\b���!�\u0000\u0000\u0000�\u0002\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u000bY,[\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000xl/worksheets/sheet1.xml�W˒�8\u0014�S5���\u001e?dǱSI(:!�0�E�\f�\u0015GN\\m[FR:����G�\f�#��\u0007�l��3�D�>:�ܫ+E�?��3�0��ba��c\u001a���.-�\u000b��6OC���'�\u0013e7�@�0�xv�/(�ی,�;�Ǳi\u0000K�\u0017�A�rf�<>�\u001cs����7\te9\u0016���6/\u0019�;Ŕg6r���qZ�\f36��&I\u001a�5��9)DE�H�\u0005��\u000fi�\u001b�<\u001eC�cvs,��4/�b�f��W�\r�ʱǔ�1��&���~z�\u001d�P��\\��2\u0003jK�q\u000e������\u001f�����r�K!\u0017�\b\u0006#��|�ή&2��}Hɉ��\r���IFbAv�h����}�3r-�� ��B�5�Rz#�\\\u0002Б6�4���떬H\u0006�\u0015�d�'%-� l�j����F�\u000f�ّ\u0004\u001f3�^�t\u0010 \u001dB�d�f��5�1,\u0011H[�J'�\u0019W�F��~\u0003�9��\u0006�\u000b�Lw�0\u0005;\u0012�$�e�A��*솖��A8�\u0000�f\u0019.�,�B�g�Q�\u001b��\r�i\u00189\u0001\u001a`5���M*\u0006D�Z�\u001f�=��㹏�q�\u001a���h����L�3��2��A#eB+�Ã\"^-�,\u0019�\u001e�Ǥ�������5yP%�U�q*(�|��{-��δ֙��A���V?�u���a\u001eTq�^\u001e�e�\u0015D�-[���,wlk\u0005V���\u0006�\u00107��\r��\u001f������ɮ�<ul����9�'�)\n^b���Τ��C\u0013�H�s�VM\r/8Do��ܾ��5�A�u`U\u0005�6��\u0002�r\u0005&Z'�QNPω�9A�\u0013�;A�q�?ʉ�XЙ�Ps�G�.b�����\u0015v�'�\u0017}��El�\bW���\u0001'��W}�I\u0017q�G\u0004]��>b�E�i\u0010C����RK��\u001d���:�Zæ��Ġbժ{1\u0000�ʻ\u001a�h�YW��\f�M'�����b�J+�f\u0000����\u0000$�Ja�\u001d\t9a{u\u0017�p�\u001ce��\n���Rx�.�z\u001c�`�ɭ�f9/�\\a�O\u000bnd$Q{\u0007~EXuKScAK5\u0002�[*��l�\u000ep�%L>�\u001eL(\u0015̓\u0014i�\n,\u0002PK\u0007\b�J\u0001��\u0003\u0000\u0000>\f\u0000\u0000PK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[\b|�\u001aH\u0001\u0000\u0000�\u0004\u0000\u0000\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000[Content_Types].xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[nC�\"�\u0000\u0000\u0000I\u0002\u0000\u0000\u000b\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001\u0000\u0000_rels/.relsPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[�w\u0004�\u0001\u0000\u0000\t\u0003\u0000\u0000\u0010\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0002\u0000\u0000docProps/app.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[|�\u0010\u0010\u0001\u0000\u0000�\u0001\u0000\u0000\u0011\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000w\u0004\u0000\u0000docProps/core.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[\u0004�x�\u0001\u0000\u0000]\u0003\u0000\u0000\u0014\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0005\u0000\u0000xl/sharedStrings.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[~�suv\u0003\u0000\u0000�\u000b\u0000\u0000\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0007\u0000\u0000xl/styles.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[Jg��\u0007\u0006\u0000\u0000�\u001a\u0000\u0000\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000m\u000b\u0000\u0000xl/theme/theme1.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[Hx4�\t\u0002\u0000\u0000i\u0003\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0011\u0000\u0000xl/workbook.xmlPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[���!�\u0000\u0000\u0000�\u0002\u0000\u0000\u001a\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0013\u0000\u0000xl/_rels/workbook.xml.relsPK\u0001\u0002\u0014\u0000\u0014\u0000\b\b\b\u0000\u000bY,[�J\u0001��\u0003\u0000\u0000>\f\u0000\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000&\u0015\u0000\u0000xl/worksheets/sheet1.xmlPK\u0005\u0006\u0000\u0000\u0000\u0000\n\u0000\n\u0000�\u0002\u0000\u0000�\u0018\u0000\u0000\u0000\u0000"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PersonalAccountController",
+			"item": [
+				{
+					"name": "EditProfile",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Копатыч\",\r\n    \"surname\": \"Копатычев\",\r\n    \"patronymic\": \"Копатычич\",\r\n    \"email\": \"copatich@mail.ru\",\r\n    \"password\": \"copatich\",\r\n    \"region\": {\r\n        \"id\": \"b14c7476-fdb9-4d3d-9338-33c846b1042f\"\r\n        },\r\n    \"sex\": {\r\n        \"id\": \"c99ccd51-5731-42a3-9cfc-31cc4011e035\"\r\n    },\r\n    \"sportsTitle\": {\r\n        \"id\": \"5a19807c-0630-435b-a0b8-5158ad900456\"\r\n    },\r\n    \"birthDate\": \"2002-11-04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/personalAccount/editProfile?sportsmanId=39ea8967-a637-49e2-b036-65b00a6d058a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"personalAccount",
+								"editProfile"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "39ea8967-a637-49e2-b036-65b00a6d058a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadAvatarka",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/-/OneDrive/Рабочий стол/фото/Фотки/Аватарка.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/personalAccount/uploadImage?sportsmanId=39ea8967-a637-49e2-b036-65b00a6d058a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"personalAccount",
+								"uploadImage"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "39ea8967-a637-49e2-b036-65b00a6d058a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonalAccountData",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/personalAccount?sportsmanId=39ea8967-a637-49e2-b036-65b00a6d058a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"personalAccount"
+							],
+							"query": [
+								{
+									"key": "sportsmanId",
+									"value": "39ea8967-a637-49e2-b036-65b00a6d058a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
