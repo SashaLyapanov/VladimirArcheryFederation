@@ -82,4 +82,4 @@ docker compose up --build
 ```
 
 ## Документация
-
+https://github.com/SashaLyapanov/VladimirArcheryFederation/tree/develop/docs
